@@ -2,7 +2,7 @@
   "name": "node-travis",
   "version": "0.1.0",
   "dependencies": {
-    "body-parser": "*",
+    "body-parser": "^1.12.3",
     "browserify": "*",
     "envify": "*",
     "events": "*",
@@ -15,9 +15,9 @@
     "jquery": "^2.1.4",
     "mongodb": "*",
     "mongoose": "^4.0.2",
-    "react": "*"
     "passport": "^0.2.1",
     "passport-slack": "0.0.1"
+    "react": "*",
   },
   "devDependencies": {
     "grunt": "*",
