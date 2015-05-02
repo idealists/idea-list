@@ -16,6 +16,6 @@
     "test": "grunt --verbose"
   },
   "dependencies": {
-    "jshint": "~2.7.10"
+    "jshint": "~2.1.10"
   }
 }
