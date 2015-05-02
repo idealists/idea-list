@@ -1,4 +1,5 @@
 var mongo = require('mongodb').MongoClient;
+var ObjectId = require('mongodb').ObjectID;
 var DB
 
 mongo.connect('mongodb://localhost:27017/ideatool', function(err, db) {
@@ -8,13 +9,15 @@ mongo.connect('mongodb://localhost:27017/ideatool', function(err, db) {
 
 })
 var postConstruct= function(req){
+  console.log(req.body)
   var post = {
-    userid:req.body.data.userid,
-    state: req.body.data.state,
-    slackid: req.body.data.slackid,
+    //need format like int or str for user id slackid
+    userid:req.body.userid,
+    state: req.body.state||null,
+    slackid: req.body.slackid,
     vote:0,
-    heading: req.body.data.heading,
-    text:req.body.data.text,
+    heading: req.body.heading||null,
+    text:req.body.text,
     comments:[],
     tag:[]
   };
@@ -25,39 +28,59 @@ var postConstruct= function(req){
 module.exports ={ 
   getPosts: function(req,res){
     var findby
-    switch(req.body.data.query){
+    var fakedata= '[{"_id":"5544fbac2d735bd22226abe5","userid":"5516668","state":"active","slackid":"123413","vote":0,"heading":"this is a test post","text":"it is working","comments":[],"tag":[]},{"_id":"554507a3c81a88b06895e244","userid":"5516668","state":"active","slackid":"123413","vote":0,"heading":"this sucks","text":"more data","comments":[],"tag":[]},{"_id":"554507d4c81a88b06895e245","userid":"5516668","state":"active","slackid":"123413","vote":0,"heading":"can can can ","text":"you can can i can can can lets all can can can","comments":[],"tag":[]}]'
+    res.end(fakedata)
+    req.headers.query = req.headers.query|| ""
+    switch(req.headers.query){
       case 'datefirst':
-        findby= {sort:{datetime:1},limit:10};
+      res.end(fakedata)
+        // findby= {sort:{datetime:1},limit:10};
         break
       case 'datelast':
-        findby = {sort:{datetime:-1},limit:10};
+      res.end(fakedata)
+        // findby = {sort:{datetime:-1},limit:10};
         break
       case 'voteup':
-        findby = {sort:{vote:1},limit:10};
+      res.end(fakedata)
+        // findby = {sort:{vote:1},limit:10};
         break
       case 'votedown':
-        findby = {sort:{vote:-1},limit:10};
+      res.end(fakedata)
+        // findby = {sort:{vote:-1},limit:10};
         break
       case 'tag':
+      res.end(fakedata)
       //needs to have tags in array.['hotdogs','food','bbq']
-        findby = {tag:{$in:req.body.data.tag},limit:10};
+        // findby = {tag:{$in:req.headers.tag},limit:10};
         break
       case 'userid':
+      res.end(fakedata)
       // start here or aboves
-        findby={tags:{userid:req.body.data.userid},limit:10}
+        // findby={tags:{userid:req.headers.userid},limit:10}
         break
       default:
       //custom query
-      console.log('not done yet')
+        console.log('cant cant cant')
     }
-
-    DB.collection('postsDb').find(findby)
-    res.end(posted)
+    // var posts = DB.collection('postsDb').find(findby)
+    // var counts
+    // posts.count(function(err,total){
+    //   counts = total
+    // });
+    // var result = []
+    // posts.on('data',function(data){
+    //   result.push(data)
+    //   if(result.length===counts){
+    //     res.end(JSON.stringify(result))
+    //   }
+    // })
   }, 
   createPost:function(req,res){
     var post = postConstruct(req);
-    DB.collection('postsDb').insert(post)
-    res.end('posted')
+    console.log(post)
+    DB.collection('postsDb').insert(post,function(err,done){
+      console.log(done)
+    })
   },
   createComment:function(req,res){
     var commnet = postConstruct(req);
@@ -76,5 +99,5 @@ module.exports ={
 
 
 /*schema
-
+5544fbac2d735bd22226abe5 
 */
