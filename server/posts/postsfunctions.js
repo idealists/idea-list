@@ -2,7 +2,7 @@ var mongo = require('mongodb').MongoClient;
 var ObjectId = require('mongodb').ObjectID;
 var DB;
 
-mongo.connect('mongodb://localhost:27017/ideatool', function(err, db) {
+mongo.connect(process.env.MONGOLAB_URI || 'mongodb://localhost:27017/ideatool', function(err, db) {
   if (err) throw err;
   // when the connection occurs, we store the connection 'object' (or whatever it is) in a global variable so we can use it elsewhere.
   DB = db;
@@ -36,7 +36,7 @@ var commentConstruct =function (req) {
 };
 
 
-module.exports ={ 
+module.exports ={
   getPosts: function(req,res){
       var posts  =DB.collection('postsDb');
     req.headers.query = req.headers.query|| "";
@@ -61,6 +61,7 @@ module.exports ={
       //custom query (to do when need arises)
         console.log('cant cant cant');
     }
+<<<<<<< HEAD
   
     var counts;
     posts.count(function(err,total){
@@ -74,6 +75,21 @@ module.exports ={
       }
     });
   }, 
+=======
+    // var posts = DB.collection('postsDb').find(findby)
+    // var counts
+    // posts.count(function(err,total){
+    //   counts = total
+    // });
+    // var result = []
+    // posts.on('data',function(data){
+    //   result.push(data)
+    //   if(result.length===counts){
+    //     res.end(JSON.stringify(result))
+    //   }
+    // })
+  },
+>>>>>>> Progress integrating with MongoDB to store Slack ID
   createPost:function(req,res){
     var post = postConstruct(req);
     DB.collection('postsDb').insert(post,function(err,done){
@@ -97,5 +113,10 @@ module.exports ={
 
 
 /*schema
+<<<<<<< HEAD
 
 */
+=======
+5544fbac2d735bd22226abe5
+*/
+>>>>>>> Progress integrating with MongoDB to store Slack ID
