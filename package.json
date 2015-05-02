@@ -14,5 +14,8 @@
   },
   "scripts": {
     "test": "grunt --verbose"
+  },
+  "dependencies": {
+    "jshint": "^2.7.0"
   }
 }
