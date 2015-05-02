@@ -8,6 +8,7 @@
     "events": "*",
     "express": "*",
     "flux": "*",
+    "express-session": "^1.11.1",
     "grunt-browserify": "*",
     "grunt-contrib-watch": "*",
     "grunt-react": "*",
