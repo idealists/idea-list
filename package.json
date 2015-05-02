@@ -4,7 +4,7 @@
   "devDependencies": {
     "grunt": "0.4.1",
     "grunt-cli": "0.1.9",
-    "grunt-contrib-jshint": "0.6.0"
+    "grunt-contrib-jshint": "0.6.3"
   },
   
   "dependencies": {
@@ -16,6 +16,6 @@
     "test": "grunt --verbose"
   },
   "dependencies": {
-    "jshint": "^2.7.0"
+    "jshint": "~2.7.10"
   }
 }
