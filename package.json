@@ -1,6 +1,11 @@
 {
   "name": "node-travis",
   "version": "0.1.0",
+  "dependencies": {
+    "body-parser": "^1.12.3",
+    "express": "^4.12.3",
+    "mongodb": "^2.0.28",
+  },
   "devDependencies": {
     "grunt": "0.4.1",
     "grunt-cli": "0.1.9",
