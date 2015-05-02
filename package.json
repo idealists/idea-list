@@ -16,6 +16,15 @@
     "test": "grunt --verbose"
   },
   "dependencies": {
-    "jshint": "~2.1.10"
+    "jasmine-core": "^2.3.0",
+    "jshint": "~2.1.10",
+    "karma": "^0.12.31",
+    "karma-chrome-launcher": "^0.1.8",
+    "karma-jasmine": "^0.3.5",
+    "karma-nyan-reporter": "0.0.60",
+    "karma-phantomjs-launcher": "^0.1.4",
+    "karma-sauce-launcher": "~0.1.8",
+    "karma-script-launcher": "~0.1.0",
+    "karma-story-reporter": "~0.2.2"
   }
 }
