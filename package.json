@@ -11,6 +11,8 @@
     "react": "*",
     "grunt-react": "*",
     "grunt-contrib-watch": "*"
+    "passport": "^0.2.1",
+    "passport-slack": "0.0.1"
   },
   "devDependencies": {
     "grunt": "*",
