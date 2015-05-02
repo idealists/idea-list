@@ -10,10 +10,10 @@ app.get('/',function(req,res){
 })
 require('./middleware.js')(app,express);
 
-var server = app.listen(process.env.PORT||5000, function () {
+var server = app.listen(process.env.PORT || 5000, function () {
   var host = server.address().address;
   var port = server.address().port;
 
-  console.log('i am at http://%s:%s', host, port);
+  console.log('Serving at http://localhost:%s', port);
 
 });
