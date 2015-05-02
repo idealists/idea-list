@@ -89,3 +89,4 @@ app.get('/api/user', function (request, response) {
     user: request.session
   });
 });
+
