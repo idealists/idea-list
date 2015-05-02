@@ -2,7 +2,7 @@ var bodyParser = require('body-parser');
 var express = require('express');
 var session = require('express-session');
 var passport = require('passport');
-var SlackStrategy = require('passport-slack');
+var SlackStrategy = require('passport-slack').Strategy;
 
 var app = express();
 
@@ -22,14 +22,14 @@ var server = app.listen(process.env.PORT || 5000, function () {
 });
 
 passport.use(new SlackStrategy({
-  clientID: process.env.SLACK_OAUTH_ID,
-  clientSecret: process.env.SLACK_OAUTH_SECRET
-},
-function(accessToken, refreshToken, profile, done) {
-  User.findOrCreate({ SlackId: profile.id }, function (err, user) {
-    return done(err, user);
-  });
-}
+    clientID: process.env.SLACK_OAUTH_ID,
+    clientSecret: process.env.SLACK_OAUTH_SECRET
+  },
+  function(accessToken, refreshToken, profile, done) {
+    User.findOrCreate({ SlackId: profile.id }, function (err, user) {
+      return done(err, user);
+    });
+  }
 ));
 
 app.get('/auth/slack',
