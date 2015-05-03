@@ -1,6 +1,6 @@
 var mongo = require('mongodb').MongoClient;
 var ObjectId = require('mongodb').ObjectID;
-var DB
+var DB;
 
 mongo.connect('mongodb://localhost:27017/ideatool', function(err, db) {
   if (err) throw err;
@@ -31,15 +31,15 @@ var commentConstruct =function (req) {
     slackid: req.body.slackid||null,
     vote:0,
     comments:[]
-  }
-  return comment
+  };
+  return comment;
 }
 
 
 module.exports ={ 
   getPosts: function(req,res){
-      var posts  =DB.collection('postsDb')
-    req.headers.query = req.headers.query|| ""
+      var posts  =DB.collection('postsDb');
+    req.headers.query = req.headers.query|| "";
     switch(req.headers.query){
       case 'datefirst':
         posts = posts.find().sort({'datetime':1}).limit(10);
@@ -57,39 +57,37 @@ module.exports ={
         posts = posts.find({userid:req.headers.userid});
         break
       default:
-      //custom query (to do)
-        console.log('cant cant cant')
+      //custom query (to do when need arises)
+        console.log('cant cant cant');
     }
   
     var counts
     posts.count(function(err,total){
-      counts = total
-  
+      counts = total;
     });
-    var result = []
+    var result = [];
     posts.on('data',function(data){
-      result.push(data)
+      result.push(data);
       if(result.length===counts){
-        res.end(JSON.stringify(result))
+        res.end(JSON.stringify(result));
       }
     })
   }, 
   createPost:function(req,res){
     var post = postConstruct(req);
-    console.log(post)
     DB.collection('postsDb').insert(post,function(err,done){
-      console.log(done)
+      console.log(done._id);
     })
   },
   createComment:function(req,res){
     var commnet = commentConstruct(req);
-    var commentid
+    var commentid;
     DB.collection('postsDb').insert(comment,function(err,id){
-      if(err){console.log(err)}
+      if(err){console.log(err)};
       commentid = id._id;
-    })
+    });
     DB.collection('postsDb').update({_id:ObjectId(commentid)},{$push:{comments:commentid}})
-    res.end('posted comment')
+    res.end('posted comment');
   }
 }
 
@@ -98,5 +96,5 @@ module.exports ={
 
 
 /*schema
-5544fbac2d735bd22226abe5 
+
 */
