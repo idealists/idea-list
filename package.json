@@ -2,25 +2,31 @@
   "name": "node-travis",
   "version": "0.1.0",
   "dependencies": {
-    "body-parser": "^1.12.3",
-    "express": "^4.12.3",
-    "mongodb": "^2.0.28"
+    "body-parser": "*",
+    "browserify": "*",
+    "envify": "*",
+    "express": "*",
+    "grunt-browserify": "*",
+    "mongodb": "*",
+    "react": "*",
+    "grunt-react": "*",
+    "grunt-contrib-watch": "*"
   },
   "devDependencies": {
-    "grunt": "0.4.1",
-    "grunt-cli": "0.1.9",
-    "grunt-contrib-jshint": "0.6.3",
-    "grunt-karma": "^0.10.1",
-    "jasmine-core": "^2.3.0",
-    "jshint": "~2.1.10",
-    "karma": "^0.12.31",
-    "karma-chrome-launcher": "^0.1.8",
-    "karma-jasmine": "^0.3.5",
-    "karma-nyan-reporter": "0.0.60",
-    "karma-phantomjs-launcher": "^0.1.4",
-    "karma-sauce-launcher": "~0.1.8",
-    "karma-script-launcher": "~0.1.0",
-    "karma-story-reporter": "~0.2.2"
+    "grunt": "*",
+    "grunt-cli": "*",
+    "grunt-contrib-jshint": "*",
+    "grunt-karma": "*",
+    "jasmine-core": "*",
+    "jshint": "*",
+    "karma": "*",
+    "karma-chrome-launcher": "*",
+    "karma-jasmine": "*",
+    "karma-nyan-reporter": "*",
+    "karma-phantomjs-launcher": "*",
+    "karma-sauce-launcher": "*",
+    "karma-script-launcher": "*",
+    "karma-story-reporter": "*"
   },
   "scripts": {
     "test": "grunt --verbose"
