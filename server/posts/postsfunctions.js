@@ -12,68 +12,67 @@ var postConstruct= function(req){
   console.log(req.body)
   var post = {
     //need format like int or str for user id slackid
-    userid:req.body.userid,
+    userid:req.body.userid||null,
     state: req.body.state||null,
-    slackid: req.body.slackid,
+    slackid: req.body.slackid||null,
     vote:0,
     heading: req.body.heading||null,
-    text:req.body.text,
+    text:req.body.text||null,
     comments:[],
     tag:[]
   };
   return post;  
 }
+var commentConstruct =function (req) {
+  var comment ={
+    headid:req.body.postid||null,
+    userid:req.body.userid||null,
+    text:req.body.text||null,
+    slackid: req.body.slackid||null,
+    vote:0,
+    comments:[]
+  }
+  return comment
+}
 
 
 module.exports ={ 
   getPosts: function(req,res){
-    var findby
-    var fakedata= '[{"_id":"5544fbac2d735bd22226abe5","userid":"5516668","state":"active","slackid":"123413","vote":0,"heading":"this is a test post","text":"it is working","comments":[],"tag":[]},{"_id":"554507a3c81a88b06895e244","userid":"5516668","state":"active","slackid":"123413","vote":0,"heading":"this sucks","text":"more data","comments":[],"tag":[]},{"_id":"554507d4c81a88b06895e245","userid":"5516668","state":"active","slackid":"123413","vote":0,"heading":"can can can ","text":"you can can i can can can lets all can can can","comments":[],"tag":[]}]'
-    res.end(fakedata)
+      var posts  =DB.collection('postsDb')
     req.headers.query = req.headers.query|| ""
     switch(req.headers.query){
       case 'datefirst':
-      res.end(fakedata)
-        // findby= {sort:{datetime:1},limit:10};
+        posts = posts.find().sort({'datetime':1}).limit(10);
         break
       case 'datelast':
-      res.end(fakedata)
-        // findby = {sort:{datetime:-1},limit:10};
+        posts = posts.find().sort({'datetime':-1}).limit(10);
         break
-      case 'voteup':
-      res.end(fakedata)
-        // findby = {sort:{vote:1},limit:10};
-        break
-      case 'votedown':
-      res.end(fakedata)
-        // findby = {sort:{vote:-1},limit:10};
-        break
+      case 'vote':
+        posts = posts.find().sort({vote:1}).limit(10);
       case 'tag':
-      res.end(fakedata)
-      //needs to have tags in array.['hotdogs','food','bbq']
-        // findby = {tag:{$in:req.headers.tag},limit:10};
+      //add username to tags array for easy find of people also.
+        posts = posts.find({tag:{$in:req.headers.tag}}).limit(10);
         break
       case 'userid':
-      res.end(fakedata)
-      // start here or aboves
-        // findby={tags:{userid:req.headers.userid},limit:10}
+        posts = posts.find({userid:req.headers.userid});
         break
       default:
-      //custom query
+      //custom query (to do)
         console.log('cant cant cant')
     }
-    // var posts = DB.collection('postsDb').find(findby)
-    // var counts
-    // posts.count(function(err,total){
-    //   counts = total
-    // });
-    // var result = []
-    // posts.on('data',function(data){
-    //   result.push(data)
-    //   if(result.length===counts){
-    //     res.end(JSON.stringify(result))
-    //   }
-    // })
+  
+    var counts
+    posts.count(function(err,total){
+      counts = total
+  
+    });
+    var result = []
+    posts.on('data',function(data){
+      result.push(data)
+      if(result.length===counts){
+        res.end(JSON.stringify(result))
+      }
+    })
   }, 
   createPost:function(req,res){
     var post = postConstruct(req);
@@ -83,7 +82,7 @@ module.exports ={
     })
   },
   createComment:function(req,res){
-    var commnet = postConstruct(req);
+    var commnet = commentConstruct(req);
     var commentid
     DB.collection('postsDb').insert(comment,function(err,id){
       if(err){console.log(err)}
