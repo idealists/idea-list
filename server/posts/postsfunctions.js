@@ -60,7 +60,7 @@ module.exports ={
       default:
       //custom query (to do when need arises)
         console.log('cant cant cant');
-    };
+    }
   
     var counts;
     posts.count(function(err,total){
@@ -84,13 +84,13 @@ module.exports ={
     var commnet = commentConstruct(req);
     var commentid;
     DB.collection('postsDb').insert(comment,function(err,id){
-      if(err){console.log(err)};
+      if(err){console.log(err);}
       commentid = id._id;
     });
-    DB.collection('postsDb').update({_id:ObjectId(commentid)},{$push:{comments:commentid}})
+    DB.collection('postsDb').update({_id:ObjectId(commentid)},{$push:{comments:commentid}});
     res.end('posted comment');
   }
-}
+};
 
 
 
