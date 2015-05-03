@@ -7,9 +7,9 @@ mongo.connect('mongodb://localhost:27017/ideatool', function(err, db) {
   // when the connection occurs, we store the connection 'object' (or whatever it is) in a global variable so we can use it elsewhere.
   DB = db;
 
-})
+});
 var postConstruct= function(req){
-  console.log(req.body)
+  console.log(req.body);
   var post = {
     //need format like int or str for user id slackid
     userid:req.body.userid||null,
@@ -22,7 +22,7 @@ var postConstruct= function(req){
     tag:[]
   };
   return post;  
-}
+};
 var commentConstruct =function (req) {
   var comment ={
     headid:req.body.postid||null,
@@ -33,7 +33,7 @@ var commentConstruct =function (req) {
     comments:[]
   };
   return comment;
-}
+};
 
 
 module.exports ={ 
@@ -43,25 +43,26 @@ module.exports ={
     switch(req.headers.query){
       case 'datefirst':
         posts = posts.find().sort({'datetime':1}).limit(10);
-        break
+        break;
       case 'datelast':
         posts = posts.find().sort({'datetime':-1}).limit(10);
-        break
+        break;
       case 'vote':
         posts = posts.find().sort({vote:1}).limit(10);
+        break;
       case 'tag':
       //add username to tags array for easy find of people also.
         posts = posts.find({tag:{$in:req.headers.tag}}).limit(10);
-        break
+        break;
       case 'userid':
         posts = posts.find({userid:req.headers.userid});
-        break
+        break;
       default:
       //custom query (to do when need arises)
         console.log('cant cant cant');
-    }
+    };
   
-    var counts
+    var counts;
     posts.count(function(err,total){
       counts = total;
     });
@@ -71,13 +72,13 @@ module.exports ={
       if(result.length===counts){
         res.end(JSON.stringify(result));
       }
-    })
+    });
   }, 
   createPost:function(req,res){
     var post = postConstruct(req);
     DB.collection('postsDb').insert(post,function(err,done){
       console.log(done._id);
-    })
+    });
   },
   createComment:function(req,res){
     var commnet = commentConstruct(req);
