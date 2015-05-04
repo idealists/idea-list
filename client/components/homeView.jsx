@@ -5,11 +5,15 @@ var PostList = require('./postList.jsx');
 var CreatePostEntryView = require('./createPostEntryView.jsx');
 
 var Home = React.createClass({
+  handleAddPost: function(newPost) {
+    postActions.newPostEntry(newPost);
+  },
+
   render: function() {
     return(
       <div>
         <h1> Create Post </h1>
-        <CreatePostEntryView />
+        <CreatePostEntryView add={this.handleAddPost}/>
         <h1> Idea Tool </h1>
         <Search />
         <Filter />
