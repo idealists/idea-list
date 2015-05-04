@@ -16,7 +16,8 @@ var postActions = {
 
   createPostEntry: function(newPostEntry) {
     ajax.post('/posts/create', newPostEntry, function(value) {
-      console.log(value);
+      console.log('posted',value);
+      this.getPostEntries('vote');
     })
   }
 }

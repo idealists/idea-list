@@ -1,8 +1,9 @@
 var Dispatcher = require('../dispatcher/dispatcher');
 var Constants = require('../constants/constants')
 var EventEmitter = require('events').EventEmitter;
-var assign = require('object-assign');
+var objectAssign = require('react/lib/Object.assign');
 
+var CHANGE_EVENT= 'Change'
 var _postsList =[];
 
 var populatestore:function(postlist){
@@ -13,9 +14,12 @@ var populatestore:function(postlist){
       });
   }
 
-var postsStore =  assign({}, EventEmitter.prototype,{
+var postsStore = objectAssign({}, EventEmitter.prototype,{
   pullposts:function(){
     return _postsList
+  },
+  addChangeListener: function(cb){
+    this.on(CHANGE_EVENT, cb);
   }
 })
 
@@ -25,9 +29,11 @@ postsStore.dispatchToken= Dispatcher.register(function(action) {
   switch(action.type) {
     case Constants.RELOAD_POSTLIST:
       populatestore(action.data)
+      todoStore.emit(CHANGE_EVENT)
       break
     case Constants.PULL_POSTLIST:
-      pullposts();
+        pullposts();
+
       break
     default:
       return false
