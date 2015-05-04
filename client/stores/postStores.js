@@ -2,13 +2,13 @@
 var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
 
-var _posts =[];
+var _postsList =[];
 var PostsStore =  assign({}, EventEmitter.prototype,{
   populatestore:function(postlist){
-     _posts=posts;
+     _postsList=posts;
   },
   pullposts:function(){
-    return _posts
+    return _postsList
   }
 })
 
