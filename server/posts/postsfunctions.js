@@ -2,7 +2,7 @@ var mongo = require('mongodb').MongoClient;
 var ObjectId = require('mongodb').ObjectID;
 var DB;
 
-mongo.connect('mongodb://localhost:27017/ideatool', function(err, db) {
+mongo.connect(process.env.MONGOLAB_URI||'mongodb://localhost:27017/ideatool', function(err, db) {
   if (err) throw err;
   // when the connection occurs, we store the connection 'object' (or whatever it is) in a global variable so we can use it elsewhere.
   DB = db;
