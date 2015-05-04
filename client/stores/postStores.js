@@ -1,6 +1,6 @@
 // var dispatcher = require('../dispatcher/dispatcher.js');
 var EventEmitter = require('events').EventEmitter;
-var assign = require('object-assign');
+var assign = require('react/lib/Object.assign');
 
 var _postsList =[];
 var PostsStore =  assign({}, EventEmitter.prototype,{
