@@ -13,7 +13,7 @@ var postConstruct= function(req){
   var post = {
     //need format like int or str for user id slackid
     userid:req.body.userid||null,
-    state: req.body.state||null,
+    state: true,
     slackid: req.body.slackid||null,
     vote:0,
     heading: req.body.heading||null,

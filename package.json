@@ -2,17 +2,18 @@
   "name": "node-travis",
   "version": "0.1.0",
   "dependencies": {
+    "ajax": "0.0.4",
     "body-parser": "*",
     "browserify": "*",
     "envify": "*",
+    "events": "*",
     "express": "*",
-    "grunt-browserify": "*",
-    "mongodb": "*",
-    "react": "*",
-    "grunt-react": "*",
-    "grunt-contrib-watch": "*",
     "flux": "*",
-    "events": "*"
+    "grunt-browserify": "*",
+    "grunt-contrib-watch": "*",
+    "grunt-react": "*",
+    "mongodb": "*",
+    "react": "*"
   },
   "devDependencies": {
     "grunt": "*",
