@@ -10,7 +10,9 @@
     "mongodb": "*",
     "react": "*",
     "grunt-react": "*",
-    "grunt-contrib-watch": "*"
+    "grunt-contrib-watch": "*",
+    "flux": "*",
+    "events": "*"
   },
   "devDependencies": {
     "grunt": "*",
