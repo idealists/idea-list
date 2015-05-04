@@ -4,19 +4,19 @@ var EventEmitter = require('events').EventEmitter;
 var objectAssign = require('react/lib/Object.assign');
 
 var CHANGE_EVENT= 'Change'
-var _postsList =[];
+var _postList =[];
 
 var populatestore:function(postlist){
-     _postsList=posts;
+     _postList=postlist;
      Dispatcher.handleAction({
         actionType: Constants.STORE_UPDATED,
-        data: _postsList
+        data: _postList
       });
   }
 
-var postsStore = objectAssign({}, EventEmitter.prototype,{
+var postStore = objectAssign({}, EventEmitter.prototype,{
   pullposts:function(){
-    return _postsList
+    return _postList
   },
   addChangeListener: function(cb){
     this.on(CHANGE_EVENT, cb);
@@ -24,7 +24,7 @@ var postsStore = objectAssign({}, EventEmitter.prototype,{
 })
 
 
-postsStore.dispatchToken= Dispatcher.register(function(action) {
+postStore.dispatchToken= Dispatcher.register(function(action) {
 
   switch(action.type) {
     case Constants.RELOAD_POSTLIST:
@@ -38,4 +38,4 @@ postsStore.dispatchToken= Dispatcher.register(function(action) {
     default:
       return false
   })
-module.exports = postsStore;
+module.exports = postStore;
