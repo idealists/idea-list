@@ -2,7 +2,7 @@
   "name": "node-travis",
   "version": "0.1.0",
   "dependencies": {
-    "ajax": "0.0.4",
+    "ajax": "*",
     "body-parser": "*",
     "browserify": "*",
     "envify": "*",

@@ -9,7 +9,7 @@ mongo.connect('mongodb://localhost:27017/ideatool', function(err, db) {
 
 });
 var postConstruct= function(req){
-  console.log(req.body);
+  console.log('tags:', req.body.tags);
   var post = {
     //need format like int or str for user id slackid
     userid:req.body.userid||null,
@@ -19,9 +19,9 @@ var postConstruct= function(req){
     heading: req.body.heading||null,
     text:req.body.text||null,
     comments:[],
-    tag:[]
+    tags:req.body.tags
   };
-  return post;  
+  return post;
 };
 var commentConstruct =function (req) {
   var comment ={
@@ -36,7 +36,7 @@ var commentConstruct =function (req) {
 };
 
 
-module.exports ={ 
+module.exports ={
   getPosts: function(req,res){
       var posts  =DB.collection('postsDb');
     req.headers.query = req.headers.query|| "";
@@ -61,7 +61,7 @@ module.exports ={
       //custom query (to do when need arises)
         console.log('cant cant cant');
     }
-  
+
     var counts;
     posts.count(function(err,total){
       counts = total;
@@ -73,15 +73,15 @@ module.exports ={
         res.end(JSON.stringify(result));
       }
     });
-  }, 
+  },
   createPost:function(req,res){
     var post = postConstruct(req);
     DB.collection('postsDb').insert(post,function(err,done){
-      console.log(done._id);
+      console.log('DB insert done');
     });
   },
   createComment:function(req,res){
-    var commnet = commentConstruct(req);
+    var comment = commentConstruct(req);
     var commentid;
     DB.collection('postsDb').insert(comment,function(err,id){
       if(err){console.log(err);}

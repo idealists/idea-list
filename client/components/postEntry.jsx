@@ -6,7 +6,7 @@ var PostEntry = React.createClass({
       <div>
 
       </div>
-    )
+    );
   }
 });
 

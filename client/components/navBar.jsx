@@ -7,7 +7,7 @@ var NavBar = React.createClass({
         <div> Home </div>
         <div> Create Post </div>
       </div>
-    )
+    );
   }
 });
 

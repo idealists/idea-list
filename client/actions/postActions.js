@@ -1,24 +1,25 @@
 var Dispatcher = require('../dispatcher/dispatcher');
-var Constants = require('../constants/constants')
-var ajax = require('ajax')
-var postActions={
-  getEntries:function(query){
-    ajax.get('/posts', query, function(postsList){
-      console.log(postsList);
+var Constants = require('../constants/constants');
+var ajax = require('ajax');
+
+var postActions = {
+  getPostEntries: function(query) {
+    ajax.get('/posts', query, function(postList) {
+      console.log(postList);
+
       Dispatcher.handleAction({
-        actionType:Constants.RELOAD_POSTSLIST,
-        data: postsList
+        actionType: Constants.RELOAD_POSTLIST,
+        data: postList
       });
     })
   },
-  newPostEntry:function(newpostentry) {
-    ajax.post('/post/create',newpostentry,function(value){
-      console.log(value)
-    })
-  },
-  deletePostEntry
 
+  createPostEntry: function(newPostEntry) {
+    ajax.post('/posts/create', newPostEntry, function(value) {
+      console.log(value);
+    })
+  }
 }
 
 
-module.exports= postActions
+module.exports= postActions;

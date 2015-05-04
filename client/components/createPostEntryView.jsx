@@ -3,20 +3,24 @@ var React = require('react');
 var CreatePostEntryView = React.createClass({
 
   handleSubmit: function() {
-    var tags = function() {
-      var input = this.refs.newPostTags.getDOMNode().value;
-      var tagsArray = input.split(' ',',');
-      return tagsArray;
-    }
+    var tagsInput = this.refs.newPostTags.getDOMNode().value;
+    var tagsArray = tagsInput.split(' ');
 
-    var newPost = {
+    console.log('tagsInput:', tagsInput);
+    console.log('tagsArray:', tagsArray);
+
+    var newPostEntry = {
       userid: 1,
       heading: this.refs.newPostHead.getDOMNode().value,
       text: this.refs.newPostBody.getDOMNode().value,
-      tags: tags()
-    }
+      tags: tagsArray
+    };
 
-    this.props.add(newPost);
+    this.props.add(newPostEntry);
+
+    this.refs.newPostHead.getDOMNode().value = '';
+    this.refs.newPostBody.getDOMNode().value = '';
+    this.refs.newPostTags.getDOMNode().value = '';
   },
 
   render: function() {
@@ -28,7 +32,7 @@ var CreatePostEntryView = React.createClass({
         <input type='text' ref="newPostTags" ></input>
         <button onClick={this.handleSubmit}> Submit </button>
       </div>
-    )
+    );
   }
 });
 

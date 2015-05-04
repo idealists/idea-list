@@ -5,10 +5,10 @@ var PostList = React.createClass({
   render: function() {
     return(
       <div>
-        <h1>Post List:</h1>
+        <h1>Posts List:</h1>
         //This will contain multiple PostEntry components
       </div>
-    )
+    );
   }
 });
 

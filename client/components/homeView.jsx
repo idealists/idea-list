@@ -3,10 +3,12 @@ var Search = require('./search.jsx');
 var Filter = require('./filter.jsx');
 var PostList = require('./postList.jsx');
 var CreatePostEntryView = require('./createPostEntryView.jsx');
+var postActions = require('../actions/postActions');
 
 var Home = React.createClass({
-  handleAddPost: function(newPost) {
-    postActions.newPostEntry(newPost);
+
+  handleAddPost: function(newPostEntry) {
+    postActions.createPostEntry(newPostEntry);
   },
 
   render: function() {
