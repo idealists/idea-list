@@ -4,11 +4,35 @@ var Filter = require('./filter.jsx');
 var PostList = require('./postList.jsx');
 var CreatePostEntryView = require('./createPostEntryView.jsx');
 var postActions = require('../actions/postActions');
+var postStore = require('../stores/postStores');
 
 var Home = React.createClass({
 
+  getInitialState: function() {
+    return {
+      list: postStore.pullposts()
+    }
+  },
+
+  componentDidMount: function() {
+    postStore.addChangeListener(this._onChange);
+  },
+
+  componentWillUnmount: function() {
+    postStore.removeChangeListener(this._onChange);
+  },
+
   handleAddPost: function(newPostEntry) {
     postActions.createPostEntry(newPostEntry);
+  },
+
+  // handleRemovePost: function() {
+  // },
+
+  _onChange: function() {
+    this.setState({
+      list: postStore.pullposts()
+    })
   },
 
   render: function() {
@@ -19,7 +43,7 @@ var Home = React.createClass({
         <h1> Idea Tool </h1>
         <Search />
         <Filter />
-        <PostList />
+        <PostList items={this.state.list}/>
       </div>
     )
   }
