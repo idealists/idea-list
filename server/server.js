@@ -7,14 +7,6 @@ var SlackStrategy = require('passport-slack').Strategy;
 var User = require('./models/users.js');
 var TEAM_ID = 'T04M0RM4V';
 
-passport.serializeUser(function (user, done){
-  done(null, user);
-});
-
-passport.deserializeUser(function (user, done){
-  done(err, user);    
-});
-
 passport.use(new SlackStrategy({
     clientID: process.env.SLACK_OAUTH_ID,
     clientSecret: process.env.SLACK_OAUTH_SECRET,
@@ -48,12 +40,26 @@ passport.use(new SlackStrategy({
   }
 ));
 
+passport.serializeUser(function (user, done){
+  done(null, user._id);
+});
+
+passport.deserializeUser(function (id, done){
+  User.findById(id, function (err, user) {
+    done(err, user);
+  });
+});
+
 var app = express();
 
 app.use('/', express.static('client'));
 app.use(bodyParser.json());
-app.use(cookieParser);
-app.use(session);
+app.use(cookieParser());
+app.use(session({
+  secret: 'ideatool',
+  resave: true,
+  saveUninitialized: true
+}));
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -67,17 +73,19 @@ var server = app.listen(process.env.PORT || 5000, function () {
 });
 
 app.get('/auth/slack',
-  passport.authorize('slack')
+  passport.authenticate('slack')
 );
 
 app.get('/auth/slack/callback',
-  passport.authorize('slack', { failureRedirect: '/login' }),
+  passport.authenticate('slack', { failureRedirect: '/login' }),
   function (request, response) {
-    response.redirect('/posts');
+    response.redirect('/api/user'); // temporarily - for development only
   }
 );
 
 app.get('/api/user', function (request, response) {
-  response.status(200);
-  response.send(JSON.stringify(request.user));
+  response.status(200).json({
+    isAuth: request.isAuthenticated(),
+    user: request.session
+  });
 });
