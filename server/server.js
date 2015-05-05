@@ -22,6 +22,6 @@ app.post('/api/idea', function(req, res){
   var idea = req.body.text,
       token = req.body.token,
       command = req.body.command
-   console.log(req.body);
+   console.log({req.body});
    //res.send(req.body);
 })
