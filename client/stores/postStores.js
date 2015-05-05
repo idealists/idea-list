@@ -29,7 +29,7 @@ postStore.dispatchToken= Dispatcher.register(function(action) {
   switch(action.action.actionType) {
     case Constants.RELOAD_POSTLIST:
       populatestore(action.action.data)
-      todoStore.emit(CHANGE_EVENT)
+      postStore.emit(CHANGE_EVENT)
       break
     case Constants.PULL_POSTLIST:
         pullposts();

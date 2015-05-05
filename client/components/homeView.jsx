@@ -9,6 +9,8 @@ var postStore = require('../stores/postStores');
 var Home = React.createClass({
 
   getInitialState: function() {
+    postActions.getPostEntries('vote');
+
     return {
       list: postStore.pullposts()
     }
