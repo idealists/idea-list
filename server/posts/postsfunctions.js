@@ -38,6 +38,7 @@ var commentConstruct =function (req) {
 
 module.exports ={
   getPosts: function(req,res){
+    // console.log(req);
       var posts  =DB.collection('postsDb');
     req.headers.query = req.headers.query|| "";
     switch(req.headers.query){
