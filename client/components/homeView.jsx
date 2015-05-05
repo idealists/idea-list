@@ -9,8 +9,10 @@ var postStore = require('../stores/postStores');
 var Home = React.createClass({
 
   getInitialState: function() {
+    var posts = postActions.getPostEntries();
+
     return {
-      list: postStore.pullposts()
+      list: posts
     }
   },
 

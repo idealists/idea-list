@@ -5,6 +5,7 @@ var $ = require('jquery');
 var postActions = {
   getPostEntries: function(query,data) {
     console.log('getting data')
+    query = query||null
     data = data||null
     $.ajax({
         url: "/posts",
