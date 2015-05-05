@@ -5,10 +5,13 @@
     "body-parser": "*",
     "browserify": "*",
     "envify": "*",
+    "events": "*",
     "express": "*",
+    "flux": "*",
     "grunt-browserify": "*",
     "grunt-contrib-watch": "*",
     "grunt-react": "*",
+    "jquery": "^2.1.4",
     "mongodb": "*",
     "react": "*"
   },
