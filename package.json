@@ -6,14 +6,14 @@
     "browserify": "*",
     "envify": "*",
     "express": "*",
+    "grunt": "*",
     "grunt-browserify": "*",
-    "mongodb": "*",
-    "react": "*",
     "grunt-react": "*",
     "grunt-contrib-watch": "*"
+    "mongodb": "*",
+    "react": "*",
   },
   "devDependencies": {
-    "grunt": "*",
     "grunt-cli": "*",
     "grunt-contrib-jshint": "*",
     "grunt-karma": "*",
@@ -29,6 +29,6 @@
     "karma-story-reporter": "*"
   },
   "scripts": {
-    "test": "grunt --verbose"
+    "start": "grunt --verbose"
   }
 }
