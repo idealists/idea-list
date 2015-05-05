@@ -4,6 +4,7 @@ var session = require('express-session');
 var passport = require('passport');
 var SlackStrategy = require('passport-slack').Strategy;
 var User = require('./models/users.js');
+var TEAM_ID = 'T04M0RM4V';
 
 var app = express();
 
@@ -25,52 +26,32 @@ passport.use(new SlackStrategy({
     callbackURL: '/auth/slack/callback',
     scope: 'read,post',
     state: 'xyz',
-    team: 'T04M0RM4V'
+    team: TEAM_ID
   },
   function(accessToken, refreshToken, profile, done) {
-    console.log(arguments);
-    
+    console.log(profile);
+
     User.findOne({ slackId: profile.id }, function (err, user) {
-      return done(err, user);
+      if (err) return done(err);
+
+      if (!user) {
+        var user = new User({
+          accessToken: accessToken,
+          slackId: profile.id,
+          slackName: profile.displayName,
+          slack: JSON.stringify(profile._json)
+        });
+
+        user.save(function (err) {
+          if (err) console.log(err);
+          return done(null, user);
+        });
+      } else {
+        return done(err, user);
+      }
     });
   }
 ));
-
-// SlackStrategy.prototype.userProfile = function (accessToken, done) {
-//   this.get(this.profileUrl, accessToken, function (err, body, res) {
-//     if (err) {
-//       return done(err);
-//     } else {
-//       try {
-//         var json = JSON.parse(body);
-
-//         if (json.ok) {
-//           var profile = {
-//             provider: 'Slack'
-//           };
-//           profile.id = json.user.id;
-//           profile.slackUserName = json.user.name;
-//           profile.realName = json.user.profile.real_name;
-//           profile.email = json.user.profile.email;
-//           profile.image24 = json.user.profile.image_24;
-//           profile.image32 = json.user.profile.image_32;
-//           profile.image48 = json.user.profile.image_48;
-//           profile.image72 = json.user.profile.image_72;
-//           profile.image192 = json.user.profile.image_192;
-
-//           profile._raw = body;
-//           profile._json = json;
-
-//           done(null, profile);
-//         } else {
-//           done(json.error ? json.error : body);
-//         }
-//       } catch(e) {
-//         done(e);
-//       }
-//     }
-//   });
-// };
 
 app.get('/auth/slack',
   passport.authorize('slack')
