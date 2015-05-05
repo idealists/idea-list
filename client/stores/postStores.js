@@ -37,5 +37,6 @@ postStore.dispatchToken= Dispatcher.register(function(action) {
       break
     default:
       return false
-  })
+  }
+})
 module.exports = postStore;

@@ -1,25 +1,39 @@
 var Dispatcher = require('../dispatcher/dispatcher');
 var Constants = require('../constants/constants');
-var ajax = require('ajax');
+var $ = require('jquery');
 
 var postActions = {
-  getPostEntries: function(query) {
-    query =  'vote';
-    ajax.get('/posts', query, function(postList) {
+  getPostEntries: function(query,data) {
+    console.log('getting data')
+    data = data||null
+    $.ajax({
+        url: "/posts",
+        dataType: "json",
+        method: "GET",
+        headers:{'query':query,
+                  'data':data},
+      }).done(function(postList) {
       console.log(postList);
-
       Dispatcher.handleAction({
         actionType: Constants.RELOAD_POSTLIST,
         data: postList
-      });
+      })
     })
   },
 
   createPostEntry: function(newPostEntry) {
-    ajax.post('/posts/create', newPostEntry, function(value) {
-      console.log('posted',value);
-      this.getPostEntries('vote');
-    }.bind(this))
+    var action = this
+    console.log('sending')
+    $.ajax({
+        url: "/posts/create",
+        dataType:"json",
+        method: "POST",
+        data:newPostEntry
+      }).done(function(postList){
+        console.log('posted :',postList);
+      action.getPostEntries('vote')
+    })
+    console.log('sent')
   }
 }
 

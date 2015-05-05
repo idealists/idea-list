@@ -38,8 +38,8 @@ var commentConstruct =function (req) {
 
 module.exports ={
   getPosts: function(req,res){
-    // console.log(req);
-      var posts  =DB.collection('postsDb');
+    console.log(req);
+      var posts  = DB.collection('postsDb');
     req.headers.query = req.headers.query|| "";
     switch(req.headers.query){
       case 'datefirst':
@@ -76,6 +76,7 @@ module.exports ={
     });
   },
   createPost:function(req,res){
+    console.log('start insert')
     var post = postConstruct(req);
     DB.collection('postsDb').insert(post,function(err,done){
       console.log('DB insert done');

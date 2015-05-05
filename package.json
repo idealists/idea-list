@@ -11,9 +11,9 @@
     "grunt-browserify": "*",
     "grunt-contrib-watch": "*",
     "grunt-react": "*",
+    "jquery": "^2.1.4",
     "mongodb": "*",
-    "react": "*",
-    "react-ajax": "^0.1.1"
+    "react": "*"
   },
   "devDependencies": {
     "grunt": "*",
