@@ -4,6 +4,7 @@ var ajax = require('ajax');
 
 var postActions = {
   getPostEntries: function(query) {
+    query = query || 'vote';
     ajax.get('/posts', query, function(postList) {
       console.log(postList);
 
@@ -18,7 +19,7 @@ var postActions = {
     ajax.post('/posts/create', newPostEntry, function(value) {
       console.log('posted',value);
       this.getPostEntries('vote');
-    })
+    }.bind(this))
   }
 }
 

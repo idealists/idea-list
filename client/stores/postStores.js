@@ -6,7 +6,7 @@ var objectAssign = require('react/lib/Object.assign');
 var CHANGE_EVENT= 'Change'
 var _postList =[];
 
-var populatestore:function(postlist){
+var populatestore = function(postlist){
      _postList=postlist;
      Dispatcher.handleAction({
         actionType: Constants.STORE_UPDATED,
@@ -23,7 +23,6 @@ var postStore = objectAssign({}, EventEmitter.prototype,{
   }
 })
 
-
 postStore.dispatchToken= Dispatcher.register(function(action) {
 
   switch(action.type) {
@@ -37,5 +36,6 @@ postStore.dispatchToken= Dispatcher.register(function(action) {
       break
     default:
       return false
-  })
+  }
+})
 module.exports = postStore;
