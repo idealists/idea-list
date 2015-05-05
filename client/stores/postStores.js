@@ -8,15 +8,15 @@ var _postList =[];
 
 var populatestore = function(postlist){
      _postList=postlist;
-     Dispatcher.handleAction({
-        actionType: Constants.STORE_UPDATED,
-        data: _postList
-      });
+
   }
 
 var postStore = objectAssign({}, EventEmitter.prototype,{
   pullposts:function(){
     return _postList
+  },
+  removeChangeListener: function(cb){
+    this.removeListener(CHANGE_EVENT, cb);
   },
   addChangeListener: function(cb){
     this.on(CHANGE_EVENT, cb);
@@ -26,9 +26,9 @@ var postStore = objectAssign({}, EventEmitter.prototype,{
 
 postStore.dispatchToken= Dispatcher.register(function(action) {
 
-  switch(action.type) {
+  switch(action.action.actionType) {
     case Constants.RELOAD_POSTLIST:
-      populatestore(action.data)
+      populatestore(action.action.data)
       todoStore.emit(CHANGE_EVENT)
       break
     case Constants.PULL_POSTLIST:
