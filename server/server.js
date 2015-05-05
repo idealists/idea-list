@@ -28,6 +28,8 @@ passport.use(new SlackStrategy({
     team: 'T04M0RM4V'
   },
   function(accessToken, refreshToken, profile, done) {
+    console.log(arguments);
+    
     User.findOne({ slackId: profile.id }, function (err, user) {
       return done(err, user);
     });
