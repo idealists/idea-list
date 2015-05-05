@@ -18,7 +18,10 @@ var server = app.listen(process.env.PORT || 5000, function(){
 
 });
 
-app.post('/api/idea', function (request, response){
-  console.log(request.body);
-  response.end();
-});
+app.post('/api/idea', function(req, res){
+  var idea = req.body.text,
+      token = req.body.token,
+      command = req.body.command
+   console.log(req.body);
+   //res.send(req.body);
+})
