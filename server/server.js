@@ -1,4 +1,5 @@
 var bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser');
 var express = require('express');
 var session = require('express-session');
 var passport = require('passport');
@@ -6,18 +7,12 @@ var SlackStrategy = require('passport-slack').Strategy;
 var User = require('./models/users.js');
 var TEAM_ID = 'T04M0RM4V';
 
-var app = express();
+passport.serializeUser(function (user, done){
+  done(null, user);
+});
 
-app.use('/', express.static('client'));
-app.use(bodyParser.json());
-
-require('./middleware.js')(app,express);
-
-var server = app.listen(process.env.PORT || 5000, function () {
-  var host = server.address().address;
-  var port = server.address().port;
-
-  console.log('Serving at port %s', port);
+passport.deserializeUser(function (user, done){
+  done(err, user);    
 });
 
 passport.use(new SlackStrategy({
@@ -29,7 +24,7 @@ passport.use(new SlackStrategy({
     team: TEAM_ID
   },
   function(accessToken, refreshToken, profile, done) {
-    console.log(profile);
+    console.log('profile', profile,'\n done', done);
 
     User.findOne({ slackId: profile.id }, function (err, user) {
       if (err) return done(err);
@@ -53,6 +48,24 @@ passport.use(new SlackStrategy({
   }
 ));
 
+var app = express();
+
+app.use('/', express.static('client'));
+app.use(bodyParser.json());
+app.use(cookieParser);
+app.use(session);
+app.use(passport.initialize());
+app.use(passport.session());
+
+require('./middleware.js')(app,express);
+
+var server = app.listen(process.env.PORT || 5000, function () {
+  var host = server.address().address;
+  var port = server.address().port;
+
+  console.log('Serving at port %s', port);
+});
+
 app.get('/auth/slack',
   passport.authorize('slack')
 );
@@ -63,3 +76,8 @@ app.get('/auth/slack/callback',
     response.redirect('/posts');
   }
 );
+
+app.get('/api/user', function (request, response) {
+  response.status(200);
+  response.send(JSON.stringify(request.user));
+});
