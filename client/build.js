@@ -5,6 +5,7 @@ var ajax = require('ajax');
 
 var postActions = {
   getPostEntries: function(query) {
+    query = query || 'vote';
     ajax.get('/posts', query, function(postList) {
       console.log(postList);
 
@@ -17,8 +18,9 @@ var postActions = {
 
   createPostEntry: function(newPostEntry) {
     ajax.post('/posts/create', newPostEntry, function(value) {
-      console.log(value);
-    })
+      console.log('posted',value);
+      this.getPostEntries('vote');
+    }.bind(this))
   }
 }
 
@@ -235,7 +237,9 @@ module.exports = Search;
 var Constants = {
   ADD_POSTENTRY: "ADD_POSTENTRY",
   REMOVE_POSTENTRY: "REMOVE_POSTENTRY",
-  RELOAD_POSTLIST:'RELOAD_POSTLIST'
+  RELOAD_POSTLIST:'RELOAD_POSTLIST',
+  STORE_UPDATED:"STORE_UPDATED",
+  PULL_POSTLIST:'PULL_POSTLIST'
 };
 
 module.exports = Constants;
@@ -253,23 +257,49 @@ mainDispatcher.handleAction = function(action){
 
  module.exports = mainDispatcher
 },{"flux":17}],12:[function(require,module,exports){
-// var dispatcher = require('../dispatcher/dispatcher.js');
+var Dispatcher = require('../dispatcher/dispatcher');
+var Constants = require('../constants/constants')
 var EventEmitter = require('events').EventEmitter;
-var assign = require('react/lib/Object.assign');
+var objectAssign = require('react/lib/Object.assign');
 
-var _postsList =[];
-var PostsStore =  assign({}, EventEmitter.prototype,{
-  populatestore:function(postlist){
-     _postsList=posts;
-  },
+var CHANGE_EVENT= 'Change'
+var _postList =[];
+
+var populatestore = function(postlist){
+     _postList=postlist;
+     Dispatcher.handleAction({
+        actionType: Constants.STORE_UPDATED,
+        data: _postList
+      });
+  }
+
+var postStore = objectAssign({}, EventEmitter.prototype,{
   pullposts:function(){
-    return _postsList
+    return _postList
+  },
+  addChangeListener: function(cb){
+    this.on(CHANGE_EVENT, cb);
   }
 })
 
-module.exports = PostsStore;
+postStore.dispatchToken= Dispatcher.register(function(action) {
 
-},{"events":15,"react/lib/Object.assign":45}],13:[function(require,module,exports){
+  switch(action.type) {
+    case Constants.RELOAD_POSTLIST:
+      populatestore(action.data)
+      todoStore.emit(CHANGE_EVENT)
+      break
+    case Constants.PULL_POSTLIST:
+        pullposts();
+
+      break
+    default:
+      return false
+  }
+})
+module.exports = postStore;
+
+},{"../constants/constants":10,"../dispatcher/dispatcher":11,"events":15,"react/lib/Object.assign":45}],13:[function(require,module,exports){
 /* See license.txt for terms of usage */
 
 var _ = require('underscore');

@@ -4,7 +4,7 @@ var ajax = require('ajax');
 
 var postActions = {
   getPostEntries: function(query) {
-    query =query||"vote"
+    query = query || 'vote';
     ajax.get('/posts', query, function(postList) {
       console.log(postList);
 
