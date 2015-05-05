@@ -1,53 +1,48 @@
-var React = require('react');
-var Search = require('./search.jsx');
-var Filter = require('./filter.jsx');
-var PostList = require('./postList.jsx');
-var CreatePostEntryView = require('./createPostEntryView.jsx');
-var postActions = require('../actions/postActions');
-var postStore = require('../stores/postStores');
+var React          = require('react');
+var CreateIdeaView = require('./createIdeaView.jsx');
+var IdeaList       = require('./ideaList.jsx');
+var IdeaFilter     = require('./ideaFilter.jsx');
+var IdeaSearch     = require('./ideaSearch.jsx');
+var ideaActions    = require('../actions/ideaActions');
+var ideaStore      = require('../stores/ideaStore');
 
 var Home = React.createClass({
-
-  getInitialState: function() {
-    postActions.getPostEntries('vote');
+  getInitialState : function(){
+    ideaActions.getIdeas('votes');
 
     return {
-      list: postStore.pullposts()
+      list: ideaStore.fetchIdeas()
     }
   },
 
-  componentDidMount: function() {
-    postStore.addChangeListener(this._onChange);
+  componentDidMount : function(){
+    ideaStore.addChangeListener(this._onChange);
   },
 
-  componentWillUnmount: function() {
-    postStore.removeChangeListener(this._onChange);
+  componentWillUnmount : function(){
+    ideaStore.removeChangeListener(this._onChange);
   },
 
-  handleAddPost: function(newPostEntry) {
-    postActions.createPostEntry(newPostEntry);
+  handleAddIdea : function(newIdea){
+    ideaActions.createIdea(newIdea);
   },
 
-  // handleRemovePost: function() {
-  // },
-
-  _onChange: function() {
+  _onChange : function(){
     this.setState({
-      list: postStore.pullposts()
-    })
+      list : ideaStore.fetchIdeas()
+    });
   },
 
-  render: function() {
+  render : function(){
     return(
       <div>
-        <h1> Create Post </h1>
-        <CreatePostEntryView add={this.handleAddPost}/>
-        <h1> Idea Tool </h1>
-        <Search />
-        <Filter />
-        <PostList items={this.state.list}/>
+        <CreateIdeaView add={this.handleAddIdea}/>
+        <h1> Feature Idea Tool </h1>
+        <IdeaSearch />
+        <IdeaFilter />
+        <IdeaList ideas={this.state.list}/>
       </div>
-    )
+    );
   }
 });
 

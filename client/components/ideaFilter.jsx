@@ -1,16 +1,17 @@
 var React = require('react');
 
-var Filter = React.createClass({
-  render: function() {
+var IdeaFilter = React.createClass({
+  render : function(){
     return(
       <div>
         Filter By:
+        <div> Date </div>
         <div> Tags </div>
-        <div> Dates </div>
+        <div> User </div>
         <div> Votes </div>
       </div>
-    )
+    );
   }
 });
 
-module.exports = Filter;
+module.exports = IdeaFilter;

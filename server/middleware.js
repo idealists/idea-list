@@ -1,10 +1,10 @@
-var bodyParser  = require('body-parser');
+var bodyParser = require('body-parser');
  // var morgan = require('morgan');
 
-module.exports=function(app,express){
-  var posts = express.Router();
+module.exports = function(app, express){
+  var ideas = express.Router();
   app.use(bodyParser.urlencoded({extended: true}));
   app.use(bodyParser.json());
-  app.use('/posts', posts);
-  require('./posts/posts-routes.js')(posts);
+  app.use('/ideas', ideas);
+  require('./ideas/idea-routes.js')(ideas);
 };
