@@ -16,8 +16,8 @@
     "mongodb": "*",
     "mongoose": "^4.0.2",
     "passport": "^0.2.1",
-    "passport-slack": "0.0.1"
-    "react": "*",
+    "passport-slack": "0.0.1",
+    "react": "*"
   },
   "devDependencies": {
     "grunt": "*",
