@@ -2,20 +2,9 @@ var bodyParser = require('body-parser');
 var express = require('express');
 var session = require('express-session');
 var passport = require('passport');
-<<<<<<< HEAD
-<<<<<<< HEAD
 var SlackStrategy = require('passport-slack').Strategy;
 var User = require('./models/users.js');
-<<<<<<< HEAD
 var TEAM_ID = 'T04M0RM4V';
-=======
-var SlackStrategy = require('passport-slack');
->>>>>>> More progress on OAUTH
-=======
-var SlackStrategy = require('passport-slack').Strategy;
->>>>>>> Basic OAuth
-=======
->>>>>>> Progress integrating with MongoDB to store Slack ID
 
 var app = express();
 
