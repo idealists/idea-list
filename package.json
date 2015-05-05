@@ -9,9 +9,9 @@
     "grunt": "*",
     "grunt-browserify": "*",
     "grunt-react": "*",
-    "grunt-contrib-watch": "*"
+    "grunt-contrib-watch": "*",
     "mongodb": "*",
-    "react": "*",
+    "react": "*"
   },
   "devDependencies": {
     "grunt-cli": "*",
