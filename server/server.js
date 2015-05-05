@@ -16,3 +16,8 @@ var server = app.listen(process.env.PORT||5000, function () {
   console.log('i am at http://%s:%s', host, port);
 
 });
+
+app.post('/api/idea', function (request, response){
+  console.log(request.body);
+  response.end();
+});
