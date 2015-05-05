@@ -7,10 +7,10 @@
     "envify": "*",
     "express": "*",
     "grunt-browserify": "*",
-    "mongodb": "*",
-    "react": "*",
+    "grunt-contrib-watch": "*",
     "grunt-react": "*",
-    "grunt-contrib-watch": "*"
+    "mongodb": "^2.0.28",
+    "react": "*"
   },
   "devDependencies": {
     "grunt": "*",
