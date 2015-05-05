@@ -78,7 +78,7 @@ module.exports ={
     var post = postConstruct(req);
     DB.collection('postsDb').insert(post,function(err,done){
       console.log('DB insert done');
-      res.end(done)
+      res.end(JSON.stringify(done));
     });
   },
   createComment:function(req,res){
