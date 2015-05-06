@@ -1,9 +1,13 @@
 var mongo    = require('mongodb').MongoClient;
 var ObjectId = require('mongodb').ObjectID;
 var DB;
-var Slack = require('node-slack');
-var slack = new Slack(SLACK_WEBHOOK);
-//var request = require('request');
+var request = require('request');
+//var Slack = require('node-slack');
+var Slack = require('slack-node');
+var webhook = process.env.SLACK_WEBHOOK;
+
+var slack = new Slack(webhook);
+//slack.setWebHook(webhook);
 
 
 mongo.connect(process.env.MONGOLAB_URI || 'mongodb://localhost:27017/ideatool', function(err, db){
@@ -98,10 +102,12 @@ module.exports = {
     //get new counter +username
     var idea = ideaConstruct(req);
 
-    slack.send({
+    slack.webhook({
       text: 'HEYYYY',
-      channel: '',
-      username: '',
+      channel: '#general',
+      //username: '',
+    }, function(err, res){
+      console.log(res);
     });
 
     DB.collection('ideasDB').insert(idea, function(err, done){
