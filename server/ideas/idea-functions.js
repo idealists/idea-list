@@ -99,8 +99,8 @@ module.exports = {
     var idea = ideaConstruct(req);
 
     var reply = slack.respond(req.body, function(hook){
-      return {
-        text: 'PLEASE WORK!'
+      return payload={
+        "text": 'PLEASE WORK!'
       }
     });
 
