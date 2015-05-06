@@ -1,6 +1,10 @@
 var mongo    = require('mongodb').MongoClient;
 var ObjectId = require('mongodb').ObjectID;
 var DB;
+var Slack = require('node-slack');
+var slack = new Slack(SLACK_WEBHOOK);
+//var request = require('request');
+
 
 mongo.connect(process.env.MONGOLAB_URI || 'mongodb://localhost:27017/ideatool', function(err, db){
   if (err) throw err;
@@ -94,13 +98,37 @@ module.exports = {
     //get new counter +username
     var idea = ideaConstruct(req);
 
+    slack.send({
+      text: 'HEYYYY',
+      channel: '',
+      username: '',
+    });
+
     DB.collection('ideasDB').insert(idea, function(err, done){
       console.log('DB insert done: ', idea);
       res.end(JSON.stringify(done));
     });
-    var payload = 'payload={"text": HELLyeayah", "channel": "#'+idea.sChannelName+'", "username": "darth"}';
-    res.send(payload);
   },
+
+  // sendToSlack : function(idea){
+  //   var payload = 'payload={"text": HELLyeayah"
+  //                 , "channel": "#'+idea.sChannelName+'"
+  //                 , "username": "darth"}';
+  //   var data = {
+      
+  //   }
+    
+  //   request({ 
+  //         method: 'POST'
+  //       , uri: 'https://hooks.slack.com/services/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'
+  //       , json: JSON.stringify(data)
+  //     },
+  //     function(err, res, body){
+  //       if(err) throw err;
+  //       console.log('Success! -->', body);
+  //     }
+  //   )
+  // },
 
   createComment : function(req,res){
     var comment = commentConstruct(req);
