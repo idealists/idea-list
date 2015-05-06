@@ -7,14 +7,14 @@ var userProfile
 var ideaHeader//gets votes  button needs request
 ///////////////// 
 var IdeaView= React.createClass({
-  setInitialState:function (argument) {
+  
+  getInitialState:function(){
     var index = this.context.router.getCurrentParams().index
     var Idea = this.props.params.ideas[index]
-    ideaActions.getIdeas('vote',Idea.id)
-    return Idea
-  }
-  getInitialState:function(){
-    commentActions.getComments('vote');
+    this.setState({
+      idea: idea
+    })
+    commentActions.getIdeas('vote',Idea)
   },
   componentDidMount :function (argument) {
     commentActions.addChangeListener(this._onChange)
