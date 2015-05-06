@@ -11,26 +11,37 @@ mongo.connect(process.env.MONGOLAB_URI || 'mongodb://localhost:27017/ideatool', 
 var ideaConstruct = function(req){
   var idea = {
     // need format like int or str for user id slackId
-    userId   : req.body.userId || null,
-    slackId  : req.body.slackId || null,
-    title    : req.body.title || null,
-    body     : req.body.body || null,
-    tags     : req.body.tags || null,
-    active   : true,
-    votes    : 1,
-    comments : []
+    userName     : req.body.user_name,
+    sTeamId      : req.body.team_id,
+    sChannelId   : req.body.channel_id,
+    sChannelName : req.body.channel_name,
+    sToken       : process.env.SLACK_TOKEN,
+    sTeamDomain  : req.body.team_domain,
+    sCommand     : req.body.command,
+    sText        : req.body.text,
+    tags         : req.body.tags || null,
+    active       : true,
+    votes        : 1,
+    comments     : []
   };
   return idea;
 };
 
 var commentConstruct = function(req){
   var comment = {
-    parentId : req.body.parentId || null,
-    userId   : req.body.userId || null,
-    slackId  : req.body.slackId || null,
-    body     : req.body.body || null,
-    votes    : 0,
-    comments : []
+    parentId     : req.body.parentId || null,
+    userName     : req.body.user_name,
+    sTeamId      : req.body.team_id,
+    sChannelId   : req.body.channel_id,
+    sChannelName : req.body.channel_name,
+    sToken       : process.env.SLACK_TOKEN,
+    sTeamDomain  : req.body.team_domain,
+    sCommand     : req.body.command,
+    sText        : req.body.text,
+    tags         : req.body.tags || null,
+    active       : true,
+    votes        : 1,
+    comments     : []
   };
   return comment;
 };
@@ -77,10 +88,14 @@ module.exports = {
   },
 
   createIdea : function(req,res){
+    // var user id = req.userid
+    //db.collection ('userdb').update(userid counter = counter 
+    //1)
+    //get new counter +username
     var idea = ideaConstruct(req);
 
     DB.collection('ideasDB').insert(idea, function(err, done){
-      console.log('DB insert done');
+      console.log('DB insert done: ', idea);
       res.end(JSON.stringify(done));
     });
   },
@@ -88,13 +103,13 @@ module.exports = {
   createComment : function(req,res){
     var comment = commentConstruct(req);
     var commentId;
-
+    var ideaId = req.data._id
     DB.collection('ideasDB').insert(comment, function(err, id){
       if (err) {console.log(err);}
       commentId = id._id;
     });
 
-    DB.collection('ideasDB').update({_id:ObjectId(commentid)},{$push:{comments:commentid}});
+    DB.collection('ideasDB').update({_id:ObjectId(postId)},{$push:{comments:commentid}});
     res.end('posted comment');
   }
 };
