@@ -1,15 +1,14 @@
-var Dispatcher = require('../dispatcher/dispatcher');
+var Dispatcher = require('../dispatcher/commentDispatcher');
 var Constants  = require('../constants/constants');
 var $          = require('jquery');
 
-
-var ideaActions = {
-  getIdeas : function(query, data){
+var commentActions = {
+  getComments : function(query, data){
     query = query || null;
     data  = data  || null;
 
     $.ajax({
-      url       : "/ideas",
+      url       : "/comments",
       dataType  : "json",
       method    : "GET",
       headers   : { 'query' : query,
@@ -24,17 +23,18 @@ var ideaActions = {
   },
 
   createIdea : function(newIdea){
-    var ideaActions = this;
+    var commentActions = this;
 
     $.ajax({
-      url      : "/ideas/create",
+      url      : "/comments/create",
       dataType : "json",
       method   : "POST",
       data     : newIdea
     }).done(function(ideaList){
-      ideaActions.getIdeas('votes');
+      commentActions.getIdeas('votes');
     });
   }
 }
 
-module.exports= ideaActions;
+module.exports= commentActions;
+//need to build a server routes
