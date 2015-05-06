@@ -98,16 +98,20 @@ module.exports = {
     //get new counter +username
     var idea = ideaConstruct(req);
 
-    slack.send({
-      text: 'HEYYYY',
-      channel: '',
-      username: '',
+    var reply = slack.respond(req.body, function(hook){
+      return {
+        text: 'PLEASE WORK!'
+      }
     });
+
+    res.json(reply);
 
     DB.collection('ideasDB').insert(idea, function(err, done){
       console.log('DB insert done: ', idea);
       res.end(JSON.stringify(done));
     });
+
+    
   },
 
   // sendToSlack : function(idea){
