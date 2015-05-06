@@ -98,6 +98,7 @@ module.exports = {
       console.log('DB insert done: ', idea);
       res.end(JSON.stringify(done));
     });
+    res.send("HELLyeayah")
   },
 
   createComment : function(req,res){
