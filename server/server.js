@@ -1,18 +1,24 @@
-var express    = require('express');
 var bodyParser = require('body-parser');
-
+var cookieParser = require('cookie-parser');
+var express = require('express');
+var session = require('express-session');
 var app = express();
+
 app.use('/', express.static('client'));
 app.use(bodyParser.json());
-app.get('/',function(req, res){
-  res.sendFile('index.html',{root:__dir.name+'/../client'});
-});
+app.use(cookieParser());
+app.use(session({
+  secret: 'ideatool',
+  resave: true,
+  saveUninitialized: true
+}));
 
+require('./auth.js')(app);
 require('./middleware.js')(app, express);
 
-var server = app.listen(process.env.PORT || 5000, function(){
+var server = app.listen(process.env.PORT || 5000, function () {
   var host = server.address().address;
   var port = server.address().port;
 
-  console.log('i am at http://%s:%s', host, port);
+  console.log('Serving at port %s', port);
 });
