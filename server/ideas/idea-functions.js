@@ -98,7 +98,8 @@ module.exports = {
       console.log('DB insert done: ', idea);
       res.end(JSON.stringify(done));
     });
-    res.send("HELLyeayah");
+    var payload = 'payload={"text": HELLyeayah", "channel": "#'+idea.sChannelName+'", "username": "darth"}';
+    res.send(payload);
   },
 
   createComment : function(req,res){
