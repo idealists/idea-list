@@ -13,7 +13,8 @@
     "grunt-react": "*",
     "jquery": "^2.1.4",
     "mongodb": "*",
-    "react": "*"
+    "react": "*",
+    "react-router": "^0.13.3"
   },
   "devDependencies": {
     "grunt": "*",
