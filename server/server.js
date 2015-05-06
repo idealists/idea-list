@@ -13,8 +13,9 @@ app.use(session({
   saveUninitialized: true
 }));
 
-require('./auth.js')(app);
-require('./middleware.js')(app, express);
+require('./auth')(app);
+require('./middleware')(app, express);
+require('./update-users');
 
 var server = app.listen(process.env.PORT || 5000, function () {
   var host = server.address().address;
