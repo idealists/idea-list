@@ -54,7 +54,7 @@ function isAuthenticated (request, response, next) {
   response.redirect('/login');
 }
 
-module.exports = function (app, express) {
+module.exports = function (app) {
   app.use(passport.initialize());
   app.use(passport.session());
 
@@ -81,3 +81,5 @@ module.exports = function (app, express) {
     response.redirect('/login');
   });
 }
+
+module.exports.isAuthenticated = isAuthenticated;

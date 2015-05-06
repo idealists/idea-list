@@ -13,7 +13,7 @@ app.use(session({
   saveUninitialized: true
 }));
 
-require('./auth.js')(app, express);
+require('./auth.js')(app);
 require('./middleware.js')(app, express);
 
 var server = app.listen(process.env.PORT || 5000, function () {
