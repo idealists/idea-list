@@ -32,7 +32,7 @@ var ideaConstruct = function(req){
 var commentConstruct = function(req){
   var comment = {
     parentId     : req.body.parentId || null,
-    userName     : req.body.user_name,
+    sUserName     : req.body.user_name,
     sTeamId      : req.body.team_id,
     sChannelId   : req.body.channel_id,
     sChannelName : req.body.channel_name,
