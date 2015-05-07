@@ -13,10 +13,8 @@
     "grunt-react": "*",
     "jquery": "^2.1.4",
     "mongodb": "*",
-    "node-slack": "0.0.5",
     "react": "*",
-    "request": "^2.55.0",
-    "slack-node": "^0.1.0"
+    "request": "^2.55.0"
   },
   "devDependencies": {
     "grunt": "*",

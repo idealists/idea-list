@@ -1,8 +1,6 @@
 var mongo    = require('mongodb').MongoClient;
 var ObjectId = require('mongodb').ObjectID;
 var DB;
-// var Slack = require('node-slack');
-// var slack = new Slack(process.env.SLACK_WEBHOOK);
 var request = require('request');
 
 
