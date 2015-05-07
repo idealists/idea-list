@@ -14,24 +14,24 @@ var commentActions = {
       headers   : { 'query' : query,
                     'data'  : data
                   }
-    }).done(function(ideaList){
+    }).done(function(commentList){
       Dispatcher.handleAction({
-        actionType : Constants.RELOAD_IDEALIST,
-        data       : ideaList
+        actionType : Constants.RELOAD_COMMENTLIST,
+        data       : commentList
       })
     });
   },
 
-  createIdea : function(newIdea){
+  createComment : function(newComment){
     var commentActions = this;
 
     $.ajax({
       url      : "/comments/create",
       dataType : "json",
       method   : "POST",
-      data     : newIdea
-    }).done(function(ideaList){
-      commentActions.getIdeas('votes');
+      data     : newComment
+    }).done(function(commentList){
+      commentActions.getComments('votes');
     });
   }
 }
