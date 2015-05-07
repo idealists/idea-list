@@ -17,7 +17,7 @@ passport.use(new SlackStrategy({
 
       // Create a new user if none found
       if (!user) {
-        var user = new User({
+        user = new User({
           accessToken: accessToken,
           slackId: profile.id,
           slackName: profile.displayName,
@@ -80,6 +80,6 @@ module.exports = function (app) {
     request.logout();
     response.redirect('/login');
   });
-}
+};
 
 module.exports.isAuthenticated = isAuthenticated;
