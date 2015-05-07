@@ -102,9 +102,9 @@ module.exports = {
     //   return 'payload={"text": "PLEASE WORK!"}'
     // });
 
-    var reply = { payload: { 'text': 'hey' } };
+    var reply = { 'text': 'hey, hey, hey!' };
 
-    res.json(reply);
+    res.send(JSON.stringify(reply));
 
     DB.collection('ideasDB').insert(idea, function(err, done){
       console.log('DB insert done: ', idea);
