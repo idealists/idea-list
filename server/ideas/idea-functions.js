@@ -102,7 +102,7 @@ module.exports = {
     //   return 'payload={"text": "PLEASE WORK!"}'
     // });
 
-    var reply = { 'text': 'hey' };
+    var reply = { payload: { 'text': 'hey' } };
 
     res.json(reply);
 
