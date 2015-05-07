@@ -1,6 +1,8 @@
 var mongo    = require('mongodb').MongoClient;
 var ObjectId = require('mongodb').ObjectID;
 var DB;
+var request = require('request');
+
 
 mongo.connect(process.env.MONGOLAB_URI || 'mongodb://localhost:27017/ideatool', function(err, db){
   if (err) throw err;
@@ -11,26 +13,37 @@ mongo.connect(process.env.MONGOLAB_URI || 'mongodb://localhost:27017/ideatool', 
 var ideaConstruct = function(req){
   var idea = {
     // need format like int or str for user id slackId
-    userId   : req.body.userId || null,
-    slackId  : req.body.slackId || null,
-    title    : req.body.title || null,
-    body     : req.body.body || null,
-    tags     : req.body.tags || null,
-    active   : true,
-    votes    : 1,
-    comments : []
+    userName     : req.body.user_name,
+    sTeamId      : req.body.team_id,
+    sChannelId   : req.body.channel_id,
+    sChannelName : req.body.channel_name,
+    sToken       : process.env.SLACK_TOKEN,
+    sTeamDomain  : req.body.team_domain,
+    sCommand     : req.body.command,
+    sText        : req.body.text,
+    tags         : req.body.tags || null,
+    active       : true,
+    votes        : 1,
+    comments     : []
   };
   return idea;
 };
 
 var commentConstruct = function(req){
   var comment = {
-    parentId : req.body.parentId || null,
-    userId   : req.body.userId || null,
-    slackId  : req.body.slackId || null,
-    body     : req.body.body || null,
-    votes    : 0,
-    comments : []
+    parentId     : req.body.parentId || null,
+    userName     : req.body.user_name,
+    sTeamId      : req.body.team_id,
+    sChannelId   : req.body.channel_id,
+    sChannelName : req.body.channel_name,
+    sToken       : process.env.SLACK_TOKEN,
+    sTeamDomain  : req.body.team_domain,
+    sCommand     : req.body.command,
+    sText        : req.body.text,
+    tags         : req.body.tags || null,
+    active       : true,
+    votes        : 1,
+    comments     : []
   };
   return comment;
 };
@@ -79,22 +92,34 @@ module.exports = {
   createIdea : function(req,res){
     var idea = ideaConstruct(req);
 
+    var reply = { 'text': 'IDEA POSTED! Whoohoo! - Idea: '+ idea.sText };
+
+    request({ method: 'POST', 
+      uri: process.env.SLACK_WEBHOOK, 
+      body: JSON.stringify(reply) 
+      },
+      function (error, response, body) {
+        if(error) console.log(error);
+      }
+    );
+
     DB.collection('ideasDB').insert(idea, function(err, done){
-      console.log('DB insert done');
-      res.end(JSON.stringify(done));
+      console.log('DB insert done: ', idea);
     });
+    
+    res.end();
   },
 
   createComment : function(req,res){
     var comment = commentConstruct(req);
     var commentId;
-
+    var ideaId = req.data._id;
     DB.collection('ideasDB').insert(comment, function(err, id){
       if (err) {console.log(err);}
       commentId = id._id;
     });
 
-    DB.collection('ideasDB').update({_id:ObjectId(commentid)},{$push:{comments:commentid}});
+    DB.collection('ideasDB').update({_id:ObjectId(postId)},{$push:{comments:commentid}});
     res.end('posted comment');
   }
 };

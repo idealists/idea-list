@@ -1,6 +1,6 @@
 var request = require('request');
 var slackUserList = 'https://slack.com/api/users.list?token='+process.env.SLACK_API_TOKEN;
-var User = require('./models/users')
+var User = require('./models/users');
 
 function updateUsers () {
   request(slackUserList, function (error, response, body) {
