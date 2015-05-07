@@ -94,7 +94,7 @@ module.exports = {
   createIdea : function(req,res){
     var idea = ideaConstruct(req);
 
-    var reply = { 'text': 'hey, hey, hey!' };
+    var reply = { 'text': 'IDEA POSTED! Whoohoo! - Idea: '+ idea.sText };
 
     request({ method: 'POST', 
       uri: process.env.SLACK_WEBHOOK, 
