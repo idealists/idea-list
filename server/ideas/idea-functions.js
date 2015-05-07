@@ -13,7 +13,7 @@ mongo.connect(process.env.MONGOLAB_URI || 'mongodb://localhost:27017/ideatool', 
 var ideaConstruct = function(req){
   var idea = {
     // need format like int or str for user id slackId
-    userName     : req.body.user_name,
+    sUserName    : req.body.user_name,
     sTeamId      : req.body.team_id,
     sChannelId   : req.body.channel_id,
     sChannelName : req.body.channel_name,
