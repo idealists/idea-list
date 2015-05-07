@@ -104,14 +104,12 @@ module.exports = {
         if(error) console.log(error);
       }
     );
-    //res.end();
 
     DB.collection('ideasDB').insert(idea, function(err, done){
       console.log('DB insert done: ', idea);
-      res.end(JSON.stringify(done));
     });
-
     
+    res.end();
   },
 
   createComment : function(req,res){
