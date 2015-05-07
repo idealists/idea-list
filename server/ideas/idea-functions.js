@@ -1,8 +1,8 @@
 var mongo    = require('mongodb').MongoClient;
 var ObjectId = require('mongodb').ObjectID;
 var DB;
-var Slack = require('node-slack');
-var slack = new Slack(process.env.SLACK_WEBHOOK);
+// var Slack = require('node-slack');
+// var slack = new Slack(process.env.SLACK_WEBHOOK);
 var request = require('request');
 
 
@@ -92,25 +92,19 @@ module.exports = {
   },
 
   createIdea : function(req,res){
-    // var user id = req.userid
-    //db.collection ('userdb').update(userid counter = counter 
-    //1)
-    //get new counter +username
     var idea = ideaConstruct(req);
-
-    // var reply = slack.respond(req.body, function(hook){
-    //   return 'payload={"text": "PLEASE WORK!"}'
-    // });
 
     var reply = { 'text': 'hey, hey, hey!' };
 
-    request({ method: 'POST', uri: 'https://hooks.slack.com/services/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', body: JSON.stringify(reply) },
+    request({ method: 'POST', 
+      uri: process.env.SLACK_WEBHOOK, 
+      body: JSON.stringify(reply) 
+      },
       function (error, response, body) {
-        console.log('error', error)
-        console.log('response', response)
-        console.log('body', body)
-      });
-    res.end();
+        if(error) console.log(error);
+      }
+    );
+    //res.end();
 
     DB.collection('ideasDB').insert(idea, function(err, done){
       console.log('DB insert done: ', idea);
@@ -120,30 +114,10 @@ module.exports = {
     
   },
 
-  // sendToSlack : function(idea){
-  //   var payload = 'payload={"text": HELLyeayah"
-  //                 , "channel": "#'+idea.sChannelName+'"
-  //                 , "username": "darth"}';
-  //   var data = {
-      
-  //   }
-    
-  //   request({ 
-  //         method: 'POST'
-  //       , uri: 'https://hooks.slack.com/services/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'
-  //       , json: JSON.stringify(data)
-  //     },
-  //     function(err, res, body){
-  //       if(err) throw err;
-  //       console.log('Success! -->', body);
-  //     }
-  //   )
-  // },
-
   createComment : function(req,res){
     var comment = commentConstruct(req);
     var commentId;
-    var ideaId = req.data._id
+    var ideaId = req.data._id;
     DB.collection('ideasDB').insert(comment, function(err, id){
       if (err) {console.log(err);}
       commentId = id._id;

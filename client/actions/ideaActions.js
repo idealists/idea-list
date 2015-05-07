@@ -18,7 +18,7 @@ var ideaActions = {
       Dispatcher.handleAction({
         actionType : Constants.RELOAD_IDEALIST,
         data       : ideaList
-      })
+      });
     });
   },
 
@@ -34,6 +34,6 @@ var ideaActions = {
       ideaActions.getIdeas('votes');
     });
   }
-}
+};
 
 module.exports= ideaActions;
