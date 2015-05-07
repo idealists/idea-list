@@ -3,7 +3,7 @@ var ObjectId = require('mongodb').ObjectID;
 var DB;
 var Slack = require('node-slack');
 var slack = new Slack(process.env.SLACK_WEBHOOK);
-//var request = require('request');
+var request = require('request');
 
 
 mongo.connect(process.env.MONGOLAB_URI || 'mongodb://localhost:27017/ideatool', function(err, db){
@@ -104,7 +104,13 @@ module.exports = {
 
     var reply = { 'text': 'hey, hey, hey!' };
 
-    res.send(JSON.stringify(reply));
+    request({ method: 'POST', uri: 'https://hooks.slack.com/services/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', body: JSON.stringify(reply) },
+      function (error, response, body) {
+        console.log('error', error)
+        console.log('response', response)
+        console.log('body', body)
+      });
+    res.end();
 
     DB.collection('ideasDB').insert(idea, function(err, done){
       console.log('DB insert done: ', idea);
