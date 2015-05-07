@@ -33,6 +33,7 @@ var Home = React.createClass({
   },
 
   render : function(){
+    console.log('home',this.state)
     return(
       <div>
         <h1> Feature Idea Tool </h1>
