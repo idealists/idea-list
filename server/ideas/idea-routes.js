@@ -1,8 +1,9 @@
 var ideaFunctions = require('./idea-functions.js');
+var isAuth = require('../auth.js').isAuthenticated;
 
 module.exports = function(app){
-  app.get('/', ideaFunctions.getIdeas);
-  app.post('/create', ideaFunctions.createIdea);
-  app.post('/comment', ideaFunctions.createComment);
+  app.get('/', isAuth, ideaFunctions.getIdeas);
+  app.post('/create', isAuth, ideaFunctions.createIdea);
+  app.post('/comment', isAuth, ideaFunctions.createComment);
   // body...
 };
