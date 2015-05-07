@@ -37,6 +37,7 @@ var commentConstruct = function(req){
 
 module.exports = {
   getIdeas : function(req,res){
+    console.log('getting')
     var ideas  = DB.collection('ideasDB');
     req.headers.query = req.headers.query || "";
 

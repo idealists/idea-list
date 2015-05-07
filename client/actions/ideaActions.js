@@ -9,7 +9,7 @@ var ideaActions = {
     data  = data  || null;
 
     $.ajax({
-      url       : "/",
+      url       : "/serverideas/get",
       dataType  : "json",
       method    : "GET",
       headers   : { 'query' : query,
@@ -20,6 +20,7 @@ var ideaActions = {
         actionType : Constants.RELOAD_IDEALIST,
         data       : ideaList
       })
+      console.log('ran')
     });
   },
 
@@ -27,7 +28,7 @@ var ideaActions = {
     var ideaActions = this;
 
     $.ajax({
-      url      : "/create",
+      url      : "/serverideas/create",
       dataType : "json",
       method   : "POST",
       data     : newIdea

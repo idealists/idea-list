@@ -22,9 +22,9 @@ var Home = React.createClass({
     ideaStore.removeChangeListener(this._onChange);
   },
 
-  handleAddIdea : function(newIdea){
-    ideaActions.createIdea(newIdea);
-  },
+
+
+
 
   _onChange : function(){
     this.setState({

@@ -13,7 +13,7 @@ var CreateIdeaView = React.createClass({
     };
 
     // alert if no title or body
-    this.props.add(newIdea);
+        ideaActions.createIdea(newIdea);
 
     this.refs.newIdeaTitle.getDOMNode().value = '';
     this.refs.newIdeaBody.getDOMNode().value = '';
@@ -28,7 +28,7 @@ var CreateIdeaView = React.createClass({
         <input type='text' ref='newIdeaTitle' placeholder='title'></input>
         <input type='text' ref='newIdeaBody' placeholder='body'></input>
         <input type='text' ref='newIdeaTags' placeholder='tags (split by space)'></input>
-        <a onClick={this.handleSubmit} href='/'> Submit </a>
+        <a onClick={this.handleSubmit} > Submit </a>
       </div>
     );
   }
