@@ -1,4 +1,6 @@
 var React = require('react');
+var ideaActions    = require('../actions/ideaActions');
+var Router = require('react-router');
 
 var CreateIdeaView = React.createClass({
   handleSubmit : function(){
@@ -18,6 +20,7 @@ var CreateIdeaView = React.createClass({
     this.refs.newIdeaTitle.getDOMNode().value = '';
     this.refs.newIdeaBody.getDOMNode().value = '';
     this.refs.newIdeaTags.getDOMNode().value = '';
+    this.transitionTo('/')
 
   },
 

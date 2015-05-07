@@ -49,7 +49,7 @@ module.exports = {
         ideas = ideas.find().sort({'datetime':-1}).limit(10);
         break;
       case 'votes':
-        ideas = ideas.find().sort({votes:1}).limit(10);
+        ideas = ideas.find().sort({votes:1,date:1}).limit(10);
         break;
       case 'tags':
       //add username to tags array for easy find of people also.
