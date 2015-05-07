@@ -22,10 +22,6 @@ var Home = React.createClass({
     ideaStore.removeChangeListener(this._onChange);
   },
 
-
-
-
-
   _onChange : function(){
     this.setState({
       list : ideaStore.fetchIdeas()

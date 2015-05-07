@@ -20,6 +20,7 @@ var IdeaList = React.createClass({
           <h4><Link to="ideaView" path=':index'>{title}</Link></h4>
         </div>
       );
+
     })
     return (
       <ul> {list} </ul>
