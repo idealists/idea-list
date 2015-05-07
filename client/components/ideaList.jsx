@@ -25,7 +25,7 @@ var IdeaList = React.createClass({
 });
 
 var routes = (
-  <Route name='idealist' path="/" handler={IdeaList}>
+  <Route name='idealist' path="/ideas" handler={IdeaList}>
     <Route name='ideaView' path=":index" handler={ideaView}/>
   </Route>
 );

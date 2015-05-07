@@ -78,7 +78,7 @@ module.exports = {
 
   createIdea : function(req,res){
     var idea = ideaConstruct(req);
-
+    console.log('newidea')
     DB.collection('ideasDB').insert(idea, function(err, done){
       console.log('DB insert done');
       res.end(JSON.stringify(done));

@@ -9,7 +9,7 @@ var ideaActions = {
     data  = data  || null;
 
     $.ajax({
-      url       : "/ideas",
+      url       : "/",
       dataType  : "json",
       method    : "GET",
       headers   : { 'query' : query,
@@ -27,7 +27,7 @@ var ideaActions = {
     var ideaActions = this;
 
     $.ajax({
-      url      : "/ideas/create",
+      url      : "/create",
       dataType : "json",
       method   : "POST",
       data     : newIdea
