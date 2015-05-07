@@ -18,6 +18,7 @@ var CreateIdeaView = React.createClass({
     this.refs.newIdeaTitle.getDOMNode().value = '';
     this.refs.newIdeaBody.getDOMNode().value = '';
     this.refs.newIdeaTags.getDOMNode().value = '';
+
   },
 
   render : function(){
@@ -27,7 +28,7 @@ var CreateIdeaView = React.createClass({
         <input type='text' ref='newIdeaTitle' placeholder='title'></input>
         <input type='text' ref='newIdeaBody' placeholder='body'></input>
         <input type='text' ref='newIdeaTags' placeholder='tags (split by space)'></input>
-        <button onClick={this.handleSubmit}> Submit </button>
+        <a onClick={this.handleSubmit} href='/'> Submit </a>
       </div>
     );
   }
