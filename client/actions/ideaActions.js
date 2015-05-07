@@ -34,6 +34,10 @@ var ideaActions = {
     }).done(function(ideaList){
       ideaActions.getIdeas('votes');
     });
+  },
+
+  changevote: function (voteobj, userId) {
+    data ={sorce:voteobj, userinfo:userId}
   }
 }
 

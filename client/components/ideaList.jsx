@@ -1,31 +1,33 @@
 var React = require('react');
 var Router = require('react-router')
-var Link = Router.Link;
 var ideaView = require("./ideaView.jsx")
 
-var IdeaList = React.createClass({
-  getInitialState: function(){
+var Link = Router.Link;
+var Route = Router.Route;
+var DefaultRoute = Router.DefaultRoute;
+var RouteHandler = Router.RouteHandler;
 
-  },
+
+var IdeaList = React.createClass({
   render : function(){
-    var list = this.props.params.ideas.map(function(idea, index, collection){
+    var list = this.props.ideas.map(function(idea, index, collection){
       return (
         <li key={index} >
           <h3> <Link to="ideaView">Title: {idea.title}</Link> </h3>
           <h5> Body:  {idea.body}  </h5>
         </li>
       );
-      var routes = (
-        <Route handler={App}>
-          <Route name='ideaView' path=":index" handler={ideaView}/>
-        </Route>
-      );
-    }.bind(this));
 
+    })
     return (
       <ul> {list} </ul>
     );
   }
 });
+var routes = (
+  <Route name='idealist' path="/ideas" handler={IdeaList}>
+    <Route name='ideaView' path=":index" handler={ideaView}/>
+  </Route>
+);
 
 module.exports = IdeaList;
