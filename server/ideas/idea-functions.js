@@ -10,6 +10,7 @@ function getIdeas (req, res) {
   switch (req.headers.query) {
     case 'dateFirst':
       ideas = Idea.find()
+                .select('!comments') // I dont' think so
                 .sort('-updatedAt')
                 .limit(10);
       break;
@@ -83,7 +84,7 @@ function createIdea (req, res) {
     sTeamDomain  : req.body.team_domain || null,
     sCommand     : req.body.command || null,
     title        : req.body.title || null,
-    body         : req.body.body || null,
+    body         : req.body.body,
     tags         : req.body.tags,
     active       : true
   });
@@ -100,7 +101,7 @@ function createComment (req, res) {
   var now = Date.now();
 
   User.findOne({ slackName: req.body.user_name }, function (err, user) {
-    console.log(user.slackName);
+    console.log('User:', user.slackName);
 
     if (!req.body.userId) {
       req.body.userId = user._id;
@@ -112,7 +113,9 @@ function createComment (req, res) {
     req.body.body = req.body.text;
   }
 
-  var comment = new Comment({
+  // If from Slack, set req.body.parentId to mongo _id (looked up from shortId)
+
+  var newComment = new Comment({
     createdAt : now,
     updatedAt : now,
     parentId  : req.body.parentId,
@@ -121,11 +124,37 @@ function createComment (req, res) {
     body      : req.body.body
   });
 
-  comment.save(function (err) {
-    if (err) console.log(err);
-    console.log('New comment "' + comment.body.substr(0, 10) + '"saved')
-  });
+  // Assumes comment request comes with a parentType
+  if (req.body.parentType === 'idea') {
+    Idea.findOne({ _id: req.body.parentId }, function (err, idea) {
+      console.log('Idea shortId:', idea.shortId);
 
+      idea.comments.push(newComment);
+    });
+  }
+
+  if (req.body.parentType === 'comment') {
+    Idea.findOne({ _id: req.body.rootId }, function (err, idea) {
+      console.log('Root idea shortId:', idea.shortId);
+
+      insertComment(idea);
+
+      // Traverse comment tree to find parent of comment
+      function insertComment (node) {
+        node.comments.map(function (comment) {
+          if (comment._id === req.body.parentId) {
+            comment.push(newComment);
+            res.end();
+            return;
+          } else {
+            insertComment(comment);
+          }
+        });
+      }
+    });
+  }
+  //   console.log('New comment "' + comment.body.substr(0, 10) + '"saved')
+  
   res.end();
 } // end createComment
 

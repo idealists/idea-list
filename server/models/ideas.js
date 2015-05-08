@@ -16,7 +16,6 @@ var Idea = new Schema({
   sChannelName : String,
   sTeamDomain  : String,
   sCommand     : String,
-  sText        : String,
   title        : String,
   body         : String,
   tags         : [String],
