@@ -4,15 +4,15 @@ var EventEmitter = require('events').EventEmitter;
 var ObjectAssign = require('react/lib/Object.assign');
 
 var CHANGE_EVENT = 'change';
-var _commentList    = [];
+var _detailList    = [];
 
 var populateStore = function(commentList){
-  _commentList = commentList;
+  _detailList = commentList;
 };
 
-var CommentStore = ObjectAssign({}, EventEmitter.prototype, {
+var detailStore = ObjectAssign({}, EventEmitter.prototype, {
   fetchComments : function(){
-    return _commentList;
+    return _detailList;
   },
 
   addChangeListener : function(cb){
@@ -24,11 +24,11 @@ var CommentStore = ObjectAssign({}, EventEmitter.prototype, {
   }
 });
 
-commentStore.dispatchToken = Dispatcher.register(function(action){
+detailStore.dispatchToken = Dispatcher.register(function(action){
   switch(action.action.actionType){
     case Constants.RELOAD_COMMENTLIST:
       populateStore(action.action.data);
-      commentStore.emit(CHANGE_EVENT);
+      detailStore.emit(CHANGE_EVENT);
       break;
 
     case Constants.FETCH_COMMENTLIST:
@@ -40,4 +40,4 @@ commentStore.dispatchToken = Dispatcher.register(function(action){
   }
 });
 
-module.exports = CommentStore;
+module.exports = detailStore;
