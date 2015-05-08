@@ -1,5 +1,5 @@
-var ideaFunctions = require('./idea-functions.js');
-var isAuth = require('../auth.js').isAuthenticated;
+var ideaFunctions = require('./idea-functions');
+var isAuth = require('../auth').isAuthenticated;
 
 module.exports = function(app){
   app.get('/', isAuth, ideaFunctions.getIdeas);
