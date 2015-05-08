@@ -153,7 +153,7 @@ function createComment (req, res) {
       function insertComment (node) {
         node.comments.map(function (comment) {
           if (comment._id === req.body.parentId) {
-            comment.push(newComment);
+            comment.comments.push(newComment);
             res.end();
             return;
           } else {
