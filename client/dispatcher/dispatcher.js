@@ -6,7 +6,7 @@ mainDispatcher.handleAction = function(action){
     source : 'ACTION',
     action : action
   });
-}
+};
 
  module.exports = mainDispatcher;
  
