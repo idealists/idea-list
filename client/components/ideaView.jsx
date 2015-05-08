@@ -7,16 +7,18 @@ var ideaHeader
 // gets votes button needs request
 
 var IdeaView = React.createClass({
- 
+  getInitialState : function(){
+    idea : this.props.params.data
+  },
+
   render : function(){
-    console.log(this.props.params.data)
     return(
       <div>
         <h3 className='ideaTitle'>
 
        </h3>
         <h5 className='ideaBody'>
-       
+
         </h5>
       </div>
     );
