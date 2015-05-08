@@ -1,20 +1,13 @@
 var React  = require('react');
-var Router = require('react-router');
 var Comment = require('./comment.jsx');
 
 var CommentList = React.createClass({
-  render : function(){
-    var list = this.props.comments.map(function(comment, index){
-      return (
-        <li key={index} >
-          <h5> {comment.body} </h5>
-        </li>
-      );
-    })
-
-    return (
-      <ul> {list} </ul>
-    );
+  render: function(){
+    return <div>
+      {this.props.comments.map(function(comment){
+        return <Comment key={comment._id} comment={comment} />
+      })
+    </div>
   }
 });
 
