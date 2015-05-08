@@ -1,5 +1,6 @@
 var React       = require('react');
 var ideaActions = require('../actions/ideaActions');
+var CommentList = require('./commentList.jsx');
 // need to build
 var commentList
 var userProfile
@@ -20,6 +21,8 @@ var IdeaView = React.createClass({
         <h5 className='ideaBody'>
 
         </h5>
+
+        <CommentList />
       </div>
     );
   }

@@ -6,9 +6,7 @@ var Comment = React.createClass({
   },
 
   render : function(){
-    React.render(
-      return();
-    );
+    return;
   }
 });
 
