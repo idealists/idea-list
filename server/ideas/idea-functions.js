@@ -44,7 +44,7 @@ function getIdeas (req, res) {
   }
 
   var results = [];
-  
+
   ideas.exec(function (data) {
     results.push(data);
   });
@@ -104,8 +104,8 @@ function createIdea (req, res) {
 function createComment (req, res) {
   var now = Date.now();
 
-  User.findOne({ slackName: req.body.user_name }, function (err, user) {
-    console.log('User:', user.slackName);
+  User.findOne({ sUserName: req.body.user_name }, function (err, user) {
+    console.log('User:', user.sUserName);
 
     if (!req.body.userId) {
       req.body.userId = user._id;
