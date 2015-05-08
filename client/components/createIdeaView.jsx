@@ -27,6 +27,7 @@ var CreateIdeaView = React.createClass({
   },
 
   render : function(){
+    console.log(this.props,this.params)
     return(
       <div>
         <h1>Create Post: </h1>
