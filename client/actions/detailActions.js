@@ -22,14 +22,14 @@ var commentActions = {
     });
   },
 
-  createComment : function(newComment){
+  createComment : function(userId,newComment){
     var commentActions = this;
-
+    var data = {userId:userId, comment:newComment}
     $.ajax({
       url      : "/comments/create",
       dataType : "json",
       method   : "POST",
-      data     : newComment
+      data     : data
     }).done(function(commentList){
       commentActions.getComments('votes');
     });

@@ -5,9 +5,8 @@ var $          = require('jquery');
 
 var ideaActions = {
   getIdeas : function(query, data){
-    query = query || null;
+    query = query || 'userid';
     data  = data  || null;
-
     $.ajax({
       url       : "/serverideas/get",
       dataType  : "json",
