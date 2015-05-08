@@ -7,36 +7,43 @@ function getIdeas (req, res) {
   req.headers.query = req.headers.query || "";
   var ideas;
 
+  var selectFields = 'createdAt updatedAt shortId userId slackId sUserName title body tags active voters upvotes downvotes rating';
+
   switch (req.headers.query) {
     case 'dateFirst':
       ideas = Idea.find()
-                .select('!comments') // I dont' think so
+                .select(selectFields)
                 .sort('-updatedAt')
                 .limit(10);
       break;
     case 'dateLast':
       ideas = Idea.find()
+                .select(selectFields)
                 .sort('updatedAt')
                 .limit(10);
       break;
     case 'votes':
       ideas = Idea.find()
+                .select(selectFields)
                 .sort('-rating')
                 .limit(10);
       break;
     case 'tags':
     //add username to tags array for easy find of people also.
       ideas = Idea.find({ tags: { $in:req.headers.tags } })
+                .select(selectFields)
                 .limit(10);
       break;
     case 'userId':
-      ideas = Idea.find({ userId:req.headers.userId });
+      ideas = Idea.find({ userId:req.headers.userId })
+                .select(selectFields);
       break;
     default:
     //custom query (to do when need arises)
       console.log('cant cant cant');
   }
 
+  // Might have to call idea.exec()
   var counts;
   ideas.count(function (err, total) {
     counts = total;
@@ -71,10 +78,13 @@ function createIdea (req, res) {
     req.body.body = req.body.text;
   }
 
+  // create title joined with underscores for shortId
+  var ti_tle = req.body.title.split(' ').join('_')
+
   var idea = new Idea({
     createdAt    : now,
     updatedAt    : now,
-    shortId      : req.body.user_name + '_' + count,
+    shortId      : req.body.user_name + '_' + ti_tle,
     userId       : req.body.userId,
     slackId      : req.body.slackId,
     sUserName    : req.body.user_name || null,
