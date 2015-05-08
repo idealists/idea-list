@@ -21,6 +21,7 @@ var Idea = new Schema({
   body         : String,
   tags         : [String],
   active       : Boolean,
+  voters       : [String],
   upvotes      : [Vote],
   downvotes    : [Vote],
   rating       : Number,

@@ -5,5 +5,6 @@ module.exports = function(app){
   app.get('/', isAuth, ideaFunctions.getIdeas);
   app.post('/create', isAuth, ideaFunctions.createIdea);
   app.post('/comment', isAuth, ideaFunctions.createComment);
+  app.post('/api/idea', ideaFunctions.createIdea);
   // body...
 };
