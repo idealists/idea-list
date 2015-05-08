@@ -14,7 +14,7 @@ function slackInt (req, res){
 
   // Need to return: "Idea posted to IdeaList! " +'|'+ <uniqueIdeaId> +'|'+ ideaText;
   var parsed = req.body.text.split("|");
-  var uniqueIdeaId = parsed[0].split(" ").join("_").join(+"_"+req.body.user_name);
+  var uniqueIdeaId = parsed[0].split(" ").join("_")+"_"+req.body.user_name;
   var text = parsed[1];
 
   // response to Slack through post request
@@ -102,7 +102,7 @@ function createIdea (req, res) {
   // If from Slack, parse text property for text and to create uniqueIdeaId
   if (req.body.team_id){
     var parsed = req.body.text.split("|");
-    var uniqueIdeaId = parsed[0].split(" ").join("_").join(+"_"+req.body.user_name);
+    var uniqueIdeaId = parsed[0].split(" ").join("_")+"_"+req.body.user_name;
     var title = parsed[0];
     var text = parsed[1];
   }
