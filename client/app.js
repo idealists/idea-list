@@ -23,8 +23,8 @@ var App = React.createClass({
 
 var routes = (
   <Route name="app" path="/" handler={App}>
-    <Route name="ideas"  path='/:test'handler={CreateIdeaView} />
-    <Route name="ideaView" handler={ideaView}/>
+    <Route name="ideas"  path='/newidea/:test'handler={CreateIdeaView} />
+    <Route name="ideaView" path='/ideaView/:data'handler={ideaView}/>
     <DefaultRoute handler={Home} />
   </Route>
 );

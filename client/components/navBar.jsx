@@ -10,7 +10,7 @@ var NavBar = React.createClass({
           <Link to="app">Home</Link>
         </div>
         <div className="createIdea">
-          <Link to="ideas" params={{test:"firealk"}}>Create Idea</Link>
+          <Link to="ideas" params={{test:"works"}}>Create Idea</Link>
         </div>
       </div>
     );

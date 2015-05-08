@@ -13,7 +13,7 @@ var IdeaList = React.createClass({
       var title = idea.title|| 'Untitled'
       return (
         <div  key ={index}>
-          <h4><Link to="ideaView" params={{userId: "123"}}>{title}</Link></h4>
+          <h4><Link to="ideaView" params={{data: idea._id}}>{title}</Link></h4>
         </div>
       );
 

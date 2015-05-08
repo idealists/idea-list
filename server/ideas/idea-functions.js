@@ -56,7 +56,7 @@ module.exports = {
         ideas = ideas.find({tags:{$in:req.headers.tags}}).limit(10);
         break;
       case 'userId':
-        ideas = ideas.find({userId:req.headers.userId });
+        ideas = ideas.find({_id:ObjectId(req.headers.data) });
         break;
       default:
       //custom query (to do when need arises)
