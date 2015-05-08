@@ -8,16 +8,12 @@ var Route = Router.Route;
 var RouteHandler = Router.RouteHandler;
 
 var IdeaList = React.createClass({
-  componentDidMount:function(){
-    this.setState({params:this.props.idea})
-    console.log('loger',this.props)
-  },
   render : function(){
     var list = this.props.ideas.map(function(idea, index){
       var title = idea.title|| 'Untitled'
       return (
         <div  key ={index}>
-          <h4><Link to="ideaView" path=':index'>{title}</Link></h4>
+          <h4><Link to="ideaView" params={{userId: "123"}}>{title}</Link></h4>
         </div>
       );
 
