@@ -1,5 +1,6 @@
 var React  = require('react');
 var Router = require('react-router');
+var Comment = require('./comment.jsx');
 
 var CommentList = React.createClass({
   render : function(){

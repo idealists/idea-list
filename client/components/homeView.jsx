@@ -4,6 +4,7 @@ var IdeaFilter     = require('./ideaFilter.jsx');
 var IdeaSearch     = require('./ideaSearch.jsx');
 var ideaActions    = require('../actions/ideaActions');
 var ideaStore      = require('../stores/ideaStore');
+var mui            = require('material-ui');
 
 var Home = React.createClass({
   getInitialState : function(){
