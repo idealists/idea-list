@@ -20,8 +20,7 @@
     "passport": "^0.2.1",
     "passport-slack": "0.0.1",
     "react": "*",
-    "request": "^2.55.0",
-    "shortid": "^2.2.2"
+    "request": "^2.55.0"
   },
   "devDependencies": {
     "grunt": "*",
