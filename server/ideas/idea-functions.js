@@ -43,27 +43,21 @@ function getIdeas (req, res) {
       console.log('cant cant cant');
   }
 
-  // Might have to call idea.exec()
-  var counts;
-  ideas.count(function (err, total) {
-    counts = total;
+  var results = [];
+  
+  ideas.exec(function (data) {
+    results.push(data);
   });
 
-  var results = [];
-  ideas.on('data', function (data) {
-    results.push(data);
-    if (results.length === counts) {
-      res.end(JSON.stringify(results));
-    }
-  });
+  res.end(JSON.stringify(results));
 } // end getIdeas
 
 function createIdea (req, res) {
   var now = Date.now();
   var count;
 
-  User.findOne({ slackName: req.body.user_name }, function (err, user) {
-    console.log(user.slackName);
+  User.findOne({ sUserName: req.body.user_name }, function (err, user) {
+    console.log(user.sUserName);
 
     // Increment user's idea count and capture it in variable
     count = ++user.ideaCount;
@@ -79,7 +73,7 @@ function createIdea (req, res) {
   }
 
   // create title joined with underscores for shortId
-  var ti_tle = req.body.title.split(' ').join('_')
+  var ti_tle = req.body.title.split(' ').join('_');
 
   var idea = new Idea({
     createdAt    : now,
@@ -171,7 +165,7 @@ function createComment (req, res) {
 function downvote (req, res) {
   var now = Date.now();
 
-  var downvote = new Vote({
+  var newDownvote = new Vote({
     createdAt : now,
     voter     : req.body.user_name // Slack username
   });
@@ -185,7 +179,7 @@ function downvote (req, res) {
       });
 
       idea.voters.push(req.body.slackId);
-      idea.downvotes.push(downvote);
+      idea.downvotes.push(newDownvote);
       idea.rating = idea.upvotes.length - idea.downvotes.length;
     });
   }
@@ -210,7 +204,7 @@ function downvote (req, res) {
 function upvote (req, res) {
   var now = Date.now();
   
-  var upvote = new Vote({
+  var newUpvote = new Vote({
     createdAt : now,
     voter     : req.body.user_name // Slack username
   });
@@ -224,7 +218,7 @@ function upvote (req, res) {
       });
 
       idea.voters.push(req.body.slackId);
-      idea.upvotes.push(upvote);
+      idea.upvotes.push(newUpvote);
       idea.rating = idea.upvotes.length - idea.downvotes.length;
     });
   }
