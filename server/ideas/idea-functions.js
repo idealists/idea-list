@@ -5,26 +5,21 @@ var Vote = require('../models/votes');
 var request = require('request');
 
 function slackInt (req, res){
-  // TO-DOs
-  // parse req.body.text --> parse out title, parse out text
-  // need to return text with unique id
-    // create hyperlink for unique id
-  // making a descriptive unique id from the title itself
-  // also include a slash command to return a list of all active ideas with their info
+  // TODO: slash command to return a list of all active ideas with their info
 
-  // Need to return: "Idea posted to IdeaList! " +'|'+ <uniqueIdeaId> +'|'+ ideaText;
-  var parsed = req.body.text.split("|");
 
+  // Parsing request text for ' title | text | tags '
+  var parsed = req.body.text.split("|").map(function(y){ return y.trim(); });
 
   User.findOne({ sUserName: req.body.user_name }, function (err, user) {
-    console.log('request body:', req.body);
-    console.log('found user?', user);
+    if (err) console.log(err);
     req.body.userId = user._id;
   });
 
   // logic for inserting idea vs comment vs vote into db
   switch(req.body.command){
     case '/idea':
+      //TODO: create hyperlink for unique id
       req.body.shortId = parsed[0].split(" ").join("_")+"_"+req.body.user_name;
       req.body.title = parsed[0];
       req.body.body = parsed[1];
