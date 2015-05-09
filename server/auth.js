@@ -15,23 +15,12 @@ passport.use(new SlackStrategy({
     User.findOne({ slackId: profile.id }, function (err, user) {
       if (err) return done(err);
 
-      // Create a new user if none found
       if (!user) {
-        user = new User({
-          accessToken: accessToken,
-          slackId: profile.id,
-          slackName: profile.displayName,
-          slack: JSON.stringify(profile._json)
-        });
-
-        user.save(function (err) {
-          if (err) console.log(err);
-          return done(null, user);
-        });
+        // User list populates on server start, so don't allow user to authenticate if not in DB
+        return done(err);
       } else {
         // Otherwise update user
         user.accessToken = accessToken;
-        user.slackName = profile.displayName;
         user.slack = JSON.stringify(profile._json);
         return done(err, user);
       }
@@ -39,12 +28,12 @@ passport.use(new SlackStrategy({
   }
 ));
 
-passport.serializeUser(function (user, done){
-  done(null, user._id);
+passport.serializeUser(function (user, done) {
+  done(null, user);
 });
 
-passport.deserializeUser(function (id, done){
-  User.findById(id, function (err, user) {
+passport.deserializeUser(function (user, done) {
+  User.findById(user._id, function (err, user) {
     done(err, user);
   });
 });
@@ -72,7 +61,7 @@ module.exports = function (app) {
   app.get('/api/user', isAuthenticated, function (request, response) {
     response.status(200).json({
       loggedIn: request.isAuthenticated(),
-      user: request.session
+      session: request.session.passport
     });
   });
 
