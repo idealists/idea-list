@@ -2,13 +2,13 @@ var Dispatcher = require('../dispatcher/dispatcher');
 var Constants  = require('../constants/constants');
 var $          = require('jquery');
 
-
 var ideaActions = {
   getIdeas : function(query, data){
     query = query || 'userid';
     data  = data  || null;
+
     $.ajax({
-      url       : "/serverideas/get",
+      url       : "/ideas",
       dataType  : "json",
       method    : "GET",
       headers   : { 'query' : query,
@@ -18,8 +18,7 @@ var ideaActions = {
       Dispatcher.handleAction({
         actionType : Constants.RELOAD_IDEALIST,
         data       : ideaList
-      })
-      console.log('ran')
+      });
     });
   },
 
@@ -27,7 +26,7 @@ var ideaActions = {
     var ideaActions = this;
 
     $.ajax({
-      url      : "/serverideas/create",
+      url      : "/ideas/create",
       dataType : "json",
       method   : "POST",
       data     : newIdea
@@ -39,6 +38,6 @@ var ideaActions = {
   changevote: function (voteobj, userId) {
     data ={sorce:voteobj, userinfo:userId}
   }
-}
+};
 
 module.exports= ideaActions;
