@@ -107,7 +107,7 @@ function createIdea (req, res) {
   var idea = new Idea({
     createdAt    : now,
     updatedAt    : now,
-    shortId      : uniqueIdeaId || req.body.user_name,
+    shortId      : req.body.shortId,
     userId       : req.body.userId,
     slackId      : slackId || req.body.slackId, // <-- slackId?
     sUserName    : req.body.user_name || null,
