@@ -66,18 +66,21 @@ function getIdeas (req, res) {
     case 'dateFirst':
       ideas = Idea.find()
                 .select(selectFields)
+                .where({'active': true})
                 .sort('-updatedAt')
                 .limit(10);
       break;
     case 'dateLast':
       ideas = Idea.find()
                 .select(selectFields)
+                .where({'active': true})
                 .sort('updatedAt')
                 .limit(10);
       break;
     case 'votes':
       ideas = Idea.find()
                 .select(selectFields)
+                .where({'active': true})
                 .sort('-rating')
                 .limit(10);
       break;
@@ -85,11 +88,13 @@ function getIdeas (req, res) {
     //add username to tags array for easy find of people also.
       ideas = Idea.find({ tags: { $in:req.headers.tags } })
                 .select(selectFields)
+                .where({'active': true})
                 .limit(10);
       break;
     case 'userId':
       ideas = Idea.find({ userId:req.headers.userId })
-                .select(selectFields);
+                .select(selectFields)
+                .where({'active': true});
       break;
     default:
     //custom query (to do when need arises)
