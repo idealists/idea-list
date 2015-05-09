@@ -8,7 +8,7 @@ var User = new Schema({
   updatedAt   : Date,
   slack       : String,
   slackId     : String,
-  slackName   : String,
+  sUserName   : String,
   realName    : String,
   email       : String,
   image       : {
