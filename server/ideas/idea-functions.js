@@ -107,14 +107,14 @@ function createIdea (req, res) {
     var text = parsed[1];
     var slackId;
 
-    User.findOne({ slackName: req.body.user_name }, function (err, user) {
-      console.log(user.slackName);
+    // User.findOne({ slackName: req.body.user_name }, function (err, user) {
+    //   console.log(user.slackName);
 
-      if (!req.body.userId) {
-        req.body.userId = user._id;
-      }
-      slackId =
-    });
+    //   if (!req.body.userId) {
+    //     req.body.userId = user._id;
+    //   }
+    //   //slackId =
+    // });
   }
 
   var idea = new Idea({
