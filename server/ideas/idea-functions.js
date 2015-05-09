@@ -56,47 +56,49 @@ function getIdeas (req, res) {
   req.headers.query = req.headers.query || "";
   var ideas;
 
+  var selectFields = 'createdAt updatedAt shortId userId slackId sUserName title body tags active voters upvotes downvotes rating';
+
   switch (req.headers.query) {
     case 'dateFirst':
       ideas = Idea.find()
+                .select(selectFields)
                 .sort('-updatedAt')
                 .limit(10);
       break;
     case 'dateLast':
       ideas = Idea.find()
+                .select(selectFields)
                 .sort('updatedAt')
                 .limit(10);
       break;
     case 'votes':
       ideas = Idea.find()
+                .select(selectFields)
                 .sort('-rating')
                 .limit(10);
       break;
     case 'tags':
     //add username to tags array for easy find of people also.
       ideas = Idea.find({ tags: { $in:req.headers.tags } })
+                .select(selectFields)
                 .limit(10);
       break;
     case 'userId':
-      ideas = Idea.find({ userId:req.headers.userId });
+      ideas = Idea.find({ userId:req.headers.userId })
+                .select(selectFields);
       break;
     default:
     //custom query (to do when need arises)
       console.log('cant cant cant');
   }
 
-  var counts;
-  ideas.count(function (err, total) {
-    counts = total;
+  var results = [];
+
+  ideas.exec(function (data) {
+    results.push(data);
   });
 
-  var results = [];
-  ideas.on('data', function (data) {
-    results.push(data);
-    if (results.length === counts) {
-      res.end(JSON.stringify(results));
-    }
-  });
+  res.end(JSON.stringify(results));
 } // end getIdeas
 
 function createIdea (req, res) {
@@ -131,8 +133,8 @@ function createIdea (req, res) {
 function createComment (req, res) {
   var now = Date.now();
 
-  User.findOne({ slackName: req.body.user_name }, function (err, user) {
-    console.log(user.slackName);
+  User.findOne({ sUserName: req.body.user_name }, function (err, user) {
+    console.log('User:', user.sUserName);
 
     if (!req.body.userId) {
       req.body.userId = user._id;
@@ -144,7 +146,9 @@ function createComment (req, res) {
     req.body.body = req.body.text;
   }
 
-  var comment = new Comment({
+  // If from Slack, set req.body.parentId to mongo _id (looked up from shortId)
+
+  var newComment = new Comment({
     createdAt : now,
     updatedAt : now,
     parentId  : req.body.parentId,
@@ -153,11 +157,37 @@ function createComment (req, res) {
     body      : req.body.body
   });
 
-  comment.save(function (err) {
-    if (err) console.log(err);
-    console.log('New comment "' + comment.body.substr(0, 10) + '"saved');
-  });
+  // Assumes comment request comes with a parentType
+  if (req.body.parentType === 'idea') {
+    Idea.findOne({ _id: req.body.parentId }, function (err, idea) {
+      console.log('Idea shortId:', idea.shortId);
 
+      idea.comments.push(newComment);
+    });
+  }
+
+  if (req.body.parentType === 'comment') {
+    Idea.findOne({ _id: req.body.rootId }, function (err, idea) {
+      console.log('Root idea shortId:', idea.shortId);
+
+      insertComment(idea);
+
+      // Traverse comment tree to find parent of comment
+      function insertComment (node) {
+        node.comments.map(function (comment) {
+          if (comment._id === req.body.parentId) {
+            comment.comments.push(newComment);
+            res.end();
+            return;
+          } else {
+            insertComment(comment);
+          }
+        });
+      }
+    });
+  }
+  //   console.log('New comment "' + comment.body.substr(0, 10) + '"saved')
+  
   res.end();
 } // end createComment
 

@@ -16,7 +16,7 @@ function updateUsers () {
               createdAt: now,
               updatedAt: now,
               slackId: user.id,
-              slackName: user.name,
+              sUserName: user.name,
               realName: user.real_name,
               email: user.profile.email,
               image: {
