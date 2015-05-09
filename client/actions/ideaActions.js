@@ -4,7 +4,7 @@ var $          = require('jquery');
 
 var ideaActions = {
   getIdeas : function(query, data){
-    query = query || null;
+    query = query || 'userid';
     data  = data  || null;
 
     $.ajax({
@@ -33,6 +33,10 @@ var ideaActions = {
     }).done(function(ideaList){
       ideaActions.getIdeas('votes');
     });
+  },
+
+  changevote: function (voteobj, userId) {
+    data ={sorce:voteobj, userinfo:userId}
   }
 };
 

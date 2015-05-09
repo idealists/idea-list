@@ -1,11 +1,17 @@
-var React = require('react');
+var React  = require('react');
+var Router = require('react-router');
+var Link   = Router.Link;
 
 var NavBar = React.createClass({
   render : function(){
     return(
       <div>
-        <div> Home </div>
-        <div> Create Idea </div>
+        <div className="homeButton">
+          <Link to="app">Home</Link>
+        </div>
+        <div className="createIdea">
+          <Link to="ideas" params={{test:"works"}}>Create Idea</Link>
+        </div>
       </div>
     );
   }
