@@ -25,6 +25,7 @@ var routes = (
   <Route name="app" path="/" handler={App}>
     <Route name="ideas"  path='/newidea/:test'handler={CreateIdeaView} />
     <Route name="ideaView" path='/ideaView/:data'handler={ideaView}/>
+    <Route name='Home' path='/home' handler={Home}/>
     <DefaultRoute handler={Home} />
   </Route>
 );

@@ -6,7 +6,6 @@ var Vote = require('../models/votes');
 function getIdeas (req, res) {
   req.headers.query = req.headers.query || "";
   var ideas;
-
   var selectFields = 'createdAt updatedAt shortId userId slackId sUserName title body tags active voters upvotes downvotes rating';
 
   switch (req.headers.query) {
@@ -48,14 +47,14 @@ function getIdeas (req, res) {
   ideas.exec(function (data) {
     results.push(data);
   });
-
+  console.log(results)
   res.end(JSON.stringify(results));
 } // end getIdeas
 
 function createIdea (req, res) {
   var now = Date.now();
   var count;
-
+  console.log(req.body)
   User.findOne({ sUserName: req.body.user_name }, function (err, user) {
     console.log(user.sUserName);
 

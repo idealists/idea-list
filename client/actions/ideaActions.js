@@ -4,7 +4,7 @@ var $          = require('jquery');
 
 var ideaActions = {
   getIdeas : function(query, data){
-    query = query || 'userid';
+    query = query || 'vote';
     data  = data  || null;
 
     $.ajax({
@@ -15,6 +15,7 @@ var ideaActions = {
                     'data'  : data
                   }
     }).done(function(ideaList){
+      console.log('got ideas',ideaList)
       Dispatcher.handleAction({
         actionType : Constants.RELOAD_IDEALIST,
         data       : ideaList

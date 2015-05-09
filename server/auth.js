@@ -65,7 +65,7 @@ module.exports = function (app) {
   app.get('/auth/slack/callback',
     passport.authenticate('slack', { failureRedirect: '/login' }),
     function (request, response) {
-      response.redirect('/api/user'); // temporary - for development only
+      response.redirect('/#/home'); // temporary - for development only
     }
   );
 
