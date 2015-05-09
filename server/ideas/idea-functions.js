@@ -50,7 +50,7 @@ function slackInt (req, res){
       if(error) console.log(error);
     }
   );
-};
+}
 
 function getIdeas (req, res) {
   req.headers.query = req.headers.query || "";
@@ -155,7 +155,7 @@ function createComment (req, res) {
 
   comment.save(function (err) {
     if (err) console.log(err);
-    console.log('New comment "' + comment.body.substr(0, 10) + '"saved')
+    console.log('New comment "' + comment.body.substr(0, 10) + '"saved');
   });
 
   res.end();
@@ -245,5 +245,6 @@ module.exports = {
   createIdea: createIdea,
   createComment: createComment,
   downvote: downvote,
-  upvote: upvote
+  upvote: upvote,
+  slackInt: slackInt
 };
