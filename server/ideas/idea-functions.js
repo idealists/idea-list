@@ -17,8 +17,7 @@ function slackInt (req, res){
 
 
   User.findOne({ sUserName: req.body.user_name }, function (err, user) {
-    console.log('request body:', req.body);
-    console.log('found user?', user);
+    if (err) console.log(err);
     req.body.userId = user._id;
   });
 
