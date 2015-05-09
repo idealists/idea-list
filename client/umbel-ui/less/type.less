@@ -1,0 +1,137 @@
+// font-face
+
+// DEPRECATED: Use font variables on classes you want these fonts applied to instead
+.default_font {
+  font-family: @font-family-sans-serif;
+}
+
+.proxima_nova {
+  font-family: @font-family-sans-serif;
+}
+
+.lexia {
+  font-family: @font-family-lexia;
+}
+
+// font-weight
+// DEPRECATED: Use font-weight variables on classes you want these fonts applied to instead
+.x-bold {
+  font-weight: 900;
+}
+
+.bold {
+  font-weight: 700;
+}
+
+.semibold {
+  font-weight: 600;
+}
+
+.thin {
+  font-weight: 300;
+}
+
+// font-style
+// DEPRECATED: use <em> tags instead
+.em, .i, .italic {
+  font-style: italic;
+}
+
+// font-size
+.itty-bitty {
+  font-size: @font-size-base - 6px;  // 6px
+}
+
+.tiny {
+  font-family: Verdana, sans-serif;
+  font-size: @font-size-base - 4px;  // 8px
+}
+
+.small {
+  font-size: @font-size-base - 2px;  // 10px
+}
+
+.large {
+  font-size: @font-size-base + 4px;  // 20px
+}
+
+.x-large {
+  font-size: @font-size-base + 6px;  // 22px
+}
+
+.xx-large {
+  font-size: @font-size-base + 8px;  // 24px
+}
+
+.xxx-large {
+  font-size: @font-size-base + 12px; // 28px
+}
+
+.xxxx-large {
+  font-size: @font-size-base + 14px; // 30px
+}
+
+.huge {
+  font-size: 32px;
+  line-height: 28px;
+}
+
+.x-huge {
+  font-size: 44px;
+  line-height: 43px;
+}
+
+.xx-huge {
+  font-size: 68px;
+  line-height: 66px;
+}
+
+body {
+  font-family: @font-family-sans-serif;
+}
+
+.blackbox-title {
+  margin-right: @font-size-base + 2px;
+  border-top: 1px solid @color_contrast_dark;
+  line-height: @font-size-base + 6px;
+  margin-top: 0;
+  margin-bottom: 8px;
+  margin-right: 14px;
+
+  span {
+    font-family: @font-family-sans-serif;
+    color: @white;
+    display: inline-block;
+    background: @color_contrast_dark;
+    font-size: @font-size-base + 6px;
+    font-weight: 300;
+    line-height: @font-size-base + 6px;
+    padding: 10px 90px 10px 16px;
+    text-transform: uppercase;
+  }
+}
+
+.graybar-title {
+  font-family: @font-family-sans-serif;
+  background: @gray_light_4;
+  border-top: 1px solid @gray_light_3;
+  font-size: 14px;
+  line-height: 14px;
+  margin: 21px 14px 10px 0;
+  padding: 10px 16px 9px;
+  text-transform: uppercase;
+}
+
+.boxed-text {
+  background: #F4F4F4;
+  margin: 0;
+  padding: 12px 36px 12px 12px;
+
+  p {
+    margin-bottom: 0;
+  }
+
+  p + p {
+    margin-top: 10px;
+  }
+}

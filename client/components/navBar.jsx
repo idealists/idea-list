@@ -5,14 +5,18 @@ var Link   = Router.Link;
 var NavBar = React.createClass({
   render : function(){
     return(
-      <div>
-        <div className="homeButton">
-          <Link to="app">Home</Link>
+      <nav className="navbar navbar-inverse">
+        <div className="container-fluid">
+          <ul className="nav navbar-nav">
+            <li className="">
+              <Link to="app">Home</Link>
+            </li>
+            <li className="">
+              <Link to="ideas" params={{test:"works"}}>Create</Link>
+            </li>
+          </ul>
         </div>
-        <div className="createIdea">
-          <Link to="ideas" params={{test:"works"}}>Create Idea</Link>
-        </div>
-      </div>
+      </nav>
     );
   }
 });

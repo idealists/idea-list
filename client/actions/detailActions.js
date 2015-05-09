@@ -18,13 +18,13 @@ var commentActions = {
       Dispatcher.handleAction({
         actionType : Constants.RELOAD_COMMENTLIST,
         data       : commentList
-      })
+      });
     });
   },
 
   createComment : function(userId,newComment){
     var commentActions = this;
-    var data = {userId:userId, comment:newComment}
+    var data = {userId:userId, comment:newComment};
     $.ajax({
       url      : "/comments/create",
       dataType : "json",
@@ -34,7 +34,7 @@ var commentActions = {
       commentActions.getComments('votes');
     });
   }
-}
+};
 
 module.exports= commentActions;
 //need to build a server routes

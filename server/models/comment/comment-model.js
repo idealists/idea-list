@@ -8,10 +8,10 @@ mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost:27017/ideatool
 var commentSchema = new Schema({
   _id: {
         type: ShortId,
-        len: 5, 
+        len: 5,
         base: 64,
         alphabet: undefined,
-        retries: 4 
+        retries: 4
   }
-  
-})
+
+});

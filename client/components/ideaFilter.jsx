@@ -3,12 +3,12 @@ var React = require('react');
 var IdeaFilter = React.createClass({
   render : function(){
     return(
-      <div>
-        Filter By:
-        <div> Date </div>
-        <div> Tags </div>
-        <div> User </div>
-        <div> Votes </div>
+      <div className="container">
+        <ul className="nav nav-tabs nav-justified">
+          <li role="presentation"><a href="#">Votes</a></li>
+          <li role="presentation"><a href="#">Date</a></li>
+          <li role="presentation"><a href="#">User</a></li>
+        </ul>
       </div>
     );
   }

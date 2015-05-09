@@ -1,0 +1,156 @@
+.eyebrow {
+  position: relative;
+}
+
+.eyebrow .eyebrow-blue {
+  &:before, &:after {
+    color: @umbel_blue;
+  }
+}
+
+.eyebrow-faded {
+  &:before, &:after {
+    opacity: 0.26;
+  }
+}
+
+.eyebrow-sm-left {
+  &:before, &:after {
+    content: '';
+    position: absolute;
+    top: -8px;
+    display: block;
+    height: 1px;
+    background: fade(@white, 60%);
+    width: 30px;
+  }
+
+  &:after {
+    top: auto;
+    bottom: -8px;
+    background: fade(@white, 60%);
+  }
+}
+
+.eyebrow-sm-right {
+  &:before, &:after {
+    content: '';
+    position: absolute;
+    top: -8px;
+    right: 0;
+    display: block;
+    height: 1px;
+    background: fade(@white, 60%);
+    width: 30px;
+  }
+
+  &:after {
+    top: auto;
+    bottom: -8px;
+    background: fade(@white, 60%);
+  }
+}
+
+.eyebrow-sm-right {
+  &:before, &:after {
+    content: '';
+    position: absolute;
+    top: -8px;
+    right: 0;
+    display: block;
+    height: 1px;
+    background: fade(@white, 60%);
+    width: 100px;
+  }
+
+  &:after {
+    top: auto;
+    bottom: -8px;
+    background: fade(@white, 60%);
+  }
+}
+
+.eyebrow-full {
+  &:before, &:after {
+    content: '';
+    position: absolute;
+    top: -8px;
+    display: block;
+    height: 1px;
+    background: fade(@white, 60%);
+    width: 100%;
+  }
+
+  &:after {
+    top: auto;
+    bottom: -8px;
+    background: fade(@white, 60%);
+  }
+}
+
+.eyebrow-tall {
+  &:before {
+    top: -30px;
+  }
+
+  &:after {
+    bottom: -30px;
+  }
+}
+
+.eyebrow-topheader {
+  font-size: 14px;
+  .lh-opacity(.6);
+}
+
+
+.eyebrow-blue {
+  &:before {
+    background: fade(@umbel_blue, 80%);
+  }
+
+  &:after {
+    background: fade(@umbel_blue, 80%);
+  }
+}
+
+.eyebrow-purple {
+  &:before {
+    background: fade(@umbel_purple, 80%);
+  }
+  &:after {
+    background: fade(@umbel_purple, 80%);
+  }
+}
+
+.eyebrow-red {
+  &:before {
+    background: fade(@deep_red, 80%);
+  }
+
+  &:after {
+    background: fade(@deep_red, 80%);
+  }
+}
+
+.eyebrow-yellow {
+  &:before {
+    background: fade(@umbel_yellow, 80%);
+  }
+
+  &:after {
+    background: fade(@umbel_yellow, 80%);
+  }
+}
+
+@media (max-width: @screen-xs-max) {
+ .eyebrow-tall {
+    &:before {
+      top: -15px;
+    }
+
+    &:after {
+      bottom: -15px;
+    }
+  }
+}

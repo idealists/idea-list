@@ -36,7 +36,7 @@ var ideaActions = {
   },
 
   changevote: function (voteobj, userId) {
-    data ={sorce:voteobj, userinfo:userId}
+    data ={sorce:voteobj, userinfo:userId};
   }
 };
 
