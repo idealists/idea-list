@@ -14,24 +14,19 @@ function slackInt (req, res){
 
   // Need to return: "Idea posted to IdeaList! " +'|'+ <uniqueIdeaId> +'|'+ ideaText;
   var parsed = req.body.text.split("|");
-  var uniqueIdeaId = parsed[0].split(" ").join("_")+"_"+req.body.user_name;
-  var text = parsed[1];
 
-  // response to Slack through post request
-  var reply = { 'text': 'Idea posted to ideaList: ' + uniqueIdeaId + ' ' + text };
-
-  request({ method: 'POST', 
-    uri: process.env.SLACK_WEBHOOK, 
-    body: JSON.stringify(reply) 
-    },
-    function (error, response, body) {
-      if(error) console.log(error);
+  User.findOne({ sUserName: req.body.user_name }, function (err, user) {
+        req.body.userId = user._id;
     }
   );
 
   // logic for inserting idea vs comment vs vote into db
   switch(req.body.command){
     case '/idea':
+      req.body.shortId = parsed[0].split(" ").join("_")+"_"+req.body.user_name;
+      req.body.body = parsed[1];
+      req.body.title = parsed[0];
+      var reply = { 'text': 'Idea posted to ideaList: ' + req.body.shortId + ' ' + req.body.body };
       createIdea(req, res);
       break;
     case '/comment':
@@ -47,6 +42,14 @@ function slackInt (req, res){
       console.log("No dice.");
   }
 
+  request({ method: 'POST', 
+    uri: process.env.SLACK_WEBHOOK, 
+    body: JSON.stringify(reply) 
+    },
+    function (error, response, body) {
+      if(error) console.log(error);
+    }
+  );
 };
 
 function getIdeas (req, res) {
@@ -99,24 +102,6 @@ function getIdeas (req, res) {
 function createIdea (req, res) {
   var now = Date.now();
   
-  // If from Slack, parse text property for text and to create uniqueIdeaId
-  if (req.body.team_id){
-    var parsed = req.body.text.split("|");
-    var uniqueIdeaId = parsed[0].split(" ").join("_")+"_"+req.body.user_name;
-    var title = parsed[0];
-    var text = parsed[1];
-    var slackId;
-
-    // User.findOne({ slackName: req.body.user_name }, function (err, user) {
-    //   console.log(user.slackName);
-
-    //   if (!req.body.userId) {
-    //     req.body.userId = user._id;
-    //   }
-    //   //slackId =
-    // });
-  }
-
   var idea = new Idea({
     createdAt    : now,
     updatedAt    : now,
