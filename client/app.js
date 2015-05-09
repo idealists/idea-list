@@ -15,7 +15,7 @@ var App = React.createClass({
     return(
       <div>
         <NavBar />
-        <RouteHandler/>
+        <RouteHandler {...this.props}/>
       </div>
     );
   }
@@ -23,13 +23,13 @@ var App = React.createClass({
 
 var routes = (
   <Route name="app" path="/" handler={App}>
-    <Route name="ideas"  path='/newidea/:test'handler={CreateIdeaView} />
-    <Route name="ideaView" path='/ideaView/:data'handler={ideaView}/>
+    <Route name="ideas"  path='/newidea/:test' handler={CreateIdeaView} />
+    <Route name="ideaView" path='/ideaView/:idea' handler={ideaView}/>
     <DefaultRoute handler={Home} />
   </Route>
 );
 
 Router.run(routes, function(Handler, state) {
-  var list = state.list
-  React.render(<Handler list={list}/>, document.getElementById('main'))
+  var params = state.params
+  React.render(<Handler params={params}/>, document.getElementById('main'))
 });

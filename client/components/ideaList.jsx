@@ -10,10 +10,11 @@ var RouteHandler = Router.RouteHandler;
 var IdeaList = React.createClass({
   render : function(){
     var list = this.props.ideas.map(function(idea, index){
-      var title = idea.title|| 'Untitled'
+      var title = idea.title|| 'Untitled';
+
       return (
         <div  key ={index}>
-          <h4><Link to="ideaView" params={{data: idea._id}}>{title}</Link></h4>
+          <h4><Link to="ideaView" params={idea}>{title}</Link></h4>
         </div>
       );
 
