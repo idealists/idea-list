@@ -15,6 +15,7 @@ function slackInt (req, res){
   // Need to return: "Idea posted to IdeaList! " +'|'+ <uniqueIdeaId> +'|'+ ideaText;
   var parsed = req.body.text.split("|");
 
+
   User.findOne({ sUserName: req.body.user_name }, function (err, user) {
         req.body.userId = user._id;
     }
@@ -24,8 +25,11 @@ function slackInt (req, res){
   switch(req.body.command){
     case '/idea':
       req.body.shortId = parsed[0].split(" ").join("_")+"_"+req.body.user_name;
-      req.body.body = parsed[1];
       req.body.title = parsed[0];
+      req.body.body = parsed[1];
+      if (parsed.length === 3) {
+        req.body.tags = parsed[2].split(' ');
+      }
       var reply = { 'text': 'Idea posted to ideaList: ' + req.body.shortId + ' ' + req.body.body };
       createIdea(req, res);
       break;
@@ -103,22 +107,22 @@ function getIdeas (req, res) {
 
 function createIdea (req, res) {
   var now = Date.now();
-  
+
   var idea = new Idea({
     createdAt    : now,
     updatedAt    : now,
     shortId      : req.body.shortId,
     userId       : req.body.userId,
-    slackId      : slackId || req.body.slackId, // <-- slackId?
-    sUserName    : req.body.user_name || null,
+    slackId      : req.body.slackId,
+    sUserName    : req.body.user_name,
     sTeamId      : req.body.team_id || null,
     sChannelId   : req.body.channel_id || null,
     sChannelName : req.body.channel_name || null,
     sTeamDomain  : req.body.team_domain || null,
     sCommand     : req.body.command || null,
-    title        : title || req.body.title || null,
-    body         : text || req.body.body || null,
-    tags         : req.body.tags,
+    title        : req.body.title,
+    body         : req.body.body,
+    tags         : req.body.tags || [],
     active       : true
   });
 
