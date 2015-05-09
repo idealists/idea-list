@@ -5,8 +5,12 @@ var ObjectId = Schema.ObjectId;
 var User = new Schema({
   accessToken : String,
   createdAt   : Date,
+  updatedAt   : Date,
+  slack       : String,
+  slackId     : String,
+  slackName   : String,
+  realName    : String,
   email       : String,
-  ideaCount   : Number,
   image       : {
     24  : String,
     32  : String,
@@ -14,11 +18,7 @@ var User = new Schema({
     72  : String,
     192 : String
   },
-  realName    : String,
-  slack       : String,
-  slackId     : String,
-  slackName   : String,
-  updatedAt   : Date
+  ideaCount   : Number
 });
 
 module.exports = mongoose.model('User', User);

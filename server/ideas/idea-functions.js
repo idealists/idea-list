@@ -2,6 +2,60 @@ var Comment = require('../models/comments');
 var Idea = require('../models/ideas');
 var User = require('../models/users');
 var Vote = require('../models/votes');
+var request = require('request');
+
+function slackInt (req, res){
+  // TO-DOs
+  // parse req.body.text --> parse out title, parse out text
+  // need to return text with unique id
+    // create hyperlink for unique id
+  // making a descriptive unique id from the title itself
+  // also include a slash command to return a list of all active ideas with their info
+
+  // Need to return: "Idea posted to IdeaList! " +'|'+ <uniqueIdeaId> +'|'+ ideaText;
+  var parsed = req.body.text.split("|");
+
+
+  User.findOne({ sUserName: req.body.user_name }, function (err, user) {
+    console.log('request body:', req.body);
+    console.log('found user?', user);
+    req.body.userId = user._id;
+  });
+
+  // logic for inserting idea vs comment vs vote into db
+  switch(req.body.command){
+    case '/idea':
+      req.body.shortId = parsed[0].split(" ").join("_")+"_"+req.body.user_name;
+      req.body.title = parsed[0];
+      req.body.body = parsed[1];
+      if (parsed.length === 3) {
+        req.body.tags = parsed[2].split(' ');
+      }
+      var reply = { 'text': 'Idea posted to ideaList: ' + req.body.shortId + ' ' + req.body.body };
+      createIdea(req, res);
+      break;
+    case '/comment':
+
+      break;
+    case '/upvote':
+
+      break;
+    case '/downvote':
+
+      break;
+    default:
+      console.log("No dice.");
+  }
+
+  request({ method: 'POST', 
+    uri: process.env.SLACK_WEBHOOK, 
+    body: JSON.stringify(reply) 
+    },
+    function (error, response, body) {
+      if(error) console.log(error);
+    }
+  );
+}
 
 function getIdeas (req, res) {
   req.headers.query = req.headers.query || "";
@@ -54,42 +108,22 @@ function getIdeas (req, res) {
 
 function createIdea (req, res) {
   var now = Date.now();
-  var count;
-
-  User.findOne({ sUserName: req.body.user_name }, function (err, user) {
-    console.log(user.sUserName);
-
-    // Increment user's idea count and capture it in variable
-    count = ++user.ideaCount;
-
-    if (!req.body.userId) {
-      req.body.userId = user._id;
-    }
-  });
-
-  // If from Slack, assign text to body
-  if (!req.body.body) {
-    req.body.body = req.body.text;
-  }
-
-  // create title joined with underscores for shortId
-  var ti_tle = req.body.title.split(' ').join('_');
 
   var idea = new Idea({
     createdAt    : now,
     updatedAt    : now,
-    shortId      : req.body.user_name + '_' + ti_tle,
+    shortId      : req.body.shortId,
     userId       : req.body.userId,
     slackId      : req.body.slackId,
-    sUserName    : req.body.user_name || null,
+    sUserName    : req.body.user_name,
     sTeamId      : req.body.team_id || null,
     sChannelId   : req.body.channel_id || null,
     sChannelName : req.body.channel_name || null,
     sTeamDomain  : req.body.team_domain || null,
     sCommand     : req.body.command || null,
-    title        : req.body.title || null,
+    title        : req.body.title,
     body         : req.body.body,
-    tags         : req.body.tags,
+    tags         : req.body.tags || [],
     active       : true
   });
 
@@ -104,8 +138,8 @@ function createIdea (req, res) {
 function createComment (req, res) {
   var now = Date.now();
 
-  User.findOne({ slackName: req.body.user_name }, function (err, user) {
-    console.log('User:', user.slackName);
+  User.findOne({ sUserName: req.body.user_name }, function (err, user) {
+    console.log('User:', user.sUserName);
 
     if (!req.body.userId) {
       req.body.userId = user._id;
@@ -158,7 +192,7 @@ function createComment (req, res) {
     });
   }
   //   console.log('New comment "' + comment.body.substr(0, 10) + '"saved')
-
+  
   res.end();
 } // end createComment
 
@@ -200,10 +234,10 @@ function downvote (req, res) {
 
   res.end();
 } // end downvote
-
+  
 function upvote (req, res) {
   var now = Date.now();
-
+  
   var newUpvote = new Vote({
     createdAt : now,
     voter     : req.body.user_name // Slack username
@@ -246,5 +280,6 @@ module.exports = {
   createIdea: createIdea,
   createComment: createComment,
   downvote: downvote,
-  upvote: upvote
+  upvote: upvote,
+  slackInt: slackInt
 };

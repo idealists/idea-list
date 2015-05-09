@@ -9,7 +9,6 @@ Comment.add({
   createdAt : Date,
   updatedAt : Date,
   parentId  : ObjectId,
-  rootId    : ObjectId,
   userId    : ObjectId,
   slackId   : String,
   body      : String,
