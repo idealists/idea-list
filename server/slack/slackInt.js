@@ -2,6 +2,7 @@ var Comment = require('../models/comments');
 var Idea = require('../models/ideas');
 var User = require('../models/users');
 var Vote = require('../models/votes');
+var ideaFunctions = require('../ideas/idea-functions');
 var request = require('request');
 
 function slackInt (req, res){
@@ -30,7 +31,7 @@ function slackInt (req, res){
       if (parsed.length === 3) {
         req.body.tags = parsed[2].split(' ');
       }
-      reply = { 'text': 'Idea Posted! Idea_id: ' + req.body.shortId + ' | Idea: ' + req.body.body + ' | tags: ' + req.body.tags || '' };
+      reply = { 'text': 'Idea Posted! Idea_id: `' + req.body.shortId + '` | Idea: ' + req.body.body + ' | tags: ' + req.body.tags || '' };
       postSlack(reply);
       createIdea(req, res);
       break;
