@@ -33,7 +33,7 @@ function slackInt (req, res){
       }
       reply = { 'text': 'Idea Posted! Idea_id: `' + req.body.shortId + '` | Idea: ' + req.body.body + ' | tags: ' + req.body.tags || '' };
       postSlack(reply);
-      createIdea(req, res);
+      ideaFunctions.createIdea(req, res);
       break;
     case '/comment':
       //TODO: create hyperlink for idea id 
@@ -51,7 +51,7 @@ function slackInt (req, res){
         req.body.parentId = idea._id;
       });
 
-      createComment(req, res);
+      ideaFunctions.createComment(req, res);
       reply = 'Comment added to idea: ' + req.body.shortId;
 
 
