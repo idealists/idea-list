@@ -164,7 +164,7 @@ function createComment (req, res) {
 function downvote (req, res) {
   var now = Date.now();
 
-  var downvote = new Vote({
+  var newDownvote = new Vote({
     createdAt : now,
     voter     : req.body.user_name // Slack username
   });
@@ -178,7 +178,7 @@ function downvote (req, res) {
       });
 
       idea.voters.push(req.body.slackId);
-      idea.downvotes.push(downvote);
+      idea.downvotes.push(newDownvote);
       idea.rating = idea.upvotes.length - idea.downvotes.length;
     });
   }
@@ -203,7 +203,7 @@ function downvote (req, res) {
 function upvote (req, res) {
   var now = Date.now();
   
-  var upvote = new Vote({
+  var newUpvote = new Vote({
     createdAt : now,
     voter     : req.body.user_name // Slack username
   });
@@ -217,7 +217,7 @@ function upvote (req, res) {
       });
 
       idea.voters.push(req.body.slackId);
-      idea.upvotes.push(upvote);
+      idea.upvotes.push(newUpvote);
       idea.rating = idea.upvotes.length - idea.downvotes.length;
     });
   }
