@@ -2,55 +2,9 @@ var Comment = require('../models/comments');
 var Idea = require('../models/ideas');
 var User = require('../models/users');
 var Vote = require('../models/votes');
+var Slack = require('../slack/slackInt');
 var request = require('request');
 
-function slackInt (req, res){
-  // TODO: slash command to return a list of all active ideas with their info
-
-
-  // Parsing request text for ' title | text | tags '
-  var parsed = req.body.text.split("|").map(function(y){ return y.trim(); });
-
-  User.findOne({ sUserName: req.body.user_name }, function (err, user) {
-    if (err) console.log(err);
-    req.body.userId = user._id;
-  });
-
-  // logic for inserting idea vs comment vs vote into db
-  switch(req.body.command){
-    case '/idea':
-      //TODO: create hyperlink for unique id
-      req.body.shortId = parsed[0].split(" ").join("_")+"_"+req.body.user_name;
-      req.body.title = parsed[0];
-      req.body.body = parsed[1];
-      if (parsed.length === 3) {
-        req.body.tags = parsed[2].split(' ');
-      }
-      var reply = { 'text': 'Idea posted to ideaList: ' + req.body.shortId + ' ' + req.body.body };
-      createIdea(req, res);
-      break;
-    case '/comment':
-
-      break;
-    case '/upvote':
-
-      break;
-    case '/downvote':
-
-      break;
-    default:
-      console.log("No dice.");
-  }
-
-  request({ method: 'POST', 
-    uri: process.env.SLACK_WEBHOOK, 
-    body: JSON.stringify(reply) 
-    },
-    function (error, response, body) {
-      if(error) console.log(error);
-    }
-  );
-}
 
 function getIdeas (req, res) {
   req.headers.query = req.headers.query || "";
@@ -140,13 +94,6 @@ function createComment (req, res) {
       req.body.userId = user._id;
     }
   });
-
-  // If from Slack, assign text to body
-  if (!req.body.body) {
-    req.body.body = req.body.text;
-  }
-
-  // If from Slack, set req.body.parentId to mongo _id (looked up from shortId)
 
   var newComment = new Comment({
     createdAt : now,
@@ -275,6 +222,5 @@ module.exports = {
   createIdea: createIdea,
   createComment: createComment,
   downvote: downvote,
-  upvote: upvote,
-  slackInt: slackInt
+  upvote: upvote
 };
