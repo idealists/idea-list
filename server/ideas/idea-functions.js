@@ -105,6 +105,16 @@ function createIdea (req, res) {
     var uniqueIdeaId = parsed[0].split(" ").join("_")+"_"+req.body.user_name;
     var title = parsed[0];
     var text = parsed[1];
+    var slackId;
+
+    User.findOne({ slackName: req.body.user_name }, function (err, user) {
+      console.log(user.slackName);
+
+      if (!req.body.userId) {
+        req.body.userId = user._id;
+      }
+      slackId =
+    });
   }
 
   var idea = new Idea({
@@ -112,7 +122,7 @@ function createIdea (req, res) {
     updatedAt    : now,
     shortId      : uniqueIdeaId || req.body.user_name,
     userId       : req.body.userId,
-    slackId      : req.body.slackId, // <-- slackId?
+    slackId      : slackId || req.body.slackId, // <-- slackId?
     sUserName    : req.body.user_name || null,
     sTeamId      : req.body.team_id || null,
     sChannelId   : req.body.channel_id || null,
