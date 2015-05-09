@@ -4,7 +4,8 @@ var IdeaFilter     = require('./ideaFilter.jsx');
 var IdeaSearch     = require('./ideaSearch.jsx');
 var ideaActions    = require('../actions/ideaActions');
 var ideaStore      = require('../stores/ideaStore');
-var mui            = require('material-ui');
+var NavBar         = require('./navBar.jsx')
+
 
 var Home = React.createClass({
   getInitialState : function(){
@@ -32,6 +33,7 @@ var Home = React.createClass({
   render : function(){
     return(
       <div>
+        <NavBar />
         <h1> Feature Idea Tool </h1>
         <IdeaSearch />
         <IdeaFilter />

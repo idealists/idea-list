@@ -44,7 +44,7 @@ function getIdeas (req, res) {
   }
 
   var results = [];
-  
+
   ideas.exec(function (data) {
     results.push(data);
   });
@@ -158,7 +158,7 @@ function createComment (req, res) {
     });
   }
   //   console.log('New comment "' + comment.body.substr(0, 10) + '"saved')
-  
+
   res.end();
 } // end createComment
 
@@ -200,10 +200,10 @@ function downvote (req, res) {
 
   res.end();
 } // end downvote
-  
+
 function upvote (req, res) {
   var now = Date.now();
-  
+
   var newUpvote = new Vote({
     createdAt : now,
     voter     : req.body.user_name // Slack username

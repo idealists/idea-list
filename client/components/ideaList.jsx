@@ -11,7 +11,7 @@ var IdeaList = React.createClass({
   render : function(){
     var list = this.props.ideas.map(function(idea, index){
       var title = idea.title|| 'Untitled';
-
+      console.log(idea);
       return (
         <div  key ={index}>
           <h4><Link to="ideaView" params={idea}>{title}</Link></h4>
