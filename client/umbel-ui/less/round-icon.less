@@ -1,0 +1,38 @@
+.round-icon {
+  display: inline-block;
+  border-radius: 50%;
+  width: @round-icon-size;
+  height: @round-icon-size;
+  border: 2px solid @white;
+  text-align: center;
+  line-height: 35px;
+  cursor: pointer;
+  .transition(background 0.2s ease-out);
+
+  &:hover {
+    text-decoration: none;
+    font-size: 16px;
+    border-color: rgba(255,255,255,0);
+    .lh-scale(1.13);
+  }
+
+  &:visited {
+    text-decoration: none;
+  }
+}
+
+.round-icon-facebook:hover {
+  background: @facebook;
+}
+
+.round-icon-twitter:hover {
+  background: @twitter;
+}
+
+.round-icon-google:hover {
+  background: @google-plus;
+}
+
+.round-icon-linkedin:hover {
+  background: @linkedin;
+}

@@ -34,7 +34,9 @@ var Home = React.createClass({
     return(
       <div>
         <NavBar />
-        <h1> Feature Idea Tool </h1>
+        <div className="container page-header">
+          <h1> Idea+List= </h1>
+        </div>
         <IdeaSearch />
         <IdeaFilter />
         <IdeaList ideas={this.state.list}/>

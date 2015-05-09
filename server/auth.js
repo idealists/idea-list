@@ -51,7 +51,7 @@ passport.deserializeUser(function (id, done){
 
 function isAuthenticated (request, response, next) {
   if (request.isAuthenticated()) return next();
-  response.redirect('/login');
+  response.redirect('/#/login');
 }
 
 module.exports = function (app) {
@@ -78,7 +78,7 @@ module.exports = function (app) {
 
   app.get('/logout', function (request, response) {
     request.logout();
-    response.redirect('/login');
+    response.redirect('/#/login');
   });
 };
 

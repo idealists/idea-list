@@ -1,0 +1,30 @@
+.alert-mixin (@color: @bright_blue) {
+  border-top:5px solid @color;
+  background: fade(@color, 10%);
+  border-bottom:0px;
+  background-image:none;
+  color: @gray_dark_3;
+  margin-top:15px;
+  margin-bottom:15px;
+}
+
+.alert {
+  margin: 0;
+  font-size: 1em;
+}
+
+.alert-block {
+  text-align: center;
+}
+
+.alert-success {
+  .alert-mixin(@lime_green);
+}
+
+.alert-danger {
+  .alert-mixin(@deep_red);
+}
+
+.alert-info {
+  .alert-mixin();
+}

@@ -1,0 +1,230 @@
+.btn-mixin(@color: @gray_light_1, @font-color: #fff) {
+  border: 1px solid @color;
+  background: transparent;
+  color: @color;
+
+  &:hover {
+    background: @color;
+    color: @font-color;
+  }
+
+  &:focus {
+    background: @color;
+    color: @font-color;
+  }
+
+  &.btn-invert {
+    border: 1px solid @color;
+    background: @color;
+    color: @font-color;
+
+    &:hover {
+      background: transparent;
+      color: @color;
+    }
+
+    &:focus {
+      background: transparent;
+      color: @color;
+    }
+  }
+}
+
+//this serves as the default button which is a light grey
+.btn, .btn:visited {
+  font-family: @font-family-sans-serif;
+  .btn-mixin(@gray_light_1);
+  text-transform: uppercase;
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  line-height: 1.4em;
+  padding: 12px 40px;
+  width: auto;
+  cursor: pointer;
+  border-radius: 0;
+  white-space: normal;
+
+  &:hover {
+    text-decoration: none;
+
+    .i-caret {
+      padding-left: 2em;
+      margin-right: -1em;
+    }
+  }
+
+  .i-caret {
+    display: inline-block;
+    vertical-align: 32%;
+    font-size: 6px;
+    font-weight: 900;
+    padding-left: 1em;
+  }
+
+  &.active {
+    box-shadow: none;
+  }
+
+  &.btn-inline + &.btn-inline {
+    margin-left: 10px;
+  }
+
+  &.large {
+    padding: 15px 60px;
+  }
+
+  &.btn-small {
+    padding: 9px 15px;
+    font-size: 12px;
+    line-height: 1.2em;
+  }
+
+  &.btn-default {
+    padding: 9px 15px;
+    font-size: 12px;
+    line-height: 1.2em;
+  }
+
+  &.btn-wide {
+    padding: 12px 100px;
+    font-size: 20px;
+  }
+
+  &.btn-large {
+    padding: 22px 100px;
+    font-size: 20px;
+  }
+
+  &.btn-with-icon {
+    position: relative;
+
+    span[class^="i-"] {
+      left: -20px;
+      position: relative;
+    }
+  }
+
+  &.btn-play {
+    padding: 22px 30px;
+    font-size: 20px;
+
+    &:before {
+      .icon-font;
+      content: "\e617";
+      margin-right: 15px;
+      border-right: solid 1px;
+      padding: 22px 30px 22px 0;
+      vertical-align: middle;
+    }
+  }
+
+  &.btn-linkedin {
+    position: relative;
+    .btn-mixin(@linkedin, @white);
+    font-size: 16px;
+    padding-left: 60px;
+    padding-right: 30px;
+    width: 100%;
+
+    &:before {
+      .icon-font;
+      font-size: 24px;
+      position: absolute;
+      top: 0.4em;
+      left: 0.6em;
+      content: "\e048";
+    }
+
+    &.btn-invert {
+      &:hover, &:focus {
+        color: @white;
+        border: 1px solid @white;
+      }
+    }
+  }
+
+  &:active {
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+  }
+}
+
+.btn,
+.btn:visited {
+
+  &.btn-white {
+    .btn-mixin(#fff, @text-color);
+  }
+
+  &.btn-blue {
+    .btn-mixin(@umbel_blue, @text-color);
+  }
+
+  &.btn-red {
+    .btn-mixin(@deep_red);
+  }
+
+  &.btn-black {
+    .btn-mixin(#000);
+  }
+
+  &.btn-yellow {
+    .btn-mixin(@umbel_yellow);
+  }
+
+  &.btn-purple {
+    .btn-mixin(@umbel_purple, @text-color);
+  }
+
+  &.btn-full {
+    width: 100%;
+    font-size: 16px;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+}
+
+@media (max-width: @screen-sm-max) {
+  .btn {
+    &.large {
+      font-size: 16px;
+    }
+
+    &.btn-inline + &.btn-inline + &.btn-inline {
+      margin-left: 0;
+      margin-top: 15px;
+    }
+
+    &.btn-large {
+      width: 100%;
+      padding: 22px 10px;
+      font-size: 16px;
+    }
+  }
+}
+
+@media (max-width: @screen-xs-max) {
+  .btn {
+    &.large {
+      font-size: 14px;
+    }
+
+    &.btn-play {
+      padding: 22px 15px;
+      font-size: 18px;
+
+      &:before {
+        .icon-font;
+        content: "\e617";
+        margin-right: 10px;
+        border-right: solid 1px;
+        padding: 22px 10px 22px 0;
+        vertical-align: middle;
+      }
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "name": "umbel-ui",
+  "version": "1.1.1",
+  "authors": [
+    "Umbel Tech <tech@umbel.com>"
+  ],
+  "description": "Umbel's Front End UI Package",
+  "moduleType": [
+    "globals"
+  ],
+  "keywords": [
+    "umbel"
+  ],
+  "license": "MIT",
+  "homepage": "https://www.umbel.com",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "3.1.1",
+    "lesshat": "~3.0.2"
+  }
+}
