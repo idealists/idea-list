@@ -38,7 +38,7 @@ function updateUsers () {
 
             existingUser.updatedAt = now;
             existingUser.slackId = user.id;
-            existingUser.slackName = user.name;
+            existingUser.sUserName = user.name;
             existingUser.realName = user.real_name;
             existingUser.email = user.profile.email;
             existingUser.image = {

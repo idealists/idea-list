@@ -17,9 +17,8 @@ function slackInt (req, res){
 
 
   User.findOne({ sUserName: req.body.user_name }, function (err, user) {
-        req.body.userId = user._id;
-    }
-  );
+    req.body.userId = user._id;
+  });
 
   // logic for inserting idea vs comment vs vote into db
   switch(req.body.command){
