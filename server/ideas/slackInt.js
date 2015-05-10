@@ -25,13 +25,9 @@ function slackInt (req, res){
     });
   }
 
-  setUserId(req.body.user_name, function(err, uId){
-    if (err) { console.log(err) };
-    req.body.userId = uId;
-    console.log('Inside callback - req.body.userId: ', req.body.userId );    
-  })
+  
 
-  console.log('OUTSIDE USER QUERY - req.body.userId: ', req.body.userId );
+  //console.log('OUTSIDE USER QUERY - req.body.userId: ', req.body.userId );
 
 
   // Set slackId to the user_id
@@ -50,7 +46,12 @@ function slackInt (req, res){
       }
       reply = { 'text': 'Idea Posted! Idea_id: `' + req.body.shortId + '` | Idea: ' + req.body.body + ' | tags: ' + req.body.tags || '' };
       postSlack(reply);
-      IFuncs.createIdea(req, res);
+      setUserId(req.body.user_name, function(err, uId){
+        if (err) { console.log(err) };
+        req.body.userId = uId;
+        console.log('Inside callback - req.body: ', req.body );    
+        IFuncs.createIdea(req, res);
+      })
       break;
     case '/comment':
       //TODO: create hyperlink for idea id 
