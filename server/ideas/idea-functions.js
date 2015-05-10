@@ -86,7 +86,7 @@ function createIdea (req, res) {
 
 function createComment (req, res) {
   var now = Date.now();
-  
+
   // Saves query data in async callback for userId
   function setUserId (un, callback){ 
     User.findOne({ sUserName: un }, function (err, user) {
@@ -98,50 +98,50 @@ function createComment (req, res) {
     });
   }
   setUserId(req.body.user_name, function(err, uId){
-        if (err) { console.log(err) };
-        req.body.userId = uId;    
-        IFuncs.createIdea(req, res);
-  })
+    if (err) { console.log(err) };
+    req.body.userId = uId;    
 
-  var newComment = new Comment({
-    createdAt : now,
-    updatedAt : now,
-    parentId  : req.body.parentId,
-    userId    : req.body.userId,
-    slackId   : req.body.slackId,
-    body      : req.body.body
-  });
-
-  // Assumes comment request comes with a parentType
-  if (req.body.parentType === 'idea') {
-    Idea.findOne({ _id: req.body.parentId }, function (err, idea) {
-      if(err) console.log(err);
-      console.log("idea: ", idea, " req.body.parentId: ", req.body.parentId );
-      idea.comments.push(newComment);
+    var newComment = new Comment({
+      createdAt : now,
+      updatedAt : now,
+      parentId  : req.body.parentId,
+      userId    : req.body.userId,
+      slackId   : req.body.slackId,
+      body      : req.body.body
     });
-  }
 
-  if (req.body.parentType === 'comment') {
-    Idea.findOne({ _id: req.body.rootId }, function (err, idea) {
-      console.log('Root idea shortId:', idea.shortId);
+    // Assumes comment request comes with a parentType
+    if (req.body.parentType === 'idea') {
+      Idea.findOne({ _id: req.body.parentId }, function (err, idea) {
+        if(err) console.log(err);
+        console.log("idea: ", idea, " req.body.parentId: ", req.body.parentId );
+        idea.comments.push(newComment);
+      });
+    }
 
-      insertComment(idea);
+    if (req.body.parentType === 'comment') {
+      Idea.findOne({ _id: req.body.rootId }, function (err, idea) {
+        console.log('Root idea shortId:', idea.shortId);
 
-      // Traverse comment tree to find parent of comment
-      function insertComment (node) {
-        node.comments.map(function (comment) {
-          if (comment._id === req.body.parentId) {
-            comment.comments.push(newComment);
-            res.end();
-            return;
-          } else {
-            insertComment(comment);
-          }
-        });
-      }
-    });
-  }
-  //   console.log('New comment "' + comment.body.substr(0, 10) + '"saved')
+        insertComment(idea);
+
+        // Traverse comment tree to find parent of comment
+        function insertComment (node) {
+          node.comments.map(function (comment) {
+            if (comment._id === req.body.parentId) {
+              comment.comments.push(newComment);
+              res.end();
+              return;
+            } else {
+              insertComment(comment);
+            }
+          });
+        }
+      });
+    }
+  } // end setUserId
+
+  // console.log('New comment "' + comment.body.substr(0, 10) + '"saved')
   
   res.end();
 } // end createComment

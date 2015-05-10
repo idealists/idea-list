@@ -38,6 +38,8 @@ function slackInt (req, res){
   req.body.slackId = req.body.user_id;
 
   // Parsing data and directing idea / comment / vote to db insert functions
+  
+  // Instantiating reply variable for Slack post request
   var reply;
   switch(req.body.command){
     case '/idea':
