@@ -13,6 +13,7 @@ function slackInt (req, res){
   // For comments: parsed = [ shortId | text ];
   var parsed = req.body.text.split("|").map(function(y){ return y.trim(); });
 
+  // TODO: userId is not saving to db...
   User.findOne({ sUserName: req.body.user_name }, function (err, user) {
     if (err) console.log(err);
     req.body.userId = user._id;
@@ -42,6 +43,8 @@ function slackInt (req, res){
       req.body.parentType = 'idea';
 
       // search in the db for the shortId, if it does not exist, send error msg back to user
+      
+      // TODO: parentId is not being saved to db...
       Idea.find({ shortId: req.body.shortId }, function(err, idea){
         if(err) {
           console.log(err);
@@ -51,6 +54,8 @@ function slackInt (req, res){
         req.body.parentId = idea._id;
         console.log('req.body: ', req.body, ' idea: ', idea );
       });
+
+      console.log('req.body.parentId: ', req.body.parentId);
 
       reply = 'Comment added to idea: ' + req.body.shortId;
       postSlack(reply);
