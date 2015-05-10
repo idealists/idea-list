@@ -16,7 +16,9 @@ function slackInt (req, res){
   // TODO: userId is not saving to db...
   User.findOne({ sUserName: req.body.user_name }, function (err, user) {
     if (err) console.log(err);
+    console.log('User query - req.body: ', req.body);
     req.body.userId = user._id;
+    console.log('User query - req.body.userId: ', req.body.userId );
   });
 
   req.body.slackId = req.body.user_id;
@@ -54,8 +56,6 @@ function slackInt (req, res){
         req.body.parentId = idea._id;
         console.log('req.body: ', req.body, ' idea: ', idea );
       });
-
-      console.log('req.body.parentId: ', req.body.parentId);
 
       reply = 'Comment added to idea: ' + req.body.shortId;
       postSlack(reply);
