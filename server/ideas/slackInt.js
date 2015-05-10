@@ -19,7 +19,6 @@ function slackInt (req, res){
     req.body.userId = user._id;
     setUserId(user._id);
     setUserId(req.body.userId);
-    inside
   });
 
   function setUserId (UID){
