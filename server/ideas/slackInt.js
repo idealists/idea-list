@@ -53,10 +53,10 @@ function slackInt (req, res){
       reply = { 'text': 'Idea Posted! Idea_id: `' + req.body.shortId + '` | Idea: ' + req.body.body + ' | tags: ' + req.body.tags || '' };
       postSlack(reply);
       setUserId(req.body.user_name, function(err, uId){
-        if (err) { console.log(err) };
+        if (err) { console.log(err); }
         req.body.userId = uId;    
         IFuncs.createIdea(req, res);
-      })
+      });
       break;
     case '/comment':
       //TODO: create hyperlink for idea id 
@@ -76,7 +76,7 @@ function slackInt (req, res){
           postSlack(reply);
           IFuncs.createComment(req, res);
         }
-      })
+      });
       break;
     case '/upvote':
 

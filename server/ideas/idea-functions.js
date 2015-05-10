@@ -98,7 +98,7 @@ function createComment (req, res) {
     });
   }
   setUserId(req.body.user_name, function(err, uId){
-    if (err) { console.log(err) };
+    if (err) { console.log(err); }
     req.body.userId = uId;    
 
     var newComment = new Comment({
@@ -139,11 +139,10 @@ function createComment (req, res) {
         }
       });
     }
-  } // end setUserId
+    res.end();
 
-  // console.log('New comment "' + comment.body.substr(0, 10) + '"saved')
+  }); // end setUserId
   
-  res.end();
 } // end createComment
 
 function downvote (req, res) {
