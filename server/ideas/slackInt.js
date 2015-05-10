@@ -23,6 +23,7 @@ function slackInt (req, res){
 
   function setUserId (UID){
     req.body.userId = UID;
+    console.log('inside the setUserId function: ', UID);
   }
   console.log('OUTSIDE USER QUERY - req.body.userId: ', req.body.userId );
 
