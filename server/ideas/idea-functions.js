@@ -108,7 +108,7 @@ function createComment (req, res) {
   if (req.body.parentType === 'idea') {
     Idea.findOne({ _id: req.body.parentId }, function (err, idea) {
       if(err) console.log(err);
-      console.log("idea: ", idea);
+      console.log("idea: ", idea, " req.body.parentId: ", req.body.parentId );
       idea.comments.push(newComment);
     });
   }
