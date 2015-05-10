@@ -4,7 +4,6 @@ var Home   = require('./components/homeView.jsx');
 var ideaView= require('./components/ideaView.jsx')
 var Login = require('./components/login.jsx');
 var CreateIdeaView = require('./components/createIdeaView.jsx');
-var authActions = require('./actions/authActions')
 var $          = require('jquery');
 
 var Link = Router.Link;
@@ -46,6 +45,6 @@ Router.run(routes, function(Handler) {
         React.render(<Login/>, document.getElementById('main'))
       }else{
         React.render(<Handler/>, document.getElementById('main'))
-      }  
+      }
     })
 });
