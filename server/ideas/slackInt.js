@@ -51,9 +51,9 @@ function slackInt (req, res){
         req.body.parentId = idea._id;
       });
 
-      IFuncs.createComment(req, res);
       reply = 'Comment added to idea: ' + req.body.shortId;
       postSlack(reply);
+      IFuncs.createComment(req, res);
       break;
     case '/upvote':
 

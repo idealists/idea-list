@@ -107,7 +107,8 @@ function createComment (req, res) {
   // Assumes comment request comes with a parentType
   if (req.body.parentType === 'idea') {
     Idea.findOne({ _id: req.body.parentId }, function (err, idea) {
-
+      if(err) console.log(err);
+      console.log("idea: ", idea);
       idea.comments.push(newComment);
     });
   }
