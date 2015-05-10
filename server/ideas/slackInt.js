@@ -15,12 +15,10 @@ function slackInt (req, res){
 
   // TODO: userId is not saving to db...
   User.findOne({ sUserName: req.body.user_name }, function (err, user) {
-    if (err) console.log(err);
-    console.log('User query - req.body: ', req.body);
+    if (err) {console.log(err)};
     req.body.userId = user._id;
-    console.log('User query - req.body.userId: ', req.body.userId );
   });
-
+  console.log('req.body.userId: ', req.body.userId );
   req.body.slackId = req.body.user_id;
 
   // Directing idea / comment / vote into db
