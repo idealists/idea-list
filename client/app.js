@@ -4,6 +4,8 @@ var Home   = require('./components/homeView.jsx');
 var ideaView= require('./components/ideaView.jsx')
 var Login = require('./components/login.jsx');
 var CreateIdeaView = require('./components/createIdeaView.jsx');
+var authActions = require('./actions/authActions')
+var $          = require('jquery');
 
 var Link = Router.Link;
 var Route = Router.Route;
@@ -11,10 +13,12 @@ var DefaultRoute = Router.DefaultRoute;
 var RouteHandler = Router.RouteHandler;
 
 var App = React.createClass({
+   mixins : [ Router.Navigation ],
+
   render : function(){
     return(
       <div>
-        <RouteHandler {...this.props}/>
+        <RouteHandler />
       </div>
     );
   }
@@ -30,7 +34,18 @@ var routes = (
   </Route>
 );
 
-Router.run(routes, function(Handler, state) {
-  var params = state.params
-  React.render(<Handler params={params}/>, document.getElementById('main'))
+Router.run(routes, function(Handler) {
+
+    $.ajax({
+      url:"/api/user",
+      dataType:'json',
+      methord:"GET"
+    }).done(function(value) {
+      console.log('got auth')
+     if(!value.loggedIn){
+        React.render(<Login/>, document.getElementById('main'))
+      }else{
+        React.render(<Handler/>, document.getElementById('main'))
+      }  
+    })
 });

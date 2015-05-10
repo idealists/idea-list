@@ -47,10 +47,10 @@ module.exports = function (app) {
   app.use(passport.initialize());
   app.use(passport.session());
 
+
   app.get('/auth/slack',
     passport.authenticate('slack')
   );
-
   app.get('/auth/slack/callback',
     passport.authenticate('slack', { failureRedirect: '/login' }),
     function (request, response) {
@@ -58,7 +58,7 @@ module.exports = function (app) {
     }
   );
 
-  app.get('/api/user', isAuthenticated, function (request, response) {
+  app.get('/api/user',function (request, response) {
     response.status(200).json({
       loggedIn: request.isAuthenticated(),
       session: request.session.passport
