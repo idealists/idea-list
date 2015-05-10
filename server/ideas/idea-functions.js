@@ -86,14 +86,22 @@ function createIdea (req, res) {
 
 function createComment (req, res) {
   var now = Date.now();
-
-  User.findOne({ sUserName: req.body.user_name }, function (err, user) {
-    console.log('User:', user.sUserName);
-
-    if (!req.body.userId) {
-      req.body.userId = user._id;
-    }
-  });
+  
+  // Saves query data in async callback for userId
+  function setUserId (un, callback){ 
+    User.findOne({ sUserName: un }, function (err, user) {
+      if (err) {
+        callback(err, null);
+      } else {
+        callback(null, user._id);
+      }
+    });
+  }
+  setUserId(req.body.user_name, function(err, uId){
+        if (err) { console.log(err) };
+        req.body.userId = uId;    
+        IFuncs.createIdea(req, res);
+  })
 
   var newComment = new Comment({
     createdAt : now,
