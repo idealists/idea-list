@@ -18,7 +18,7 @@ function slackInt (req, res){
     if (err) {console.log(err)};
     req.body.userId = user._id;
   });
-  console.log('req.body.userId: ', req.body.userId );
+  console.log('OUTSIDE USER QUERY - req.body.userId: ', req.body.userId );
   req.body.slackId = req.body.user_id;
 
   // Directing idea / comment / vote into db
