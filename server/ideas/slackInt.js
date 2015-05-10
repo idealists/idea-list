@@ -19,6 +19,7 @@ function slackInt (req, res){
       if (err) {
         callback(err, null);
       } else {
+        console.log('user._id: ', user._id, ' user: ', user);
         callback(null, user._id);
       }
     });
@@ -27,8 +28,9 @@ function slackInt (req, res){
   setUserId(req.body.user_name, function(err, uId){
     if (err) { console.log(err) };
     req.body.userId = uId;
+    console.log('Inside callback - req.body.userId: ', req.body.userId );    
   })
-  
+
   console.log('OUTSIDE USER QUERY - req.body.userId: ', req.body.userId );
 
 
