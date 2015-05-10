@@ -5,7 +5,7 @@ var Vote = require('../models/votes');
 var IFuncs = require('../ideas/idea-functions');
 var request = require('request');
 
-function slackInt (req, res){
+var slackInt = function (req, res){
   // TODO: slash command to return a list of all active ideas with their info
 
   // Parsing request:
