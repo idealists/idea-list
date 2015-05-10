@@ -16,7 +16,7 @@ function slackInt (req, res){
   // TODO: userId is not saving to db...
   User.findOne({ sUserName: req.body.user_name }, function (err, user) {
     if (err) {console.log(err)};
-    req.body.userId = user._id;
+    return req.body.userId = user._id;
   });
   console.log('OUTSIDE USER QUERY - req.body.userId: ', req.body.userId );
   req.body.slackId = req.body.user_id;
