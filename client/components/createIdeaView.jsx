@@ -33,19 +33,23 @@ var CreateIdeaView = React.createClass({
       <div>
         <NavBar />
         <div className="page-header container">
-          <h1>Create+Idea= </h1>
+          <div className="xx-huge text-center text-primary">Create + Idea = </div>
         </div>
         <div className="input-group container">
           <input className="form-control" type='text' ref='newIdeaTitle' placeholder='title'></input>
           <br />
-          <textarea className="form-control" type='text' ref='newIdeaBody' placeholder='body' rows="10"></textarea>
           <br />
           <input className="form-control" type='text' ref='newIdeaTags' placeholder='tags (split by space)'></input>
           <br />
-          <button className="btn btn-default btn-lg pull-right" onClick={this.handleSubmit}>
-            Submit
-          </button>
+          <br />
+          <textarea className="form-control" type='text' ref='newIdeaBody' placeholder='body' rows="8"></textarea>
         </div>
+          <br />
+          <div className="text-center">
+            <button className="btn btn-red btn-wide center" onClick={this.handleSubmit}>
+              Submit
+            </button>
+          </div>
       </div>
     );
   }
