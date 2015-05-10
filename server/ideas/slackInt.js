@@ -49,6 +49,7 @@ function slackInt (req, res){
           res.end(reply);
         }
         req.body.parentId = idea._id;
+        console.log('req.body: ', req.body, ' idea: ', idea );
       });
 
       reply = 'Comment added to idea: ' + req.body.shortId;
