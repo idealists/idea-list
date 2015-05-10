@@ -97,6 +97,15 @@ function createComment (req, res) {
       }
     });
   }
+  function findParentId (pI, callback){
+    Idea.findOne({ _id: pI }, function (err, idea) {
+      if (err) {
+        callback(err, null);
+      } else {
+        callback(null, idea);
+      }
+    });
+  }
   setUserId(req.body.user_name, function(err, uId){
     if (err) { console.log(err); }
     req.body.userId = uId;    
@@ -112,11 +121,11 @@ function createComment (req, res) {
 
     // Assumes comment request comes with a parentType
     if (req.body.parentType === 'idea') {
-      Idea.findOne({ _id: req.body.parentId }, function (err, idea) {
-        if(err) console.log(err);
+      findParentId(req.body.parentId, function (err, idea){
+        if (err) { console.log(err); }
         console.log("idea: ", idea, " req.body.parentId: ", req.body.parentId );
         idea.comments.push(newComment);
-      });
+      })
     }
 
     if (req.body.parentType === 'comment') {

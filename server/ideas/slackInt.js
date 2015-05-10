@@ -73,7 +73,7 @@ function slackInt (req, res){
         } else {
           req.body.parentId = pId;
           reply = 'Comment added to idea: ' + req.body.shortId;
-          postSlack(reply);
+          res.send(reply);
           IFuncs.createComment(req, res);
         }
       });
