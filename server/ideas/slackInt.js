@@ -12,13 +12,19 @@ function slackInt (req, res){
   // For ideas: parsed = [ title | text | tags ];
   // For comments: parsed = [ shortId | text ];
   var parsed = req.body.text.split("|").map(function(y){ return y.trim(); });
-  req.body.userId = '';
+  
   // TODO: userId is not saving to db...
   User.findOne({ sUserName: req.body.user_name }, function (err, user) {
     if (err) {console.log(err)};
-    return req.body.userId = user._id;
+    setUserId(user._id);
   });
+
+  function setUserId (UID){
+    req.body.userId = UID;
+  }
   console.log('OUTSIDE USER QUERY - req.body.userId: ', req.body.userId );
+
+  // Set slackId to the user_id
   req.body.slackId = req.body.user_id;
 
   // Directing idea / comment / vote into db
