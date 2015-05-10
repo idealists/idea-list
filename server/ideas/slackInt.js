@@ -12,7 +12,7 @@ function slackInt (req, res){
   // For ideas: parsed = [ title | text | tags ];
   // For comments: parsed = [ shortId | text ];
   var parsed = req.body.text.split("|").map(function(y){ return y.trim(); });
-
+  req.body.userId = '';
   // TODO: userId is not saving to db...
   User.findOne({ sUserName: req.body.user_name }, function (err, user) {
     if (err) {console.log(err)};
