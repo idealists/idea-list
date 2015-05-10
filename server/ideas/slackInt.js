@@ -14,16 +14,21 @@ function slackInt (req, res){
   var parsed = req.body.text.split("|").map(function(y){ return y.trim(); });
   
   // TODO: userId is not saving to db...
-  User.findOne({ sUserName: req.body.user_name }, function (err, user) {
-    if (err) {console.log(err)};
-    req.body.userId = user._id;
-    setUserId(req.body.userId);
-  });
-
-  function setUserId (UID){
-    req.body.userId = UID;
-    console.log('inside the setUserId function: ', req.body.userId);
+  function setUserId (un, callback){ 
+    User.findOne({ sUserName: un }, function (err, user) {
+      if (err) {
+        callback(err, null);
+      } else {
+        callback(null, user._id);
+      }
+    });
   }
+
+  setUserId(req.body.user_name, function(err, uId){
+    if (err) { console.log(err) };
+    req.body.userId = uId;
+  })
+  
   console.log('OUTSIDE USER QUERY - req.body.userId: ', req.body.userId );
 
 
