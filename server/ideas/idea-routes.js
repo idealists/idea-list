@@ -1,6 +1,6 @@
 var ideaFunctions = require('./idea-functions');
 var isAuth = require('../auth').isAuthenticated;
-var Slack = require('../slack/slackInt');
+var Slack = require('./slackInt');
 
 module.exports = function(ideas){
   ideas.get('/', isAuth, ideaFunctions.getIdeas);

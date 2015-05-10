@@ -2,7 +2,7 @@ var Comment = require('../models/comments');
 var Idea = require('../models/ideas');
 var User = require('../models/users');
 var Vote = require('../models/votes');
-var Slack = require('../slack/slackInt');
+// var Slack = require('./slackInt');
 var request = require('request');
 
 
