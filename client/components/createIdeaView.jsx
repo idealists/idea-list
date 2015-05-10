@@ -28,7 +28,6 @@ var CreateIdeaView = React.createClass({
   },
 
   render : function(){
-    console.log(this.props,this.params)
     return(
       <div>
         <NavBar />

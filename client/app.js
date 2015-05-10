@@ -25,10 +25,11 @@ var App = React.createClass({
 
 var routes = (
   <Route name="app" path="/" handler={App}>
-    <Route name="ideas"  path='/newidea/:test' handler={CreateIdeaView} />
+    <Route name="ideas"  path='/newidea' handler={CreateIdeaView} />
     <Route name="ideaView" path='/ideaView/:idea' handler={ideaView}/>
     <Route name="Home" path='/home' handler={Home} />
     <Route name="login" path='/login' handler={Login} />
+    <Route name="logout" path='/logout' handler={Login} />
     <DefaultRoute handler={Home} />
   </Route>
 );
