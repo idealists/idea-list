@@ -128,9 +128,10 @@ function createComment (req, res) {
           body      : req.body.body,
           rating    : 0
         }); 
-        console.log("idea: ", idea, " newComment: ", newComment );
+        console.log("newComment: ", newComment );
         // error when trying to push to the comments array in the idea
         idea.comments.push(newComment);
+        console.log("idea after inserting comment: ", idea);
       })
     }
 
