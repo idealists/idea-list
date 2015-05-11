@@ -88,7 +88,7 @@ function createComment (req, res) {
   var now = Date.now();
 
   // Saves query data in async callback for userId
-  function setUserId (un, callback){ 
+  function setUserId (un,  callback){ 
     User.findOne({ sUserName: un }, function (err, user) {
       if (err) {
         callback(err, null);
@@ -110,6 +110,7 @@ function createComment (req, res) {
     if (err) { console.log(err); }
     req.body.userId = uId;    
 
+    console.log('INSIDE setUserId FUNCTION: req: ', req);
     var newComment = new Comment({
       createdAt : now,
       updatedAt : now,
@@ -123,6 +124,7 @@ function createComment (req, res) {
     if (req.body.parentType === 'idea') {
       findParentId(req.body.parentId, function (err, idea){
         if (err) { console.log(err); }
+        // idea is null and parentId is undefined 
         console.log("idea: ", idea, " req.body.parentId: ", req.body.parentId );
         idea.comments.push(newComment);
       })
