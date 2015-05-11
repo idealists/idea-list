@@ -11,7 +11,6 @@ var CreateIdeaView = React.createClass({
     var tagsArray = tagsInput.split(' ');
 
     var newIdea = {
-      userId  : 1,
       title   : this.refs.newIdeaTitle.getDOMNode().value,
       body    : this.refs.newIdeaBody.getDOMNode().value,
       tags    : tagsArray
@@ -28,6 +27,7 @@ var CreateIdeaView = React.createClass({
   },
 
   render : function(){
+    console.log(this.props,this.params)
     return(
       <div>
         <NavBar />

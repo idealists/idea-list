@@ -29,7 +29,11 @@ var ideaActions = {
       dataType:'json',
       methord:"GET"
     }).done(function(userinfo){
-      console.log(userinfo.session)
+      var userinfo = userinfo.session
+      newIdea['user_name']= userinfo['sUserName']
+      newIdea['shortId'] = newIdea['title']+newIdea['user_name']
+      newIdea['slackId'] = userinfo['slackId']
+      newIdea['userId']= userinfo['_id']
       $.ajax({
         url      : "/ideas/create",
         dataType : "json",
