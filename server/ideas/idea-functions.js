@@ -92,7 +92,7 @@ function getIdeas (req, res) {
                 .select(selectFields);
       break;
     case 'id':
-      ideas = Idea.find({ _id: ObjectId.fromString(req.headers.id)})
+      ideas = Idea.find({ _id: ObjectId.fromString(req.headers.id)});
       break;
     default:
     //custom query (to do when need arises)
@@ -101,10 +101,9 @@ function getIdeas (req, res) {
 
   ideas.exec().then(
     function(value){
-      console.log('results',value)
-      res.end(JSON.stringify(value))
+      res.end(JSON.stringify(value));
     }
-  )
+  );
 } // end getIdeas
 
 function createIdea (req, res) {
@@ -129,10 +128,10 @@ function createIdea (req, res) {
   });
 
   idea.save(function (err) {
-    if (err) {console.log(err)}
-    else{
+    if (err) { console.log(err); }
+    else {
         console.log('New idea', idea.title, 'saved');
-      };
+    }
   });
 
   res.end();
