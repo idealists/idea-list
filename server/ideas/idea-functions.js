@@ -91,6 +91,9 @@ function getIdeas (req, res) {
       ideas = Idea.find({ userId:req.headers.userId })
                 .select(selectFields);
       break;
+    case 'id':
+      ideas = Idea.find({ _id: ObjectId.fromString(req.headers.id)})
+      break;
     default:
     //custom query (to do when need arises)
       console.log('cant cant cant');

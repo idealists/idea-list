@@ -9,7 +9,7 @@ var NavBar         = require('./navBar.jsx')
 
 var Home = React.createClass({
   getInitialState : function(){
-    ideaActions.getIdeas('votes');
+    ideaActions.getIdeas();
 
     return {
       list: ideaStore.fetchIdeas()

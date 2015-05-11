@@ -4,7 +4,7 @@ var $          = require('jquery');
 
 var ideaActions = {
   getIdeas : function(query, data){
-    query = query || 'dateLast';
+    query = query || 'dateFirst';
     data  = data  || null;
 
     $.ajax({
@@ -43,7 +43,7 @@ var ideaActions = {
       }).done(function(ideaList){
         ideaActions.getIdeas('votes');
       });
-      
+
     })
   },
 
