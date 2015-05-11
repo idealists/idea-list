@@ -12,7 +12,6 @@ var DefaultRoute = Router.DefaultRoute;
 var RouteHandler = Router.RouteHandler;
 
 var App = React.createClass({
-   mixins : [ Router.Navigation ],
 
   render : function(){
     return(

@@ -4,7 +4,7 @@ var $          = require('jquery');
 
 var ideaActions = {
   getIdeas : function(query, data){
-    query = query || 'votes';
+    query = query || 'dateLast';
     data  = data  || null;
 
     $.ajax({
@@ -15,6 +15,7 @@ var ideaActions = {
                     'data'  : data
                   }
     }).done(function(ideaList){
+      console.log('getidea',ideaList)
       Dispatcher.handleAction({
         actionType : Constants.RELOAD_IDEALIST,
         data       : ideaList
@@ -24,15 +25,26 @@ var ideaActions = {
 
   createIdea : function(newIdea){
     var ideaActions = this;
-
     $.ajax({
-      url      : "/ideas/create",
-      dataType : "json",
-      method   : "POST",
-      data     : newIdea
-    }).done(function(ideaList){
-      ideaActions.getIdeas('votes');
-    });
+      url:"/api/user",
+      dataType:'json',
+      methord:"GET"
+    }).done(function(userinfo){
+      var userinfo = userinfo.session
+      newIdea['user_name']= userinfo['sUserName']
+      newIdea['shortId'] = newIdea['title']+newIdea['user_name']
+      newIdea['slackId'] = userinfo['slackId']
+      newIdea['userId']= userinfo['_id']
+      $.ajax({
+        url      : "/ideas/create",
+        dataType : "json",
+        method   : "POST",
+        data     : newIdea
+      }).done(function(ideaList){
+        ideaActions.getIdeas('votes');
+      });
+      
+    })
   },
 
   changevote: function (voteobj, userId) {
