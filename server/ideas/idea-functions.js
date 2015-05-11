@@ -147,12 +147,12 @@ function createComment (req, res) {
           } 
           
           var reply = 'Comment added to idea: ' + idea.shortId;
-          confirm(reply);
+          confirm(res,reply);
         })
 
       }); // end of findId
 
-      var confirm = function(reply){
+      var confirm = function(res,reply){
         res.send(reply);
       }
 
