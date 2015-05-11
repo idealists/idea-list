@@ -4,8 +4,8 @@ var Comment = require('./comment.jsx');
 var CommentList = React.createClass({
   render: function(){
     return(
-      <div>
-        HELLO WORLD
+      <div className="text-primary">
+        hello world // commentList
       </div>
     )
   }
