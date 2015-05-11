@@ -145,10 +145,9 @@ function createComment (req, res) {
           if (err) { 
             console.log(err); 
           } 
-        }).then(function(reply){
           reply = 'Comment added to idea: ' + idea.shortId;
           res.end(reply);
-        });
+        })
 
       }); // end of findId
 
