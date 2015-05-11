@@ -15,23 +15,12 @@ passport.use(new SlackStrategy({
     User.findOne({ slackId: profile.id }, function (err, user) {
       if (err) return done(err);
 
-      // Create a new user if none found
       if (!user) {
-        user = new User({
-          accessToken: accessToken,
-          slackId: profile.id,
-          slackName: profile.displayName,
-          slack: JSON.stringify(profile._json)
-        });
-
-        user.save(function (err) {
-          if (err) console.log(err);
-          return done(null, user);
-        });
+        // User list populates on server start, so don't allow user to authenticate if not in DB
+        return done(err);
       } else {
         // Otherwise update user
         user.accessToken = accessToken;
-        user.slackName = profile.displayName;
         user.slack = JSON.stringify(profile._json);
         return done(err, user);
       }
@@ -39,46 +28,46 @@ passport.use(new SlackStrategy({
   }
 ));
 
-passport.serializeUser(function (user, done){
-  done(null, user._id);
+passport.serializeUser(function (user, done) {
+  done(null, user);
 });
 
-passport.deserializeUser(function (id, done){
-  User.findById(id, function (err, user) {
+passport.deserializeUser(function (user, done) {
+  User.findById(user._id, function (err, user) {
     done(err, user);
   });
 });
 
 function isAuthenticated (request, response, next) {
   if (request.isAuthenticated()) return next();
-  response.redirect('/login');
+  response.redirect('/#/login');
 }
 
 module.exports = function (app) {
   app.use(passport.initialize());
   app.use(passport.session());
 
+
   app.get('/auth/slack',
     passport.authenticate('slack')
   );
-
   app.get('/auth/slack/callback',
     passport.authenticate('slack', { failureRedirect: '/login' }),
     function (request, response) {
-      response.redirect('/api/user'); // temporary - for development only
+      response.redirect('/#/home'); // temporary - for development only
     }
   );
 
-  app.get('/api/user', isAuthenticated, function (request, response) {
+  app.get('/api/user',function (request, response) {
     response.status(200).json({
       loggedIn: request.isAuthenticated(),
-      user: request.session
+      session: request.session.passport
     });
   });
 
   app.get('/logout', function (request, response) {
     request.logout();
-    response.redirect('/login');
+    response.redirect('/#/login');
   });
 };
 

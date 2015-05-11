@@ -1,14 +1,15 @@
 var React          = require('react');
-var CreateIdeaView = require('./createIdeaView.jsx');
 var IdeaList       = require('./ideaList.jsx');
 var IdeaFilter     = require('./ideaFilter.jsx');
 var IdeaSearch     = require('./ideaSearch.jsx');
 var ideaActions    = require('../actions/ideaActions');
 var ideaStore      = require('../stores/ideaStore');
+var NavBar         = require('./navBar.jsx')
+
 
 var Home = React.createClass({
   getInitialState : function(){
-    ideaActions.getIdeas('votes');
+    ideaActions.getIdeas();
 
     return {
       list: ideaStore.fetchIdeas()
@@ -23,11 +24,8 @@ var Home = React.createClass({
     ideaStore.removeChangeListener(this._onChange);
   },
 
-  handleAddIdea : function(newIdea){
-    ideaActions.createIdea(newIdea);
-  },
-
   _onChange : function(){
+
     this.setState({
       list : ideaStore.fetchIdeas()
     });
@@ -36,11 +34,17 @@ var Home = React.createClass({
   render : function(){
     return(
       <div>
-        <CreateIdeaView add={this.handleAddIdea}/>
-        <h1> Feature Idea Tool </h1>
-        <IdeaSearch />
-        <IdeaFilter />
-        <IdeaList ideas={this.state.list}/>
+        <NavBar />
+        <div className="container">
+          <div className="page-header">
+            <div className="xx-huge text-center text-primary"> Idea + List = </div>
+          </div>
+          <IdeaSearch />
+          <br />
+          <IdeaFilter />
+          <br />
+          <IdeaList ideas={this.state.list}/>
+        </div>
       </div>
     );
   }
