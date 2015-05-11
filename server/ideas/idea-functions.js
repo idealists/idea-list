@@ -111,21 +111,24 @@ function createComment (req, res) {
     req.body.userId = uId;    
 
     console.log('INSIDE setUserId FUNCTION: req.body: ', req.body);
-    var newComment = new Comment({
-      createdAt : now,
-      updatedAt : now,
-      parentId  : req.body.parentId,
-      userId    : req.body.userId,
-      slackId   : req.body.slackId,
-      body      : req.body.body
-    });
+
+    // this.newComment = newComment;
+    // var self = this;
 
     // Assumes comment request comes with a parentType
     if (req.body.parentType === 'idea') {
       findParentId(req.body.parentId, function (err, idea){
         if (err) { console.log(err); }
+        var newComment = new Comment({
+          createdAt : now,
+          updatedAt : now,
+          parentId  : req.body.parentId,
+          userId    : req.body.userId,
+          slackId   : req.body.slackId,
+          body      : req.body.body
+        });
         // idea is null and parentId is undefined 
-        console.log("idea: ", idea, " req.body.parentId: ", req.body.parentId );
+        console.log("idea: ", idea, " newComment: ", newComment );
         idea.comments.push(newComment);
       })
     }
