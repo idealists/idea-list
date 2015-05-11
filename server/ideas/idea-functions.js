@@ -76,31 +76,10 @@ function getIdeas (req, res) {
                 .limit(10);
       break;
     case 'votes':
-      res.end(
-        JSON.stringify([{
-          createdAt    : 12345678900,
-          updatedAt    : 12345678902,
-          shortId      : "idea_vishal",
-          userId       : "qwer1234",
-          slackId      : "asdf1234",
-          sUserName    : "vishal",
-          sTeamId      : "idealist",
-          sChannelId   : "zxcv1234",
-          sChannelName : "schannelname",
-          sTeamDomain  : "steamdomain",
-          sCommand     : "scommand",
-          sText        : "stext",
-          title        : "Espresso in the break room",
-          body         : "We need more options than coffee. Also, who drinks decaf?",
-          tags         : ["coffee", "espresso", "decaf"],
-          active       : true,
-          voters       : ["richard", "gerald", "kayden"],
-          upvotes      : [10],
-          downvotes    : [8],
-          rating       : 2,
-          comments     : ["i agree", "great idea"]
-        }])
-      );
+      ideas = Idea.find()
+                .select(selectFields)
+                .sort('-rating')
+                .limit(10);
       break;
     case 'tags':
     //add username to tags array for easy find of people also.
@@ -117,13 +96,12 @@ function getIdeas (req, res) {
       console.log('cant cant cant');
   }
 
-  var results = [];
-
-  ideas.exec(function (data) {
-    results.push(data);
-  });
-
-  res.end(JSON.stringify(results));
+  ideas.exec().then(
+    function(value){
+      console.log('results',value)
+      res.end(JSON.stringify(value))
+    }
+  )
 } // end getIdeas
 
 function createIdea (req, res) {
@@ -148,8 +126,10 @@ function createIdea (req, res) {
   });
 
   idea.save(function (err) {
-    if (err) console.log(err);
-    console.log('New idea', idea.title, 'saved');
+    if (err) {console.log(err)}
+    else{
+        console.log('New idea', idea.title, 'saved');
+      };
   });
 
   res.end();
