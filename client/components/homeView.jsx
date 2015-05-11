@@ -25,6 +25,7 @@ var Home = React.createClass({
   },
 
   _onChange : function(){
+
     this.setState({
       list : ideaStore.fetchIdeas()
     });

@@ -46,9 +46,9 @@ function slackInt (req, res){
       console.log("No dice.");
   }
 
-  request({ method: 'POST', 
-    uri: process.env.SLACK_WEBHOOK, 
-    body: JSON.stringify(reply) 
+  request({ method: 'POST',
+    uri: process.env.SLACK_WEBHOOK,
+    body: JSON.stringify(reply)
     },
     function (error, response, body) {
       if(error) console.log(error);
@@ -76,10 +76,31 @@ function getIdeas (req, res) {
                 .limit(10);
       break;
     case 'votes':
-      ideas = Idea.find()
-                .select(selectFields)
-                .sort('-rating')
-                .limit(10);
+      res.end(
+        JSON.stringify([{
+          createdAt    : 12345678900,
+          updatedAt    : 12345678902,
+          shortId      : "idea_vishal",
+          userId       : "qwer1234",
+          slackId      : "asdf1234",
+          sUserName    : "vishal",
+          sTeamId      : "idealist",
+          sChannelId   : "zxcv1234",
+          sChannelName : "schannelname",
+          sTeamDomain  : "steamdomain",
+          sCommand     : "scommand",
+          sText        : "stext",
+          title        : "Espresso in the break room",
+          body         : "We need more options than coffee. Also, who drinks decaf?",
+          tags         : ["coffee", "espresso", "decaf"],
+          active       : true,
+          voters       : ["richard", "gerald", "kayden"],
+          upvotes      : [10],
+          downvotes    : [8],
+          rating       : 2,
+          comments     : ["i agree", "great idea"]
+        }])
+      );
       break;
     case 'tags':
     //add username to tags array for easy find of people also.
@@ -191,7 +212,7 @@ function createComment (req, res) {
     });
   }
   //   console.log('New comment "' + comment.body.substr(0, 10) + '"saved')
-  
+
   res.end();
 } // end createComment
 
@@ -233,10 +254,10 @@ function downvote (req, res) {
 
   res.end();
 } // end downvote
-  
+
 function upvote (req, res) {
   var now = Date.now();
-  
+
   var newUpvote = new Vote({
     createdAt : now,
     voter     : req.body.user_name // Slack username
