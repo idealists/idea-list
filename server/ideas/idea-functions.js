@@ -125,7 +125,8 @@ function createComment (req, res) {
           parentId  : req.body.parentId,
           userId    : req.body.userId,
           slackId   : req.body.slackId,
-          body      : req.body.body
+          body      : req.body.body,
+          rating    : 0
         });
         // idea is null and parentId is undefined 
         console.log("idea: ", idea, " newComment: ", newComment );
