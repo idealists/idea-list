@@ -145,11 +145,17 @@ function createComment (req, res) {
           if (err) { 
             console.log(err); 
           } 
-          var reply = { 'post': 'Comment added to idea: ' + idea.shortId };
-          slackPost.postSlack(reply);
+          
+          var reply = 'Comment added to idea: ' + idea.shortId;
+          confirm(reply);
         })
 
       }); // end of findId
+
+      var confirm = function(reply){
+        res.send(reply);
+      }
+
 
     } //if comment if commenting on a comment, traverse idea/comment tree
       else if (req.body.parentType === 'comment') {
