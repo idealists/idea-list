@@ -12,7 +12,7 @@ var IdeaList = React.createClass({
     var list = this.props.ideas.map(function(idea, index){
       return (
         <div key={index}>
-          <h2><Link to="ideaView"> + {idea.title} </Link></h2>
+          <h2><Link to="ideaView" params={{id: idea._id, index: index}}> + {idea.title} </Link></h2>
         </div>
       );
 
