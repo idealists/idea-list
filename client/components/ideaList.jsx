@@ -1,20 +1,18 @@
-var React = require('react');
-var Router = require('react-router')
-var ideaView= require('./ideaView.jsx')
+var React    = require('react');
+var Router   = require('react-router');
+var ideaView = require('./ideaView.jsx');
 
 var DefaultRoute = Router.DefaultRoute;
-var Link = Router.Link;
-var Route = Router.Route;
 var RouteHandler = Router.RouteHandler;
+var Route = Router.Route;
+var Link  = Router.Link;
 
 var IdeaList = React.createClass({
-  render : function(){
+  render: function(){
     var list = this.props.ideas.map(function(idea, index){
-      var title = idea.title|| 'Untitled';
-      console.log(idea);
       return (
-        <div  key ={index}>
-          <h4><Link to="ideaView" params={idea}>{title}</Link></h4>
+        <div key={index}>
+          <h2><Link to="ideaView"> + {idea.title} </Link></h2>
         </div>
       );
 
