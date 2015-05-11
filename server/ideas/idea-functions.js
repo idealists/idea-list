@@ -145,7 +145,7 @@ function createComment (req, res) {
           if (err) { 
             console.log(err); 
           } 
-          
+          console.log('running',res,idea)
           var reply = 'Comment added to idea: ' + idea.shortId;
           confirm(res,reply);
         })
@@ -153,7 +153,7 @@ function createComment (req, res) {
       }); // end of findId
 
       var confirm = function(res,reply){
-        res.send(reply);
+        res.end(reply);
       }
 
 
