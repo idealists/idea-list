@@ -25,7 +25,7 @@ var Idea = new Schema({
   upvotes      : [Vote],
   downvotes    : [Vote],
   rating       : Number,
-  comments     : [Object]
+  comments     : [Comment]
 });
 
 module.exports = mongoose.model('Idea', Idea);
