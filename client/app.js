@@ -4,7 +4,6 @@ var Home   = require('./components/homeView.jsx');
 var ideaView= require('./components/ideaView.jsx')
 var Login = require('./components/login.jsx');
 var CreateIdeaView = require('./components/createIdeaView.jsx');
-var authActions = require('./actions/authActions')
 var $          = require('jquery');
 
 var Link = Router.Link;
@@ -29,6 +28,7 @@ var routes = (
     <Route name="ideaView" path='/ideaView/:idea' handler={ideaView}/>
     <Route name="Home" path='/home' handler={Home} />
     <Route name="login" path='/login' handler={Login} />
+    <Route name="logout" path='/logout' handler={Login} />
     <DefaultRoute handler={Home} />
   </Route>
 );
@@ -45,6 +45,6 @@ Router.run(routes, function(Handler) {
         React.render(<Login/>, document.getElementById('main'))
       }else{
         React.render(<Handler/>, document.getElementById('main'))
-      }  
+      }
     })
 });
