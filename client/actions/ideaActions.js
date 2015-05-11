@@ -24,15 +24,22 @@ var ideaActions = {
 
   createIdea : function(newIdea){
     var ideaActions = this;
-
     $.ajax({
-      url      : "/ideas/create",
-      dataType : "json",
-      method   : "POST",
-      data     : newIdea
-    }).done(function(ideaList){
-      ideaActions.getIdeas('votes');
-    });
+      url:"/api/user",
+      dataType:'json',
+      methord:"GET"
+    }).done(function(userinfo){
+      console.log(userinfo.session)
+      $.ajax({
+        url      : "/ideas/create",
+        dataType : "json",
+        method   : "POST",
+        data     : newIdea
+      }).done(function(ideaList){
+        ideaActions.getIdeas('votes');
+      });
+      
+    })
   },
 
   changevote: function (voteobj, userId) {
