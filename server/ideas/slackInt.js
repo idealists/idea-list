@@ -28,6 +28,7 @@ function slackInt (req, res){
       if(err) {
         callback(err, null);
       } else {
+        console.log('INSIDE setParentId: idea: ', idea, ' / idea._id: ', idea._id);
         callback(null, idea._id);
       }
     });
