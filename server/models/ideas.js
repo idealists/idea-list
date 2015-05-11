@@ -1,8 +1,23 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
-var Comment = require('./comments');
+//var Comment = require('./comments');
 var Vote = require('./votes');
+
+var Comment = new Schema();
+Comment.add({
+  createdAt : Date,
+  updatedAt : Date,
+  parentId  : ObjectId,
+  userId    : ObjectId,
+  slackId   : String,
+  body      : String,
+  voters    : [String],
+  upvotes   : [Vote],
+  downvotes : [Vote],
+  rating    : Number,
+  comments  : [Comment]
+});
 
 var Idea = new Schema({
   createdAt    : Date,

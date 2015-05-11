@@ -19,4 +19,4 @@ Comment.add({
   comments  : [Comment]
 });
 
-module.exports = Comment;
+module.exports = mongoose.model('Comment', Comment);
