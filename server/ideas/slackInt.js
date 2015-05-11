@@ -3,7 +3,7 @@ var Idea = require('../models/ideas');
 var User = require('../models/users');
 var Vote = require('../models/votes');
 var IFuncs = require('./idea-functions');
-var slackPost = require('./slackInt');
+//var slackPost = require('./slackPost');
 var request = require('request');
 
 function slackInt (req, res){
