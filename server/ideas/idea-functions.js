@@ -46,9 +46,9 @@ function slackInt (req, res){
       console.log("No dice.");
   }
 
-  request({ method: 'POST', 
-    uri: process.env.SLACK_WEBHOOK, 
-    body: JSON.stringify(reply) 
+  request({ method: 'POST',
+    uri: process.env.SLACK_WEBHOOK,
+    body: JSON.stringify(reply)
     },
     function (error, response, body) {
       if(error) console.log(error);
@@ -91,18 +91,20 @@ function getIdeas (req, res) {
       ideas = Idea.find({ userId:req.headers.userId })
                 .select(selectFields);
       break;
+    case 'id':
+      ideas = Idea.find({ _id: ObjectId.fromString(req.headers.id)})
+      break;
     default:
     //custom query (to do when need arises)
       console.log('cant cant cant');
   }
 
-  var results = [];
-
-  ideas.exec(function (data) {
-    results.push(data);
-  });
-
-  res.end(JSON.stringify(results));
+  ideas.exec().then(
+    function(value){
+      console.log('results',value)
+      res.end(JSON.stringify(value))
+    }
+  )
 } // end getIdeas
 
 function createIdea (req, res) {
@@ -127,8 +129,10 @@ function createIdea (req, res) {
   });
 
   idea.save(function (err) {
-    if (err) console.log(err);
-    console.log('New idea', idea.title, 'saved');
+    if (err) {console.log(err)}
+    else{
+        console.log('New idea', idea.title, 'saved');
+      };
   });
 
   res.end();
@@ -191,7 +195,7 @@ function createComment (req, res) {
     });
   }
   //   console.log('New comment "' + comment.body.substr(0, 10) + '"saved')
-  
+
   res.end();
 } // end createComment
 
@@ -233,10 +237,10 @@ function downvote (req, res) {
 
   res.end();
 } // end downvote
-  
+
 function upvote (req, res) {
   var now = Date.now();
-  
+
   var newUpvote = new Vote({
     createdAt : now,
     voter     : req.body.user_name // Slack username

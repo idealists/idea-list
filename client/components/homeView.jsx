@@ -9,7 +9,7 @@ var NavBar         = require('./navBar.jsx')
 
 var Home = React.createClass({
   getInitialState : function(){
-    ideaActions.getIdeas('votes');
+    ideaActions.getIdeas();
 
     return {
       list: ideaStore.fetchIdeas()
@@ -25,6 +25,7 @@ var Home = React.createClass({
   },
 
   _onChange : function(){
+
     this.setState({
       list : ideaStore.fetchIdeas()
     });
@@ -34,12 +35,16 @@ var Home = React.createClass({
     return(
       <div>
         <NavBar />
-        <div className="container page-header">
-          <h1> Idea+List= </h1>
+        <div className="container">
+          <div className="page-header">
+            <div className="xx-huge text-center text-primary"> Idea + List = </div>
+          </div>
+          <IdeaSearch />
+          <br />
+          <IdeaFilter />
+          <br />
+          <IdeaList ideas={this.state.list}/>
         </div>
-        <IdeaSearch />
-        <IdeaFilter />
-        <IdeaList ideas={this.state.list}/>
       </div>
     );
   }

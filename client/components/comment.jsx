@@ -1,4 +1,4 @@
-var React = require('react');
+var React       = require('react');
 var CommentList = require('./commentList.jsx');
 
 var Comment = React.createClass({

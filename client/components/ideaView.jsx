@@ -1,25 +1,70 @@
 var React       = require('react');
-var ideaActions = require('../actions/ideaActions');
+var NavBar      = require('./navBar.jsx');
 var CommentList = require('./commentList.jsx');
-// need to build
-var commentList
-var userProfile
-var ideaHeader
-// gets votes button needs request
+var ideaActions = require('../actions/ideaActions');
+var ideaStore   = require('../stores/ideaStore');
 
 var IdeaView = React.createClass({
 
-  render : function(){
-    console.log(this.props)
+
+  getInitialState: function () {
+    return {
+      idea: ideaStore.fetchIdeas()[this.props.params.index]
+    }
+  },
+
+  componentDidMount : function(){
+    ideaStore.addChangeListener(this._onChange);
+  },
+
+  componentWillUnmount : function(){
+    ideaStore.removeChangeListener(this._onChange);
+  },
+
+  _onChange : function(){
+
+    this.setState({
+      idea : ideaStore.fetchIdeas()[this.props.params.index]
+    });
+  },
+
+  render: function(){
+
+    console.log('state:', this.state.idea)
     return(
       <div>
-        <h3 className='ideaTitle'>
-          {this.props.params}
-        </h3>
-        <h5 className='ideaBody'>
-        </h5>
+        <NavBar />
 
-        <CommentList />
+        <div className="page-header container">
+          <div className="x-huge text-primary"> {this.state.idea.title} </div>
+        </div>
+
+        <div className="container">
+          <br />
+          <div className="large text-primary"> {this.state.idea.body} </div>
+          <br />
+          <br />
+          <br />
+        </div>
+
+        <div className="input-group container">
+          <textarea className="form-control" type='text' ref='parentComment' placeholder='some_commas' rows="4"></textarea>
+        </div>
+
+        <br />
+
+        <div className="text-center">
+          <button className="btn btn-red btn-wide center">
+            Add Comment
+          </button>
+        </div>
+
+        <br />
+
+        <div className="container">
+          <CommentList />
+        </div>
+
       </div>
     );
   }
