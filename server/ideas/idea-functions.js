@@ -131,6 +131,9 @@ function createComment (req, res) {
         console.log("newComment: ", newComment );
         // error when trying to push to the comments array in the idea
         idea.comments.push(newComment);
+        idea.save(function(err){
+          console.log(err);
+        });
         console.log("idea after inserting comment: ", idea);
       })
     }
