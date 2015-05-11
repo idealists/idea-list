@@ -2,7 +2,7 @@ var Comment = require('../models/comments');
 var Idea = require('../models/ideas');
 var User = require('../models/users');
 var Vote = require('../models/votes');
-// var Slack = require('./slackInt');
+var slackPost = require('./slackInt');
 var request = require('request');
 
 
@@ -77,92 +77,106 @@ function createIdea (req, res) {
   });
 
   idea.save(function (err) {
-    if (err) console.log(err);
+    if (err) {
+      console.log(err);
+    }
+    var reply = { 'text': 'Idea Posted! Idea_id: `' + idea.shortId + '` | Idea: ' + idea.body + ' | tags: ' + idea.tags || '' };
+    slackPost.postSlack(reply);
     console.log('New idea', idea.title, 'saved');
   });
 
   res.end();
 } // end createIdea
 
+// helper functions for mongodb search with async callbacks
+function setUserId (un,  callback){ 
+  User.findOne({ sUserName: un }, function (err, user) {
+    if (err) {
+      callback(err, null);
+    } else {
+      callback(null, user._id);
+    }
+  });
+}
+function findId (pI, callback){
+  Idea.findOne({ _id: pI }, function (err, idea) {
+    if (err) {
+      callback(err, null);
+    } else {
+      callback(null, idea);
+    }
+  });
+}
+
+//TODO:
+/*INCOMING POST REQ NEED THE FOLLOWING:*/
+  // each incoming post req needs a parentId and a rootId associated
+  // each incoming post also needs parentType = 'comment'
+  
+// creating and inserting comments into db
 function createComment (req, res) {
   var now = Date.now();
 
   // Saves query data in async callback for userId
-  function setUserId (un,  callback){ 
-    User.findOne({ sUserName: un }, function (err, user) {
-      if (err) {
-        callback(err, null);
-      } else {
-        callback(null, user._id);
-      }
-    });
-  }
-  function findParentId (pI, callback){
-    Idea.findOne({ _id: pI }, function (err, idea) {
-      if (err) {
-        callback(err, null);
-      } else {
-        callback(null, idea);
-      }
-    });
-  }
   setUserId(req.body.user_name, function(err, uId){
+    
     if (err) { console.log(err); }
     req.body.userId = uId;    
 
-    console.log('INSIDE setUserId FUNCTION: req.body: ', req.body);
-
-    // this.newComment = newComment;
-    // var self = this;
-
-    // Assumes comment request comes with a parentType
+    // if a comment is commenting directly on an idea
     if (req.body.parentType === 'idea') {
-      findParentId(req.body.parentId, function (err, idea){
+
+      findId(req.body.parentId, function (err, idea){
         if (err) { console.log(err); }
+
         var newComment = new Comment({
           createdAt : now,
           updatedAt : now,
           parentId  : req.body.parentId,
+          rootId    : req.body.parentId,
           userId    : req.body.userId,
           slackId   : req.body.slackId,
           body      : req.body.body,
           rating    : 0
-        }); 
-        console.log("newComment: ", newComment );
-        // error when trying to push to the comments array in the idea
-        idea.comments.push(newComment);
-        idea.save(function(err){
-          console.log(err);
         });
-        console.log("idea after inserting comment: ", idea);
-      })
+
+        idea.comments.push(newComment);
+        idea.save(function(err){ 
+          if (err) { 
+            console.log(err); 
+          } 
+          var reply = 'Comment added to idea: ' + idea.shortId;
+          res.send(reply);
+        });
+
+      }); // end of findId
+
+    } //if comment if commenting on a comment, traverse idea/comment tree
+      else if (req.body.parentType === 'comment') {
+
+        findId(req.body.rootId, function (err, idea){
+          if (err) { console.log(err); }
+
+          insertComment(idea);
+
+          function insertComment (node) {
+            node.comments.map(function (comment) {
+              if (comment._id === req.body.parentId) {
+                comment.comments.push(newComment);
+                res.end();
+                return;
+              } else {
+                insertComment(comment);
+              }
+            });
+          }
+        }); // end of findId
     }
-
-    if (req.body.parentType === 'comment') {
-      Idea.findOne({ _id: req.body.rootId }, function (err, idea) {
-        console.log('Root idea shortId:', idea.shortId);
-
-        insertComment(idea);
-
-        // Traverse comment tree to find parent of comment
-        function insertComment (node) {
-          node.comments.map(function (comment) {
-            if (comment._id === req.body.parentId) {
-              comment.comments.push(newComment);
-              res.end();
-              return;
-            } else {
-              insertComment(comment);
-            }
-          });
-        }
-      });
-    }
-    res.end();
-
-  }); // end setUserId
+  }); // end of setUserId
   
-} // end createComment
+  res.end();
+}; // end of createComment
+  
 
 function downvote (req, res) {
   var now = Date.now();

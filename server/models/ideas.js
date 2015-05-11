@@ -1,14 +1,18 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
-//var Comment = require('./comments');
-var Vote = require('./votes');
+
+var Vote = new Schema({
+  createdAt : Date,
+  voter     : String,
+});
 
 var Comment = new Schema();
 Comment.add({
   createdAt : Date,
   updatedAt : Date,
   parentId  : ObjectId,
+  rootId    : ObjectId,
   userId    : ObjectId,
   slackId   : String,
   body      : String,
