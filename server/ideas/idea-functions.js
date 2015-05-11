@@ -110,7 +110,7 @@ function createComment (req, res) {
     if (err) { console.log(err); }
     req.body.userId = uId;    
 
-    console.log('INSIDE setUserId FUNCTION: req: ', req);
+    console.log('INSIDE setUserId FUNCTION: req.body: ', req.body);
     var newComment = new Comment({
       createdAt : now,
       updatedAt : now,

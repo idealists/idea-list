@@ -72,6 +72,7 @@ function slackInt (req, res){
           res.end(reply);
         } else {
           req.body.parentId = pId;
+          console.log("IN SLACKINT: req.body: ", req.body);
           reply = 'Comment added to idea: ' + req.body.shortId;
           res.send(reply);
           IFuncs.createComment(req, res);
