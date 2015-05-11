@@ -127,9 +127,9 @@ function createComment (req, res) {
           slackId   : req.body.slackId,
           body      : req.body.body,
           rating    : 0
-        });
-        // idea is null and parentId is undefined 
+        }); 
         console.log("idea: ", idea, " newComment: ", newComment );
+        // error when trying to push to the comments array in the idea
         idea.comments.push(newComment);
       })
     }

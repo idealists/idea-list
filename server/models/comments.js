@@ -16,7 +16,7 @@ Comment.add({
   upvotes   : [Vote],
   downvotes : [Vote],
   rating    : Number,
-  comments  : [Comment]
+  comments  : [Object]
 });
 
 module.exports = mongoose.model('Comment', Comment);
