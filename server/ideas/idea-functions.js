@@ -145,7 +145,7 @@ function createComment (req, res) {
           if (err) { 
             console.log(err); 
           } 
-          var reply = { 'Comment added to idea: ' + idea.shortId };
+          var reply = { 'post': 'Comment added to idea: ' + idea.shortId };
           slackPost.postSlack(reply);
         })
 
