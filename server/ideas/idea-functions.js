@@ -145,8 +145,8 @@ function createComment (req, res) {
           if (err) { 
             console.log(err); 
           } 
-          reply = 'Comment added to idea: ' + idea.shortId;
-          res.end(reply);
+          var reply = 'Comment added to idea: ' + idea.shortId;
+          slackPost.postSlack(reply);
         })
 
       }); // end of findId
