@@ -76,10 +76,10 @@ function getIdeas (req, res) {
       console.log('Default case');
   }
 
-  ideas.exec().then(function (value) {
-    console.log('Results:', value);
-    res.end(JSON.stringify(value));
-  });
+  ideas.exec().then(function(value){
+      res.end(JSON.stringify(value));
+    }
+  );
 } // end getIdeas
 
 function createIdea (req, res) {
@@ -137,7 +137,7 @@ function findId (pI, callback){
 //TODO:
 /*INCOMING POST REQ NEED THE FOLLOWING:*/
   // each incoming post req needs a parentId and a rootId associated
-  // each incoming post also needs parentType = 'comment'
+  // each incoming post also needs parentType = 'comment' or 'idea'
   
 // creating and inserting comments into db
 function createComment (req, res) {
@@ -174,7 +174,7 @@ function createComment (req, res) {
         });
       }); // end of findId
 
-    } //if comment if commenting on a comment, traverse idea/comment tree
+    } //if comment is commenting on a comment, traverse idea/comment tree
       else if (req.body.parentType === 'comment') {
 
         findId(req.body.rootId, function (err, idea) {
