@@ -94,7 +94,7 @@ function getIdeas (req, res) {
     case 'id':
       ideas = Idea.find({ _id: ObjectId.fromString(req.headers.id)});
       break;
-    case 'serchbar':
+    case 'searchbar':
       var text = req.headers.lookup.replace(/\s+/g,' ').trim()
       text = text.split(' ');
       var result={};

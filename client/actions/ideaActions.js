@@ -28,7 +28,7 @@ var ideaActions = {
       url       : "/ideas",
       dataType  : "json",
       method    : "GET",
-      headers   : { 'query' : 'serchbar',
+      headers   : { 'query' : 'searchbar',
                     'lookup'  : data.lookup
                   }
     }).done(function (result) {
