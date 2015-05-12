@@ -23,7 +23,6 @@ var ideaActions = {
   },
 
   searchBy:function(data){
-    console.log(data.lookup)
     $.ajax({
       url       : "/ideas",
       dataType  : "json",
@@ -32,16 +31,20 @@ var ideaActions = {
                     'lookup'  : data.lookup
                   }
     }).done(function (result) {
-      console.log('query bar',result);
+      var uslist = result.users.concat(result.ideas);
+      Dispatcher.handleAction({
+        actionType : Constants.RELOAD_IDEALIST,
+        data       : uslist
+      });
     });
   },
 
   createIdea : function(newIdea){
     var ideaActions = this;
     $.ajax({
-      url:"/api/user",
-      dataType:'json',
-      methord:"GET"
+      url      :"/api/user",
+      dataType :'json',
+      method   :"GET"
     }).done(function(userinfo){
       userinfo          = userinfo.session;
       newIdea.user_name = userinfo.sUserName;
