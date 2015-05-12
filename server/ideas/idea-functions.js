@@ -2,59 +2,8 @@ var Comment = require('../models/comments');
 var Idea = require('../models/ideas');
 var User = require('../models/users');
 var Vote = require('../models/votes');
+var slackPost = require('./slackPost');
 var request = require('request');
-
-function slackInt (req, res){
-  // TO-DOs
-  // parse req.body.text --> parse out title, parse out text
-  // need to return text with unique id
-    // create hyperlink for unique id
-  // making a descriptive unique id from the title itself
-  // also include a slash command to return a list of all active ideas with their info
-
-  // Need to return: "Idea posted to IdeaList! " +'|'+ <uniqueIdeaId> +'|'+ ideaText;
-  var parsed = req.body.text.split("|");
-
-
-  User.findOne({ sUserName: req.body.user_name }, function (err, user) {
-    if (err) console.log(err);
-    req.body.userId = user._id;
-  });
-
-  // logic for inserting idea vs comment vs vote into db
-  switch(req.body.command){
-    case '/idea':
-      req.body.shortId = parsed[0].split(" ").join("_")+"_"+req.body.user_name;
-      req.body.title = parsed[0];
-      req.body.body = parsed[1];
-      if (parsed.length === 3) {
-        req.body.tags = parsed[2].split(' ');
-      }
-      var reply = { 'text': 'Idea posted to ideaList: ' + req.body.shortId + ' ' + req.body.body };
-      createIdea(req, res);
-      break;
-    case '/comment':
-
-      break;
-    case '/upvote':
-
-      break;
-    case '/downvote':
-
-      break;
-    default:
-      console.log("No dice.");
-  }
-
-  request({ method: 'POST',
-    uri: process.env.SLACK_WEBHOOK,
-    body: JSON.stringify(reply)
-    },
-    function (error, response, body) {
-      if(error) console.log(error);
-    }
-  );
-}
 
 function getIdeas (req, res) {
   req.headers.query = req.headers.query || "";
@@ -148,75 +97,105 @@ function createIdea (req, res) {
   });
 
   idea.save(function (err) {
-    if (err) { console.log(err); }
-    else {
-        console.log('New idea', idea.title, 'saved');
+    if (err) {
+      console.log(err);
     }
+    var reply = { 'text': 'Idea Posted! Idea_id: `' + idea.shortId + '` | Idea: ' + idea.body + ' | tags: ' + idea.tags || '' };
+    slackPost.postSlack(reply);
+    console.log('New idea', idea.title, 'saved');
   });
 
   res.end();
 } // end createIdea
 
+// helper functions for mongodb search with async callbacks
+function setUserId (un,  callback){ 
+  User.findOne({ sUserName: un }, function (err, user) {
+    if (err) {
+      callback(err, null);
+    } else {
+      callback(null, user._id);
+    }
+  });
+}
+function findId (pI, callback){
+  Idea.findOne({ _id: pI }, function (err, idea) {
+    if (err) {
+      callback(err, null);
+    } else {
+      callback(null, idea);
+    }
+  });
+}
+
+//TODO:
+/*INCOMING POST REQ NEED THE FOLLOWING:*/
+  // each incoming post req needs a parentId and a rootId associated
+  // each incoming post also needs parentType = 'comment'
+  
+// creating and inserting comments into db
 function createComment (req, res) {
   var now = Date.now();
 
-  User.findOne({ sUserName: req.body.user_name }, function (err, user) {
-    console.log('User:', user.sUserName);
+  // Saves query data in async callback for userId
+  setUserId(req.body.user_name, function(err, uId){
+    
+    if (err) { console.log(err); }
+    req.body.userId = uId;    
 
-    if (!req.body.userId) {
-      req.body.userId = user._id;
-    }
-  });
+    // if a comment is commenting directly on an idea
+    if (req.body.parentType === 'idea') {
 
-  // If from Slack, assign text to body
-  if (!req.body.body) {
-    req.body.body = req.body.text;
-  }
+      findId(req.body.parentId, function (err, idea){
+        if (err) { console.log(err); }
 
-  // If from Slack, set req.body.parentId to mongo _id (looked up from shortId)
-
-  var newComment = new Comment({
-    createdAt : now,
-    updatedAt : now,
-    parentId  : req.body.parentId,
-    userId    : req.body.userId,
-    slackId   : req.body.slackId,
-    body      : req.body.body
-  });
-
-  // Assumes comment request comes with a parentType
-  if (req.body.parentType === 'idea') {
-    Idea.findOne({ _id: req.body.parentId }, function (err, idea) {
-      console.log('Idea shortId:', idea.shortId);
-
-      idea.comments.push(newComment);
-    });
-  }
-
-  if (req.body.parentType === 'comment') {
-    Idea.findOne({ _id: req.body.rootId }, function (err, idea) {
-      console.log('Root idea shortId:', idea.shortId);
-
-      insertComment(idea);
-
-      // Traverse comment tree to find parent of comment
-      function insertComment (node) {
-        node.comments.map(function (comment) {
-          if (comment._id === req.body.parentId) {
-            comment.comments.push(newComment);
-            res.end();
-            return;
-          } else {
-            insertComment(comment);
-          }
+        var newComment = new Comment({
+          createdAt : now,
+          updatedAt : now,
+          parentId  : req.body.parentId,
+          rootId    : req.body.parentId,
+          userId    : req.body.userId,
+          slackId   : req.body.slackId,
+          body      : req.body.body,
+          rating    : 0
         });
-      }
-    });
-  }
-  //   console.log('New comment "' + comment.body.substr(0, 10) + '"saved')
 
+        idea.comments.push(newComment);
+        idea.save(function(err){ 
+          if (err) { 
+            console.log(err); 
+          } 
+          var reply = { 'text': 'Comment added to idea: ' + idea.shortId };
+          slackPost.postSlack(reply);
+        })
+
+      }); // end of findId
+    } //if comment if commenting on a comment, traverse idea/comment tree
+      else if (req.body.parentType === 'comment') {
+
+        findId(req.body.rootId, function (err, idea){
+          if (err) { console.log(err); }
+
+          insertComment(idea);
+
+          function insertComment (node) {
+            node.comments.map(function (comment) {
+              if (comment._id === req.body.parentId) {
+                comment.comments.push(newComment);
+                res.end();
+                return;
+              } else {
+                insertComment(comment);
+              }
+            });
+          }
+        }); // end of findId
+    }
+  }); // end of setUserId
+  
   res.end();
-} // end createComment
+}; // end of createComment
+  
 
 function downvote (req, res) {
   var now = Date.now();
@@ -302,6 +281,5 @@ module.exports = {
   createIdea: createIdea,
   createComment: createComment,
   downvote: downvote,
-  upvote: upvote,
-  slackInt: slackInt
+  upvote: upvote
 };
