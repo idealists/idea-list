@@ -4,7 +4,7 @@ var Home   = require('./components/homeView.jsx');
 var ideaView= require('./components/ideaView.jsx')
 var Login = require('./components/login.jsx');
 var CreateIdeaView = require('./components/createIdeaView.jsx');
-var $          = require('jquery');
+var $ = require('jquery');
 
 var Link = Router.Link;
 var Route = Router.Route;
@@ -12,8 +12,7 @@ var DefaultRoute = Router.DefaultRoute;
 var RouteHandler = Router.RouteHandler;
 
 var App = React.createClass({
-
-  render : function(){
+  render : function () {
     return(
       <div>
         <RouteHandler />
@@ -33,18 +32,18 @@ var routes = (
   </Route>
 );
 
-Router.run(routes, function(Handler) {
-
+Router.run(routes, function (Handler) {
     $.ajax({
       url:"/api/user",
       dataType:'json',
       methord:"GET"
-    }).done(function(value) {
-      console.log('got auth')
-     if(!value.loggedIn){
-        React.render(<Login/>, document.getElementById('main'))
-      }else{
-        React.render(<Handler/>, document.getElementById('main'))
-      }
     })
+    .done(function (value) {
+      console.log('got auth')
+     if (!value.loggedIn) {
+        React.render(<Login/>, document.getElementById('main'));
+      } else {
+        React.render(<Handler/>, document.getElementById('main'));
+      }
+    });
 });

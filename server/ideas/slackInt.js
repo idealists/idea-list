@@ -15,7 +15,7 @@ function slackInt (req, res){
   var parsed = req.body.text.split("|").map(function(y){ return y.trim(); });
   
   // Saves query data in async callback for userId and parentId
-  function setUserId (un, callback){ 
+  function setUserId (un, callback) { 
     User.findOne({ sUserName: un }, function (err, user) {
       if (err) {
         callback(err, null);
@@ -24,7 +24,8 @@ function slackInt (req, res){
       }
     });
   }
-  function setParentId (pi, callback){
+  
+  function setParentId (pi, callback) {
     Idea.find({ shortId: pi }, function(err, idea){
       if(err) {
         callback(err, null);
@@ -48,23 +49,23 @@ function slackInt (req, res){
       if (parsed.length === 3) {
         req.body.tags = parsed[2].split(' ');
       }
-      setUserId(req.body.user_name, function(err, uId){
-        if (err) { console.log(err); }
+      setUserId(req.body.user_name, function(err, uId) {
+        if (err) console.log(err);
         req.body.userId = uId;    
         IFuncs.createIdea(req, res);
       });
       break;
     case '/comment':
-      //TODO: create hyperlink for idea id 
+      // TODO: create hyperlink for comment id 
       req.body.shortId = parsed[0];
       req.body.body = parsed[1];
       req.body.parentType = 'idea';
 
       // search in the db for the shortId, if it does not exist, send error msg back to user
-      setParentId (req.body.shortId, function(err, pId){
+      setParentId (req.body.shortId, function(err, pId) {
         if (err) { 
           console.log(err);
-          reply = 'Idea_id not found. See a list of active ideas with /ideaList .'; 
+          reply = 'Idea not found. See a list of active ideas with /ideaList'; 
           res.end(reply);
         } else {
           req.body.parentId = pId;
@@ -73,13 +74,13 @@ function slackInt (req, res){
       });
       break;
     case '/upvote':
-
+      // call upvote function
       break;
     case '/downvote':
-
+      // call downvote function
       break;
     default:
-      console.log("No dice.");
+      res.send("Invalid slash command entered: " + req.body.command);
   }
 } // end slackInt
 

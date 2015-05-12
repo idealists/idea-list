@@ -7,5 +7,4 @@ module.exports = function(ideas){
   ideas.post('/create', isAuth, ideaFunctions.createIdea);
   ideas.post('/comment', isAuth, ideaFunctions.createComment);
   ideas.post('/api/idea', Slack.slackInt);
-  
 };
