@@ -3,7 +3,7 @@
 var request = require('request');
 
 // Post request back to Slack
-function postSlack (reply){
+function postSlack (reply) {
   request({ method: 'POST', 
     uri: process.env.SLACK_WEBHOOK, 
     body: JSON.stringify(reply) 

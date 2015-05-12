@@ -1,14 +1,15 @@
 body {
   background: url('umbel-ui/assets/blurred-bg.jpg');
-  background-repeat: no-repeat;
-  background-position: center center;
   background-attachment: fixed;
+  background-position: center center;
+  background-repeat: no-repeat;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
 }
+
 #login {
-  margin-top: 15%
+  margin-top: 15%;
 }
 

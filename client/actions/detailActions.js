@@ -3,7 +3,7 @@ var Constants  = require('../constants/constants');
 var $          = require('jquery');
 
 var commentActions = {
-  getComments : function(query, data){
+  getComments: function (query, data) {
     query = query || null;
     data  = data  || null;
 
@@ -11,10 +11,12 @@ var commentActions = {
       url       : "/comments",
       dataType  : "json",
       method    : "GET",
-      headers   : { 'query' : query,
-                    'data'  : data
-                  }
-    }).done(function(commentList){
+      headers   : {
+        'query' : query,
+        'data'  : data
+      }
+    })
+    .done(function (commentList) {
       Dispatcher.handleAction({
         actionType : Constants.RELOAD_COMMENTLIST,
         data       : commentList
@@ -22,15 +24,19 @@ var commentActions = {
     });
   },
 
-  createComment : function(userId,newComment){
+  createComment: function (userId,newComment) {
     var commentActions = this;
-    var data = {userId:userId, comment:newComment};
+    var data = {
+      userId   : userId,
+      comment  : newComment
+    };
     $.ajax({
       url      : "/comments/create",
       dataType : "json",
       method   : "POST",
       data     : data
-    }).done(function(commentList){
+    })
+    .done(function (commentList) {
       commentActions.getComments('votes');
     });
   }
@@ -38,3 +44,4 @@ var commentActions = {
 
 module.exports= commentActions;
 //need to build a server routes
+
