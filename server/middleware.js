@@ -1,5 +1,4 @@
 var bodyParser = require('body-parser');
- // var morgan = require('morgan');
 
 module.exports = function(app, express){
   var ideas = express.Router();
