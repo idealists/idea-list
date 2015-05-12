@@ -9,13 +9,13 @@ var request = require('request');
 function slackInt (req, res){
   // TODO: slash command to return a list of all active ideas with their info
   
-  // Parsing request:
+  // Parsing incoming request data
   // For ideas: parsed = [ title | text | tags ];
   // For comments: parsed = [ shortId | text ];
   var parsed = req.body.text.split("|").map(function(y){ return y.trim(); });
   
-  // Saves query data in async callback for userId and parentId
-  function setUserId (un, callback) { 
+  // helper functions for querying data with async callbacks for userId and parentId
+  function setUserId (un, callback){ 
     User.findOne({ sUserName: un }, function (err, user) {
       if (err) {
         callback(err, null);
@@ -39,7 +39,6 @@ function slackInt (req, res){
   req.body.slackId = req.body.user_id;
 
   // Parsing data and directing idea / comment / vote to db insert functions
-  
   switch(req.body.command){
     case '/idea':
       // TODO: create hyperlink for unique id

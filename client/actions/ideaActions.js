@@ -48,17 +48,20 @@ var ideaActions = {
       dataType :'json',
       method   :"GET"
     }).done(function(userinfo){
-      userinfo          = userinfo.session;
+      var parsed = newIdea.title.split(" ").join("_");
+      userinfo          = userinfo.session.user;
       newIdea.user_name = userinfo.sUserName;
-      newIdea.shortId   = newIdea.title + newIdea.user_name;
+      newIdea.shortId   = parsed + "_" + newIdea.user_name;
       newIdea.slackId   = userinfo.slackId;
       newIdea.userId    = userinfo._id;
+
       $.ajax({
         url      : "/ideas/create",
         dataType : "json",
         method   : "POST",
         data     : newIdea
-      }).done(function(ideaList){
+      })
+      .done(function (ideaList) {
         ideaActions.getIdeas('votes');
       });
     });
