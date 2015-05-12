@@ -43,14 +43,14 @@ var ideaActions = {
   createIdea: function(newIdea){
     var ideaActions = this;
     $.ajax({
-      url: "/api/user",
-      dataType: 'json',
-      method: "GET"
-    })
-    .done(function (userinfo) {
-      userinfo          = userinfo.session;
+      url:"/api/user",
+      dataType:'json',
+      method:"GET"
+    }).done(function(userinfo){
+      var parsed = newIdea.title.split(" ").join("_");
+      userinfo          = userinfo.session.user;
       newIdea.user_name = userinfo.sUserName;
-      newIdea.shortId   = newIdea.title + newIdea.user_name;
+      newIdea.shortId   = parsed + "_" + newIdea.user_name;
       newIdea.slackId   = userinfo.slackId;
       newIdea.userId    = userinfo._id;
 
