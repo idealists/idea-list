@@ -14,13 +14,8 @@ function slackInt (req, res){
   // For comments: parsed = [ shortId | text ];
   var parsed = req.body.text.split("|").map(function(y){ return y.trim(); });
   
-<<<<<<< HEAD
-  // Saves query data in async callback for userId and parentId
-  function setUserId (un, callback) { 
-=======
   // helper functions for querying data with async callbacks for userId and parentId
   function setUserId (un, callback){ 
->>>>>>> minor fixes
     User.findOne({ sUserName: un }, function (err, user) {
       if (err) {
         callback(err, null);
