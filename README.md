@@ -1,1 +1,1 @@
-# ideatool
+# IdeaList
