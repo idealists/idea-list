@@ -54,21 +54,17 @@ function getIdeas (req, res) {
       var result={};
       users = User.find({sUserName:{$in:text} });
       ideas = Idea.find({ tags: { $in:text} })
-                .select(selectFields).limit(40)
-                .where({ active: true });
-
-      users.exec().then(function (users) {
-        result.users = users;
-        console.log('Users:', users);
-      })
-      .then(ideas.exec().then(function (idealist) {
-          result.ideas = idealist;
-          console.log('Idealist:', idealist);
-        })
-        .then(function () {
-            res.end(JSON.stringify(result));
-        })
-      );
+                .select(selectFields).limit(40);
+      users.exec().then(function(users){
+        users=users||[];
+        result.users= users;
+      }).then(
+        ideas.exec().then(function (idealist) {
+          idealist= idealist||[];
+          result.ideas= idealist;
+        }).then(function () {
+          res.end(JSON.stringify(result));
+        }));
 
       break;
     default:

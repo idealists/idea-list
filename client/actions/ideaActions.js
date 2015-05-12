@@ -24,28 +24,29 @@ var ideaActions = {
     });
   },
 
-  searchBy: function (data) {
-    console.log(data.lookup);
+  searchBy:function(data){
     $.ajax({
       url       : "/ideas",
       dataType  : "json",
       method    : "GET",
-      headers   : {
-        'query' : 'searchbar',
-        'lookup'  : data.lookup
-      }
-    })
-    .done(function (result) {
-      console.log('Searcbar query result:',result);
+      headers   : { 'query' : 'searchbar',
+                    'lookup'  : data.lookup
+                  }
+    }).done(function (result) {
+      var uslist = result.users.concat(result.ideas);
+      Dispatcher.handleAction({
+        actionType : Constants.RELOAD_IDEALIST,
+        data       : uslist
+      });
     });
   },
 
   createIdea: function(newIdea){
     var ideaActions = this;
     $.ajax({
-      url:"/api/user",
-      dataType:'json',
-      method:"GET"
+      url      :"/api/user",
+      dataType :'json',
+      method   :"GET"
     }).done(function(userinfo){
       var parsed = newIdea.title.split(" ").join("_");
       userinfo          = userinfo.session.user;
@@ -74,5 +75,4 @@ var ideaActions = {
   }
 };
 
-module.exports = ideaActions;
-
+module.exports= ideaActions;
