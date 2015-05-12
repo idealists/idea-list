@@ -1,7 +1,11 @@
 var React = require('react');
-
+var ideaActions    = require('../actions/ideaActions');
 var IdeaSearch = React.createClass({
   handleSubmit : function () {
+    var data = {
+      lookup: this.refs.search.getDOMNode().value
+    };
+    ideaActions.searchBy(data);
     this.refs.search.getDOMNode().value = '';
     // fill in the action
   },

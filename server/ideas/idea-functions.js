@@ -41,7 +41,26 @@ function getIdeas (req, res) {
                 .select(selectFields);
       break;
     case 'id':
-      ideas = Idea.find({ _id: ObjectId.fromString(req.headers.id)})
+      ideas = Idea.find({ _id: ObjectId.fromString(req.headers.id)});
+      break;
+    case 'serchbar':
+      var text = req.headers.lookup.replace(/\s+/g,' ').trim()
+      text = text.split(' ');
+      var result={};
+      users = User.find({sUserName:{$in:text} });
+      ideas = Idea.find({ tags: { $in:text} })
+                .select(selectFields).limit(40);
+      users.exec().then(function(users){
+        result['users']= users;
+        console.log('working',users)
+      }).then(
+        ideas.exec().then(function (idealist) {
+          result['ideas']= idealist;
+          console.log('working',idealist);
+        }).then(function () {
+          res.end(JSON.stringify(result));
+        }));
+
       break;
     default:
     //custom query (to do when need arises)
@@ -50,10 +69,10 @@ function getIdeas (req, res) {
 
   ideas.exec().then(
     function(value){
-      console.log('results',value)
-      res.end(JSON.stringify(value))
+      console.log('results',value);
+      res.end(JSON.stringify(value));
     }
-  )
+  );
 } // end getIdeas
 
 function createIdea (req, res) {

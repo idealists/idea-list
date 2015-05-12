@@ -7,7 +7,7 @@ var IdeaFilter = React.createClass({
         <ul className="nav nav-tabs nav-justified">
           <li role="presentation"><a href="#">Votes</a></li>
           <li role="presentation"><a href="#">Date</a></li>
-          <li role="presentation"><a href="#">User</a></li>
+          <li role="presentation"><a href="#">Tags</a></li>
         </ul>
       </div>
     );

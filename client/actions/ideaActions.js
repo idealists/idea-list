@@ -4,7 +4,7 @@ var $          = require('jquery');
 
 var ideaActions = {
   getIdeas : function(query, data){
-    query = query || 'dateFirst';
+    query = query || 'votes';
     data  = data  || null;
 
     $.ajax({
@@ -15,11 +15,24 @@ var ideaActions = {
                     'data'  : data
                   }
     }).done(function(ideaList){
-      console.log('getidea',ideaList)
       Dispatcher.handleAction({
         actionType : Constants.RELOAD_IDEALIST,
         data       : ideaList
       });
+    });
+  },
+
+  searchBy:function(data){
+    console.log(data.lookup)
+    $.ajax({
+      url       : "/ideas",
+      dataType  : "json",
+      method    : "GET",
+      headers   : { 'query' : 'serchbar',
+                    'lookup'  : data.lookup
+                  }
+    }).done(function (result) {
+      console.log('query bar',result);
     });
   },
 
@@ -30,11 +43,11 @@ var ideaActions = {
       dataType:'json',
       methord:"GET"
     }).done(function(userinfo){
-      var userinfo = userinfo.session
-      newIdea['user_name']= userinfo['sUserName']
-      newIdea['shortId'] = newIdea['title']+newIdea['user_name']
-      newIdea['slackId'] = userinfo['slackId']
-      newIdea['userId']= userinfo['_id']
+      userinfo          = userinfo.session;
+      newIdea.user_name = userinfo.sUserName;
+      newIdea.shortId   = newIdea.title + newIdea.user_name;
+      newIdea.slackId   = userinfo.slackId;
+      newIdea.userId    = userinfo._id;
       $.ajax({
         url      : "/ideas/create",
         dataType : "json",
@@ -43,12 +56,14 @@ var ideaActions = {
       }).done(function(ideaList){
         ideaActions.getIdeas('votes');
       });
-
-    })
+    });
   },
 
-  changevote: function (voteobj, userId) {
-    data ={sorce:voteobj, userinfo:userId};
+  changeVote : function (voteObj, userId) {
+    data = {
+      source   : voteObj,
+      userInfo : userId
+    };
   }
 };
 
