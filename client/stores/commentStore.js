@@ -10,7 +10,7 @@ var populateStore = function(commentList){
   _commentList = commentList;
 };
 
-var detailStore = ObjectAssign({}, EventEmitter.prototype, {
+var commentStore = ObjectAssign({}, EventEmitter.prototype, {
   fetchComments : function(){
     return _commentList;
   },
