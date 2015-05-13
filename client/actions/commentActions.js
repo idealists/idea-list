@@ -1,14 +1,14 @@
-var Dispatcher = require('../dispatcher/commentDispatcher');
+var Dispatcher = require('../dispatcher/dispatcher');
 var Constants  = require('../constants/constants');
 var $          = require('jquery');
 
 var commentActions = {
   getComments : function(query, data){
-    query = query || null;
+    query = query || 'votes';
     data  = data  || null;
 
     $.ajax({
-      url       : "/comments",
+      url       : "/comment",
       dataType  : "json",
       method    : "GET",
       headers   : { 'query' : query,
@@ -22,19 +22,26 @@ var commentActions = {
     });
   },
 
-  createComment : function(userId,newComment){
+  createComment : function(newComment){
     var commentActions = this;
-    var data = {userId:userId, comment:newComment};
     $.ajax({
-      url      : "/comments/create",
+      url      : "/api/user",
       dataType : "json",
-      method   : "POST",
-      data     : data
-    }).done(function(commentList){
-      commentActions.getComments('votes');
+      method   : "GET"
+    }).done(function(userinfo){
+      userinfo           = userinfo.session;
+      newComment.userId  = userinfo._id;
+      newComment.slackId = userinfo.slackId;
+      $.ajax({
+        url      : "/comment",
+        dataType : "json",
+        method   : "POST",
+        data     : newComment
+      }).done(function(commentList){
+        commentActions.getComments('votes');
+      });
     });
   }
 };
 
 module.exports= commentActions;
-//need to build a server routes

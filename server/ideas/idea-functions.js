@@ -109,7 +109,7 @@ function createIdea (req, res) {
 } // end createIdea
 
 // helper functions for mongodb search with async callbacks
-function setUserId (un,  callback){ 
+function setUserId (un,  callback){
   User.findOne({ sUserName: un }, function (err, user) {
     if (err) {
       callback(err, null);
@@ -132,16 +132,16 @@ function findId (pI, callback){
 /*INCOMING POST REQ NEED THE FOLLOWING:*/
   // each incoming post req needs a parentId and a rootId associated
   // each incoming post also needs parentType = 'comment'
-  
+
 // creating and inserting comments into db
 function createComment (req, res) {
   var now = Date.now();
 
   // Saves query data in async callback for userId
   setUserId(req.body.user_name, function(err, uId){
-    
+
     if (err) { console.log(err); }
-    req.body.userId = uId;    
+    req.body.userId = uId;
 
     // if a comment is commenting directly on an idea
     if (req.body.parentType === 'idea') {
@@ -161,10 +161,10 @@ function createComment (req, res) {
         });
 
         idea.comments.push(newComment);
-        idea.save(function(err){ 
-          if (err) { 
-            console.log(err); 
-          } 
+        idea.save(function(err){
+          if (err) {
+            console.log(err);
+          }
           var reply = { 'text': 'Comment added to idea: ' + idea.shortId };
           slackPost.postSlack(reply);
         })
@@ -192,10 +192,10 @@ function createComment (req, res) {
         }); // end of findId
     }
   }); // end of setUserId
-  
+
   res.end();
 }; // end of createComment
-  
+
 
 function downvote (req, res) {
   var now = Date.now();
