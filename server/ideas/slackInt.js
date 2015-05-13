@@ -88,11 +88,11 @@ function slackInt (req, res){
         console.log('value: ', value);
         var ideas = [];
         for (var i = 0; i < value.length; i++){
-          var con = new Date(value[i].createdAt);
-          var date = con.getMonth() + ' ' + con.getDate() + ' ' + con.getYear();
-          ideas.push(value[i].shortId + '____' + value[i].title + '____' + date)
+          //var con = new Date(value[i].createdAt);
+          //var date = con.getMonth() + ' ' + con.getDate() + ' ' + con.getYear();
+          ideas.push('ID: ' + value[i].shortId + ' TITLE: ' + value[i].title + '\n');
         }
-        res.send(JSON.stringify(ideas));
+        res.send(ideas);
         res.end();
       })
       break;
