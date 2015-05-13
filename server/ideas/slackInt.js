@@ -7,8 +7,7 @@ var IFuncs = require('./idea-functions');
 var request = require('request');
 
 function slackInt (req, res){
-  // TODO: slash command to return a list of all active ideas with their info
-  
+
   // Parsing incoming request data
   // For ideas: parsed = [ title | text | tags ];
   // For comments: parsed = [ shortId | text ];
@@ -24,7 +23,6 @@ function slackInt (req, res){
       }
     });
   }
-  
   function setParentId (pi, callback) {
     Idea.find({ shortId: pi }, function(err, idea){
       if(err) {
@@ -77,6 +75,26 @@ function slackInt (req, res){
       break;
     case '/downvote':
       // call downvote function
+      break;
+    case '/allideas':
+      var selectFields = 'createdAt updatedAt shortId userId slackId sUserName title body tags active voters upvotes downvotes rating';
+      
+      var rawIdeas = Idea.find()
+                      .select(selectFields)
+                      .where({ active: true })
+                      .sort('-updatedAt')
+                      .limit(10);
+      rawIdeas.exec().then(function(value){
+        console.log('value: ', value);
+        var ideas = [];
+        for (var i = 0; i < value.length; i++){
+          var con = String(new Date(value[i].createdAt));
+          var date = con.split(" ").slice(1,-3).join(" ");
+          ideas.push('ID: ' + value[i].shortId + ' | TITLE: ' + value[i].title + ' | CREATED: ' + date + '\n');
+        }
+        res.send(ideas.join("\n"));
+        res.end();
+      });
       break;
     default:
       res.send("Invalid slash command entered: " + req.body.command);
