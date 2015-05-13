@@ -89,7 +89,7 @@ function slackInt (req, res){
         var ideas = [];
         for (var i = 0; i < value.length; i++){
           var con = String(new Date(value[i].createdAt));
-          var date = con.split(" ");
+          var date = con.split(" ").slice(-3).join(" ");
           ideas.push('ID: ' + value[i].shortId + ' | TITLE: ' + value[i].title + ' | CREATED: ' + date + '\n');
         }
         res.send(ideas.join("\n"));
