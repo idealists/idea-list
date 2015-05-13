@@ -63,6 +63,7 @@ function getIdeas (req, res) {
           idealist= idealist||[];
           result.ideas= idealist;
         }).then(function () {
+          console.log (result);
           res.end(JSON.stringify(result));
         }));
 
