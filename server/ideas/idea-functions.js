@@ -15,21 +15,18 @@ function getIdeas (req, res) {
     case 'dateFirst':
       ideas = Idea.find()
                 .select(selectFields)
-                .where({ active: true })
                 .sort('-updatedAt')
                 .limit(10);
       break;
     case 'dateLast':
       ideas = Idea.find()
                 .select(selectFields)
-                .where({ active: true })
                 .sort('updatedAt')
                 .limit(10);
       break;
     case 'votes':
       ideas = Idea.find()
                 .select(selectFields)
-                .where({ active: true })
                 .sort('-rating')
                 .limit(10);
       break;
@@ -37,12 +34,10 @@ function getIdeas (req, res) {
     //add username to tags array for easy find of people also.
       ideas = Idea.find({ tags: { $in:req.headers.tags } })
                 .select(selectFields)
-                .where({ active: true })
                 .limit(10);
       break;
     case 'userId':
       ideas = Idea.find({ userId:req.headers.userId })
-                .where({ active: true })
                 .select(selectFields);
       break;
     case 'id':
@@ -69,10 +64,12 @@ function getIdeas (req, res) {
       break;
     default:
     //custom query (to do when need arises)
-      console.log('Default case');
+      console.log('cant cant cant');
   }
 
-  ideas.exec().then(function(value){
+  ideas.exec().then(
+    function(value){
+      console.log('results',value);
       res.end(JSON.stringify(value));
     }
   );
@@ -95,14 +92,15 @@ function createIdea (req, res) {
     sCommand     : req.body.command || null,
     title        : req.body.title,
     body         : req.body.body,
-    tags         : req.body.tags || [],
+    tags         : req.body.tags || null,
     active       : true
   });
 
   idea.save(function (err) {
-    if (err) console.log(err);
-
-    var reply = { 'text': 'Idea Posted! id: `' + idea.shortId + '` | "' + idea.body + '" | tags: ' + idea.tags || '' };
+    if (err) {
+      console.log(err);
+    }
+    var reply = { 'text': 'Idea Posted! Idea_id: `' + idea.shortId + '` | Idea: ' + idea.body + ' | tags: ' + idea.tags || '' };
     slackPost.postSlack(reply);
     console.log('New idea', idea.title, 'saved');
   });
@@ -133,8 +131,6 @@ function findId (pI, callback){
 //TODO:
 /*INCOMING POST REQ NEED THE FOLLOWING:*/
   // each incoming post req needs a parentId and a rootId associated
-  // each incoming post also needs parentType = 'comment' or 'idea'
-
 // creating and inserting comments into db
 function createComment (req, res) {
   var now = Date.now();
@@ -174,7 +170,7 @@ function createComment (req, res) {
 
     newComment.save(function(err){
       if (err) console.log('comment save error:', err);
-    })
+    });
   }); // end of setUserId
 } // end of createComment
 
@@ -205,7 +201,6 @@ function downvote (req, res) {
     });
   }
 
-  // TODO: refactor due to change in DB architecture (no comments collection)
   if (req.body.type === 'comment') {
     Comment.find({ shortId: req.body.shortId }, function (err, comment) {
       comment.voters.map(function (voter) {
@@ -249,7 +244,6 @@ function upvote (req, res) {
     });
   }
 
-  // TODO: refactor as above (line 230)
   if (req.body.type === 'comment') {
     Comment.find({ shortId: req.body.shortId }, function (err, comment) {
       comment.voters.map(function (voter) {
