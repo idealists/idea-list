@@ -3,6 +3,7 @@ var NavBar      = require('./navBar.jsx');
 var CommentList = require('./commentList.jsx');
 var ideaActions = require('../actions/ideaActions');
 var ideaStore   = require('../stores/ideaStore');
+var commentStore   = require('../stores/commentStore');
 
 var IdeaView = React.createClass({
 
