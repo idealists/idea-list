@@ -92,7 +92,7 @@ function slackInt (req, res){
           //var date = con.getMonth() + ' ' + con.getDate() + ' ' + con.getYear();
           ideas.push('ID: ' + value[i].shortId + ' TITLE: ' + value[i].title + '\n');
         }
-        res.send(ideas);
+        res.send(ideas.join("\n"));
         res.end();
       })
       break;
