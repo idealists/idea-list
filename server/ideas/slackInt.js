@@ -84,7 +84,7 @@ function slackInt (req, res){
                       .where({ active: true })
                       .sort('-updatedAt')
                       .limit(10);
-      res.send(ideas);
+      res.send(JSON.stringify(ideas));
       break;
     default:
       res.send("Invalid slash command entered: " + req.body.command);
