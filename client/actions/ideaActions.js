@@ -56,7 +56,7 @@ var ideaActions = {
       newIdea.userId    = userinfo._id;
 
       $.ajax({
-        url      : "/ideas/create",
+        url      : "/ideas",
         dataType : "json",
         method   : "POST",
         data     : newIdea

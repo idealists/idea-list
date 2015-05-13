@@ -1,8 +1,10 @@
 var React  = require('react');
 var Router = require('react-router');
 var Home   = require('./components/homeView.jsx');
-var ideaView= require('./components/ideaView.jsx')
+var ideaView= require('./components/ideaView.jsx');
+var Dispatcher = require('./dispatcher/dispatcher');
 var Login = require('./components/login.jsx');
+var Constants    = require('../constants/constants');
 var CreateIdeaView = require('./components/createIdeaView.jsx');
 var $ = require('jquery');
 
@@ -43,6 +45,10 @@ Router.run(routes, function (Handler) {
      if (!value.loggedIn) {
         React.render(<Login/>, document.getElementById('main'));
       } else {
+        Dispatcher.handleAction({
+          actionType : Constants.RELOAD_USER,
+          data       : value.session.user
+        });
         React.render(<Handler/>, document.getElementById('main'));
       }
     });

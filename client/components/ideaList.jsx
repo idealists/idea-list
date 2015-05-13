@@ -1,7 +1,7 @@
 var React    = require('react');
 var Router   = require('react-router');
 var ideaView = require('./ideaView.jsx');
-
+var userStore    = require('../stores/userStore')
 var DefaultRoute = Router.DefaultRoute;
 var RouteHandler = Router.RouteHandler;
 var Route = Router.Route;
