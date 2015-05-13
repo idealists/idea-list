@@ -41,13 +41,11 @@ function updateUsers () {
             existingUser.sUserName = user.name;
             existingUser.realName = user.real_name;
             existingUser.email = user.profile.email;
-            existingUser.image = {
-              24: user.profile.image_24,
-              32: user.profile.image_32,
-              48: user.profile.image_48,
-              72: user.profile.image_72,
-              192: user.profile.image_192
-            };
+            existingUser.image[24] = user.profile.image_24;
+            existingUser.image[32] = user.profile.image_32;
+            existingUser.image[48] = user.profile.image_48;
+            existingUser.image[72] = user.profile.image_72;
+            existingUser.image[192] = user.profile.image_192;
             console.log('User "' + user.name + '" info updated');
           }
         });

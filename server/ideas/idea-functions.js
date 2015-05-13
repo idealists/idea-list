@@ -55,12 +55,12 @@ function getIdeas (req, res) {
       users = User.find({sUserName:{$in:text} });
       ideas = Idea.find({ tags: { $in:text} })
                 .select(selectFields).limit(40);
-      users.exec().then(function(users){
-        users=users||[];
-        result.users= users;
+      users.exec().then(function (users) {
+        users=users || [];
+        result.users = users;
       }).then(
         ideas.exec().then(function (idealist) {
-          idealist= idealist||[];
+          idealist = idealist || [];
           result.ideas= idealist;
         }).then(function () {
           res.end(JSON.stringify(result));

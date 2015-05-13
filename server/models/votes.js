@@ -4,7 +4,7 @@ var ObjectId = Schema.ObjectId;
 
 var Vote = new Schema({
   createdAt : Date,
-  voter     : String,
+  voter     : ObjectId,
 });
 
 module.exports = mongoose.model('Vote', Vote);
