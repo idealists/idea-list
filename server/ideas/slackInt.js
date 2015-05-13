@@ -79,14 +79,20 @@ function slackInt (req, res){
     case '/allideas':
       var selectFields = 'createdAt updatedAt shortId userId slackId sUserName title body tags active voters upvotes downvotes rating';
       
-      var ideas = Idea.find()
+      var rawIdeas = Idea.find()
                       .select(selectFields)
                       .where({ active: true })
                       .sort('-updatedAt')
                       .limit(10);
-      ideas.exec().then(function(value){
+      rawIdeas.exec().then(function(value){
         console.log('value: ', value);
-        res.send(JSON.stringify(value));
+        var ideas = [];
+        for (var i = 0; i < value.length; i++){
+          var date = String(new Date(value[i].createdAt)).split(" ");
+          date.splice(1,3).join(" ");
+          ideas.push(value[i].shortId + '____' + value[i].body + '____' + date)
+        }
+        res.send(JSON.stringify(ideas));
         res.end();
       })
       break;
