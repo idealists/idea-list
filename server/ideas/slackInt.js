@@ -84,6 +84,7 @@ function slackInt (req, res){
                       .where({ active: true })
                       .sort('-updatedAt')
                       .limit(10);
+      console.log(ideas);
       res.send(JSON.stringify(ideas));
       break;
     default:
