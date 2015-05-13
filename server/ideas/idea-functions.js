@@ -44,19 +44,17 @@ function getIdeas (req, res) {
       ideas = Idea.find({ _id: ObjectId.fromString(req.headers.id)});
       break;
     case 'searchbar':
-      var text = req.headers.lookup.replace(/\s+/g,' ').trim()
+      var text = req.headers.lookup.replace(/\s+/g,' ').trim();
       text = text.split(' ');
       var result={};
       users = User.find({sUserName:{$in:text} });
       ideas = Idea.find({ tags: { $in:text} })
                 .select(selectFields).limit(40);
       users.exec().then(function(users){
-        result['users']= users;
-        console.log('working',users)
+        result.users= users;
       }).then(
         ideas.exec().then(function (idealist) {
-          result['ideas']= idealist;
-          console.log('working',idealist);
+          result.ideas= idealist;
         }).then(function () {
           res.end(JSON.stringify(result));
         }));
@@ -167,7 +165,7 @@ function createComment (req, res) {
           }
           var reply = { 'text': 'Comment added to idea: ' + idea.shortId };
           slackPost.postSlack(reply);
-        })
+        });
 
       }); // end of findId
     } //if comment if commenting on a comment, traverse idea/comment tree
@@ -194,7 +192,7 @@ function createComment (req, res) {
   }); // end of setUserId
   
   res.end();
-}; // end of createComment
+} // end of createComment
   
 
 function downvote (req, res) {
