@@ -1,9 +1,13 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
-var Vote = require('./votes');
 
-// Comment schema implemented thusly to enable nested comments
+var Vote = new Schema({
+  createdAt : Date,
+  voter     : ObjectId,
+  value     : Number
+});
+
 var Comment = new Schema();
 Comment.add({
   createdAt : Date,
@@ -12,9 +16,7 @@ Comment.add({
   userId    : ObjectId,
   slackId   : String,
   body      : String,
-  voters    : [ObjectId],
-  upvotes   : [Vote],
-  downvotes : [Vote],
+  voters    : [Vote]
   rating    : Number,
   comments  : [Comment],
 });

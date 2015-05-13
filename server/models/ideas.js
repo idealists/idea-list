@@ -16,7 +16,7 @@ var Idea = new Schema({
   sCommand     : String,
   title        : String,
   body         : String,
-  tags         : [String],
+  tags         : [ObjectId],
   active       : Boolean,
   voters       : [ObjectId],
   upvotes      : [ObjectId],

@@ -111,7 +111,7 @@ function createIdea (req, res) {
 } // end createIdea
 
 // helper functions for mongodb search with async callbacks
-function setUserId (un,  callback){ 
+function setUserId (un,  callback){
   User.findOne({ sUserName: un }, function (err, user) {
     if (err) {
       callback(err, null);
@@ -134,68 +134,50 @@ function findId (pI, callback){
 /*INCOMING POST REQ NEED THE FOLLOWING:*/
   // each incoming post req needs a parentId and a rootId associated
   // each incoming post also needs parentType = 'comment' or 'idea'
-  
+
 // creating and inserting comments into db
 function createComment (req, res) {
   var now = Date.now();
 
   // Saves query data in async callback for userId
   setUserId(req.body.user_name, function(err, uId) {
-    
+
     if (err) console.log(err);
-    req.body.userId = uId;    
+    req.body.userId = uId;
+
+    var newComment = new Comment({
+      createdAt : now,
+      updatedAt : now,
+      parentId  : req.body.parentId,
+      userId    : req.body.userId,
+      slackId   : req.body.slackId,
+      body      : req.body.body,
+      voters    : [],
+      rating    : 0,
+      comments  : []
+    });
 
     // if a comment is commenting directly on an idea
-    if (req.body.parentType === 'idea') {
-
-      findId(req.body.parentId, function (err, idea) {
+    if (req.body.parentId === null) {
+      findId(req.body.ideaid, function (err, idea) {
         if (err) console.log(err);
 
-        var newComment = new Comment({
-          createdAt : now,
-          updatedAt : now,
-          parentId  : req.body.parentId,
-          rootId    : req.body.parentId,
-          userId    : req.body.userId,
-          slackId   : req.body.slackId,
-          body      : req.body.body,
-          rating    : 0
-        });
+        idea.comments.push(newComment._id);
 
-        idea.comments.push(newComment);
-        idea.save(function(err){ 
-          if (err) console.log(err);
+        idea.save(function(err){
+          if (err) console.log('idea save error:', err);
           var reply = { 'text': 'Comment added to idea: ' + idea.shortId };
           slackPost.postSlack(reply);
         });
       }); // end of findId
-
-    } //if comment is commenting on a comment, traverse idea/comment tree
-      else if (req.body.parentType === 'comment') {
-
-        findId(req.body.rootId, function (err, idea) {
-          if (err) console.log(err);
-
-          insertComment(idea);
-
-          function insertComment (node) {
-            node.comments.map(function (comment) {
-              if (comment._id === req.body.parentId) {
-                comment.comments.push(newComment);
-                res.end();
-                return;
-              } else {
-                insertComment(comment);
-              }
-            });
-          }
-        }); // end of findId
     }
+
+    newComment.save(function(err){
+      if (err) console.log('comment save error:', err);
+    })
   }); // end of setUserId
-  
-  res.end();
 } // end of createComment
-  
+
 
 function downvote (req, res) {
   var now = Date.now();
@@ -216,7 +198,7 @@ function downvote (req, res) {
       idea.voters.push(req.body.slackId);
       idea.downvotes.push(newDownvote);
       idea.rating = idea.upvotes.length - idea.downvotes.length;
-      
+
       idea.save(function (err) {
         if (err) console.log(err);
       });
@@ -260,7 +242,7 @@ function upvote (req, res) {
       idea.voters.push(req.body.slackId);
       idea.upvotes.push(newUpvote);
       idea.rating = idea.upvotes.length - idea.downvotes.length;
-      
+
       idea.save(function (err) {
         if (err) console.log(err);
       });
