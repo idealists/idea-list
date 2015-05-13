@@ -9,28 +9,30 @@ var IdeaView = React.createClass({
 
   getInitialState: function () {
     return {
-      idea: ideaStore.fetchIdeas()[this.props.params.index]
+      idea     : ideaStore.fetchIdeas()[this.props.params.index],
+      comments : commentStore.fetchComments()
     }
   },
 
   componentDidMount : function(){
     ideaStore.addChangeListener(this._onChange);
+    commentStore.addChangeListener(this._onChange);
   },
 
   componentWillUnmount : function(){
     ideaStore.removeChangeListener(this._onChange);
+    commentStore.removeChangeListener(this._onChange);
   },
 
   _onChange : function(){
-
     this.setState({
-      idea : ideaStore.fetchIdeas()[this.props.params.index]
+      idea     : ideaStore.fetchIdeas()[this.props.params.index],
+      comments : commentStore.fetchComments()
     });
   },
 
   render: function(){
 
-    console.log('state:', this.state.idea)
     return(
       <div>
         <NavBar />
@@ -62,7 +64,7 @@ var IdeaView = React.createClass({
         <br />
 
         <div className="container">
-          <CommentList />
+          <CommentList comments={this.state.comments} />
         </div>
 
       </div>
