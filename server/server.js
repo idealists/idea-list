@@ -5,13 +5,13 @@ var mongoose = require('mongoose');
 var session = require('express-session');
 var app = express();
 
-mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost:27017/ideatool');
+mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost:27017/idealist');
 
 app.use('/', express.static('client'));
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(session({
-  secret: 'ideatool',
+  secret: 'idealist',
   resave: true,
   saveUninitialized: true
 }));
