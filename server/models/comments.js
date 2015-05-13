@@ -16,7 +16,7 @@ Comment.add({
   userId    : ObjectId,
   slackId   : String,
   body      : String,
-  voters    : [Vote]
+  voters    : [Vote],
   rating    : Number,
   comments  : [Comment],
 });
