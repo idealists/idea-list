@@ -94,7 +94,7 @@ function slackInt (req, res){
         }
         res.send(ideas.join("\n"));
         res.end();
-      })
+      });
       break;
     default:
       res.send("Invalid slash command entered: " + req.body.command);
