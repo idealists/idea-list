@@ -10,6 +10,9 @@ var IdeaView = React.createClass({
 
 
   getInitialState: function () {
+    console.log('params', this.props.params);
+    commentActions.getComments('votes', this.props.params.id);
+
     return {
       idea     : ideaStore.fetchIdeas()[this.props.params.index],
       comments : commentStore.fetchComments()
@@ -46,6 +49,9 @@ var IdeaView = React.createClass({
     commentActions.createComment(newComment);
 
     this.refs.parentComment.getDOMNode().value = '';
+
+    console.log('COMMENTS', this.state.comments);
+    console.log('IDEA', this.state.idea);
   },
 
   render: function(){

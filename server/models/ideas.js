@@ -21,7 +21,7 @@ var Idea = new Schema({
   voters       : [ObjectId],
   upvotes      : [ObjectId],
   downvotes    : [ObjectId],
-  comments     : [ObjectId],
+  comments     : [{type: Schema.Types.ObjectId, ref: 'Comment'}],
   rating       : Number,
 });
 
