@@ -13,17 +13,19 @@ var IdeaList = React.createClass({
       if(!idea.email){
         return (
           <div key={index}>
-            <h2><Link to="ideaView" params={{id: idea._id, index: index}}> <p>{idea.title}</p>
+            <Link to="ideaView" params={{id: idea._id, index: index}}>
+              <p> {idea.title} </p>
               <p> {idea.sUserName} </p>
-             </Link></h2>
+             </Link>
           </div>
         );
       }else{
         return(
           <div key={index}>
-            <h2><Link to="ideaView" params={{id: idea._id, index: index}}> 
-              <img src={idea.image['24']}/> {idea.sUserName}
-             </Link></h2>
+            <Link to="ideaView" params={{id: idea._id, index: index}}>
+              <img src={idea.image['24']}/>
+              {idea.sUserName}
+            </Link>
           </div>
         )
       }

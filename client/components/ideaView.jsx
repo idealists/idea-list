@@ -3,34 +3,53 @@ var NavBar      = require('./navBar.jsx');
 var CommentList = require('./commentList.jsx');
 var ideaActions = require('../actions/ideaActions');
 var ideaStore   = require('../stores/ideaStore');
+var commentStore   = require('../stores/commentStore');
+var commentActions = require('../actions/commentActions');
 
 var IdeaView = React.createClass({
 
 
   getInitialState: function () {
     return {
-      idea: ideaStore.fetchIdeas()[this.props.params.index]
+      idea     : ideaStore.fetchIdeas()[this.props.params.index],
+      comments : commentStore.fetchComments()
     }
   },
 
   componentDidMount : function(){
     ideaStore.addChangeListener(this._onChange);
+    commentStore.addChangeListener(this._onChange);
   },
 
   componentWillUnmount : function(){
     ideaStore.removeChangeListener(this._onChange);
+    commentStore.removeChangeListener(this._onChange);
   },
 
   _onChange : function(){
-
     this.setState({
-      idea : ideaStore.fetchIdeas()[this.props.params.index]
+      idea     : ideaStore.fetchIdeas()[this.props.params.index],
+      comments : commentStore.fetchComments()
     });
+  },
+
+  handleSubmit : function(){
+    var commentBody = this.refs.parentComment.getDOMNode().value;
+    var ideaId      = this.state.idea._id
+
+    var newComment = {
+      body       : commentBody,
+      parentId   : ideaId,
+      parentType : 'idea'
+    };
+
+    commentActions.createComment(newComment);
+
+    this.refs.parentComment.getDOMNode().value = '';
   },
 
   render: function(){
 
-    console.log('state:', this.state.idea)
     return(
       <div>
         <NavBar />
@@ -48,13 +67,13 @@ var IdeaView = React.createClass({
         </div>
 
         <div className="input-group container">
-          <textarea className="form-control" type='text' ref='parentComment' placeholder='some_commas' rows="4"></textarea>
+          <textarea className="form-control" type='text' ref='parentComment' placeholder='add comment' rows="4"></textarea>
         </div>
 
         <br />
 
         <div className="text-center">
-          <button className="btn btn-red btn-wide center">
+          <button className="btn btn-red btn-wide center" onClick={this.handleSubmit}>
             Add Comment
           </button>
         </div>
@@ -62,7 +81,7 @@ var IdeaView = React.createClass({
         <br />
 
         <div className="container">
-          <CommentList />
+          <CommentList comments={this.state.comments} />
         </div>
 
       </div>

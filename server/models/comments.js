@@ -13,10 +13,11 @@ Comment.add({
   createdAt : Date,
   updatedAt : Date,
   parentId  : ObjectId,
+  parentType: String,
   userId    : ObjectId,
   slackId   : String,
   body      : String,
-  voters    : [Vote],
+  votes     : [Vote],
   rating    : Number,
   comments  : [Comment],
 });
