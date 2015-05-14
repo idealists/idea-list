@@ -1,5 +1,6 @@
 var React = require('react');
 var cookie = require('react-cookie');
+var authenticated = require('../stores/authStore');
 
 var Login = React.createClass({
   componentDidMount: function(){
