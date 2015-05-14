@@ -14,6 +14,10 @@ var DefaultRoute = Router.DefaultRoute;
 var RouteHandler = Router.RouteHandler;
 
 var App = React.createClass({
+  getInitialState: function() {
+    return { userInfo: cookie.load('userInfo') };
+  },
+  login:false,
   render : function () {
     return(
       <div>
