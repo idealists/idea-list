@@ -711,7 +711,7 @@ var authenticateStore = ObjectAssign( {}, EventEmitter.prototype, {
 });
 
 module.exports = authenticateStore;
-},{"events":20,"react/lib/Object.assign":92}],18:[function(require,module,exports){
+},{"events":21,"react/lib/Object.assign":92}],18:[function(require,module,exports){
 var Dispatcher   = require('../dispatcher/dispatcher');
 var Constants    = require('../constants/constants');
 var EventEmitter = require('events').EventEmitter;
@@ -756,7 +756,7 @@ commentStore.dispatchToken = Dispatcher.register(function(action){
 
 module.exports = commentStore;
 
-},{"../constants/constants":15,"../dispatcher/dispatcher":16,"events":20,"react/lib/Object.assign":92}],19:[function(require,module,exports){
+},{"../constants/constants":15,"../dispatcher/dispatcher":16,"events":21,"react/lib/Object.assign":92}],19:[function(require,module,exports){
 var Dispatcher   = require('../dispatcher/dispatcher');
 var Constants    = require('../constants/constants');
 var EventEmitter = require('events').EventEmitter;
@@ -802,7 +802,99 @@ ideaStore.dispatchToken = Dispatcher.register(function (action) {
 module.exports = ideaStore;
 
 
-},{"../constants/constants":15,"../dispatcher/dispatcher":16,"events":20,"react/lib/Object.assign":92}],20:[function(require,module,exports){
+},{"../constants/constants":15,"../dispatcher/dispatcher":16,"events":21,"react/lib/Object.assign":92}],20:[function(require,module,exports){
+// shim for using process in browser
+
+var process = module.exports = {};
+var queue = [];
+var draining = false;
+var currentQueue;
+var queueIndex = -1;
+
+function cleanUpNextTick() {
+    draining = false;
+    if (currentQueue.length) {
+        queue = currentQueue.concat(queue);
+    } else {
+        queueIndex = -1;
+    }
+    if (queue.length) {
+        drainQueue();
+    }
+}
+
+function drainQueue() {
+    if (draining) {
+        return;
+    }
+    var timeout = setTimeout(cleanUpNextTick);
+    draining = true;
+
+    var len = queue.length;
+    while(len) {
+        currentQueue = queue;
+        queue = [];
+        while (++queueIndex < len) {
+            currentQueue[queueIndex].run();
+        }
+        queueIndex = -1;
+        len = queue.length;
+    }
+    currentQueue = null;
+    draining = false;
+    clearTimeout(timeout);
+}
+
+process.nextTick = function (fun) {
+    var args = new Array(arguments.length - 1);
+    if (arguments.length > 1) {
+        for (var i = 1; i < arguments.length; i++) {
+            args[i - 1] = arguments[i];
+        }
+    }
+    queue.push(new Item(fun, args));
+    if (!draining) {
+        setTimeout(drainQueue, 0);
+    }
+};
+
+// v8 likes predictible objects
+function Item(fun, array) {
+    this.fun = fun;
+    this.array = array;
+}
+Item.prototype.run = function () {
+    this.fun.apply(null, this.array);
+};
+process.title = 'browser';
+process.browser = true;
+process.env = {};
+process.argv = [];
+process.version = ''; // empty string to avoid regexp issues
+process.versions = {};
+
+function noop() {}
+
+process.on = noop;
+process.addListener = noop;
+process.once = noop;
+process.off = noop;
+process.removeListener = noop;
+process.removeAllListeners = noop;
+process.emit = noop;
+
+process.binding = function (name) {
+    throw new Error('process.binding is not supported');
+};
+
+// TODO(shtylman)
+process.cwd = function () { return '/' };
+process.chdir = function (dir) {
+    throw new Error('process.chdir is not supported');
+};
+process.umask = function() { return 0; };
+
+},{}],21:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -1104,98 +1196,6 @@ function isObject(arg) {
 function isUndefined(arg) {
   return arg === void 0;
 }
-
-},{}],21:[function(require,module,exports){
-// shim for using process in browser
-
-var process = module.exports = {};
-var queue = [];
-var draining = false;
-var currentQueue;
-var queueIndex = -1;
-
-function cleanUpNextTick() {
-    draining = false;
-    if (currentQueue.length) {
-        queue = currentQueue.concat(queue);
-    } else {
-        queueIndex = -1;
-    }
-    if (queue.length) {
-        drainQueue();
-    }
-}
-
-function drainQueue() {
-    if (draining) {
-        return;
-    }
-    var timeout = setTimeout(cleanUpNextTick);
-    draining = true;
-
-    var len = queue.length;
-    while(len) {
-        currentQueue = queue;
-        queue = [];
-        while (++queueIndex < len) {
-            currentQueue[queueIndex].run();
-        }
-        queueIndex = -1;
-        len = queue.length;
-    }
-    currentQueue = null;
-    draining = false;
-    clearTimeout(timeout);
-}
-
-process.nextTick = function (fun) {
-    var args = new Array(arguments.length - 1);
-    if (arguments.length > 1) {
-        for (var i = 1; i < arguments.length; i++) {
-            args[i - 1] = arguments[i];
-        }
-    }
-    queue.push(new Item(fun, args));
-    if (!draining) {
-        setTimeout(drainQueue, 0);
-    }
-};
-
-// v8 likes predictible objects
-function Item(fun, array) {
-    this.fun = fun;
-    this.array = array;
-}
-Item.prototype.run = function () {
-    this.fun.apply(null, this.array);
-};
-process.title = 'browser';
-process.browser = true;
-process.env = {};
-process.argv = [];
-process.version = ''; // empty string to avoid regexp issues
-process.versions = {};
-
-function noop() {}
-
-process.on = noop;
-process.addListener = noop;
-process.once = noop;
-process.off = noop;
-process.removeListener = noop;
-process.removeAllListeners = noop;
-process.emit = noop;
-
-process.binding = function (name) {
-    throw new Error('process.binding is not supported');
-};
-
-// TODO(shtylman)
-process.cwd = function () { return '/' };
-process.chdir = function (dir) {
-    throw new Error('process.chdir is not supported');
-};
-process.umask = function() { return 0; };
 
 },{}],22:[function(require,module,exports){
 /**
@@ -12775,7 +12775,7 @@ function createRouter(options) {
 
 module.exports = createRouter;
 }).call(this,require('_process'))
-},{"./Cancellation":28,"./History":29,"./Match":30,"./PathUtils":32,"./PropTypes":33,"./Redirect":34,"./Route":35,"./ScrollHistory":36,"./Transition":38,"./actions/LocationActions":39,"./behaviors/ImitateBrowserBehavior":40,"./createRoutesFromReactChildren":50,"./isReactChildren":53,"./locations/HashLocation":54,"./locations/HistoryLocation":55,"./locations/RefreshLocation":56,"./locations/StaticLocation":57,"./supportsHistory":60,"_process":21,"react":221,"react/lib/ExecutionEnvironment":86,"react/lib/invariant":201,"react/lib/warning":220}],50:[function(require,module,exports){
+},{"./Cancellation":28,"./History":29,"./Match":30,"./PathUtils":32,"./PropTypes":33,"./Redirect":34,"./Route":35,"./ScrollHistory":36,"./Transition":38,"./actions/LocationActions":39,"./behaviors/ImitateBrowserBehavior":40,"./createRoutesFromReactChildren":50,"./isReactChildren":53,"./locations/HashLocation":54,"./locations/HistoryLocation":55,"./locations/RefreshLocation":56,"./locations/StaticLocation":57,"./supportsHistory":60,"_process":20,"react":221,"react/lib/ExecutionEnvironment":86,"react/lib/invariant":201,"react/lib/warning":220}],50:[function(require,module,exports){
 /* jshint -W084 */
 'use strict';
 
@@ -14458,6 +14458,7 @@ var CSSProperty = {
 module.exports = CSSProperty;
 
 },{}],70:[function(require,module,exports){
+(function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -14493,7 +14494,7 @@ if (ExecutionEnvironment.canUseDOM) {
   }
 }
 
-if ("production" !== "development") {
+if ("production" !== process.env.NODE_ENV) {
   // 'msTransform' is correct, but the other prefixes should be capitalized
   var badVendoredStyleNamePattern = /^(?:webkit|moz|o)[A-Z]/;
 
@@ -14509,7 +14510,7 @@ if ("production" !== "development") {
     }
 
     warnedStyleNames[name] = true;
-    ("production" !== "development" ? warning(
+    ("production" !== process.env.NODE_ENV ? warning(
       false,
       'Unsupported style property %s. Did you mean %s?',
       name,
@@ -14523,7 +14524,7 @@ if ("production" !== "development") {
     }
 
     warnedStyleNames[name] = true;
-    ("production" !== "development" ? warning(
+    ("production" !== process.env.NODE_ENV ? warning(
       false,
       'Unsupported vendor-prefixed style property %s. Did you mean %s?',
       name,
@@ -14537,7 +14538,7 @@ if ("production" !== "development") {
     }
 
     warnedStyleValues[value] = true;
-    ("production" !== "development" ? warning(
+    ("production" !== process.env.NODE_ENV ? warning(
       false,
       'Style property values shouldn\'t contain a semicolon. ' +
       'Try "%s: %s" instead.',
@@ -14585,7 +14586,7 @@ var CSSPropertyOperations = {
         continue;
       }
       var styleValue = styles[styleName];
-      if ("production" !== "development") {
+      if ("production" !== process.env.NODE_ENV) {
         warnValidStyle(styleName, styleValue);
       }
       if (styleValue != null) {
@@ -14609,7 +14610,7 @@ var CSSPropertyOperations = {
       if (!styles.hasOwnProperty(styleName)) {
         continue;
       }
-      if ("production" !== "development") {
+      if ("production" !== process.env.NODE_ENV) {
         warnValidStyle(styleName, styles[styleName]);
       }
       var styleValue = dangerousStyleValue(styleName, styles[styleName]);
@@ -14637,7 +14638,9 @@ var CSSPropertyOperations = {
 
 module.exports = CSSPropertyOperations;
 
-},{"./CSSProperty":69,"./ExecutionEnvironment":86,"./camelizeStyleName":174,"./dangerousStyleValue":179,"./hyphenateStyleName":199,"./memoizeStringOnly":209,"./warning":220}],71:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"./CSSProperty":69,"./ExecutionEnvironment":86,"./camelizeStyleName":174,"./dangerousStyleValue":179,"./hyphenateStyleName":199,"./memoizeStringOnly":209,"./warning":220,"_process":20}],71:[function(require,module,exports){
+(function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -14698,7 +14701,7 @@ assign(CallbackQueue.prototype, {
     var callbacks = this._callbacks;
     var contexts = this._contexts;
     if (callbacks) {
-      ("production" !== "development" ? invariant(
+      ("production" !== process.env.NODE_ENV ? invariant(
         callbacks.length === contexts.length,
         'Mismatched list of contexts in callback queue'
       ) : invariant(callbacks.length === contexts.length));
@@ -14735,7 +14738,8 @@ PooledClass.addPoolingTo(CallbackQueue);
 
 module.exports = CallbackQueue;
 
-},{"./Object.assign":92,"./PooledClass":93,"./invariant":201}],72:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"./Object.assign":92,"./PooledClass":93,"./invariant":201,"_process":20}],72:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -15143,6 +15147,7 @@ var ClientReactRootIndex = {
 module.exports = ClientReactRootIndex;
 
 },{}],74:[function(require,module,exports){
+(function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -15214,7 +15219,7 @@ var DOMChildrenOperations = {
         var updatedChild = update.parentNode.childNodes[updatedIndex];
         var parentID = update.parentID;
 
-        ("production" !== "development" ? invariant(
+        ("production" !== process.env.NODE_ENV ? invariant(
           updatedChild,
           'processUpdates(): Unable to find child %s of element. This ' +
           'probably means the DOM was unexpectedly mutated (e.g., by the ' +
