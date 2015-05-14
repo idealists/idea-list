@@ -1,9 +1,7 @@
 var React  = require('react');
 var Router = require('react-router');
 var Link   = Router.Link;
-var $      = require('jquery');
-var cookie = require('react-cookie');
-var authenticated = require('../stores/authStore');
+var $          = require('jquery');
 
 var NavBar = React.createClass({
 
@@ -11,9 +9,6 @@ var NavBar = React.createClass({
     $.ajax({
       url       : "/logout",
       method    : "GET"
-    }).done(function(){
-      authenticated.switchStatus();
-      cookie.remove('userInfo');
     });
   },
 

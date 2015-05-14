@@ -57,7 +57,6 @@ function slackInt (req, res){
       req.body.shortId = parsed[0];
       req.body.body = parsed[1];
       req.body.parentType = 'idea';
-      req.body.sUserName = req.body.user_name;
 
       // search in the db for the shortId, if it does not exist, send error msg back to user
       setParentId (req.body.shortId, function(err, pId) {

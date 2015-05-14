@@ -12,15 +12,13 @@ var CommentList = React.createClass({
     var list = this.props.comments.map(function(comment, index){
       return (
         <div key={index}>
-          <div className="text-primary"> - {comment.body} </div>
+          <p> {comment.body} </p>
         </div>
       );
-    });
 
+    })
     return (
-      <div>
-        <ul> {list} </ul>
-      </div>
+      <ul> {list} </ul>
     );
   }
 });

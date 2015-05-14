@@ -4,8 +4,7 @@ var Slack = require('./slackInt');
 
 module.exports = function(ideas){
   ideas.get('/', isAuth, ideaFunctions.getIdeas);
-  ideas.get('/comment', isAuth, ideaFunctions.getComments);
-  ideas.post('/comment', isAuth, ideaFunctions.createComment);
   ideas.post('/', isAuth, ideaFunctions.createIdea);
+  ideas.post('/comment', isAuth, ideaFunctions.createComment);
   ideas.post('/api/idea', Slack.slackInt);
 };

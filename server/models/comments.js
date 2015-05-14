@@ -1,25 +1,23 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
+var Vote = require('./votes');
 
-var Vote = new Schema({
-  createdAt : Date,
-  voter     : ObjectId,
-  value     : Number
-});
-
+// Comment schema implemented thusly to enable recursive comments
 var Comment = new Schema();
 Comment.add({
   createdAt : Date,
   updatedAt : Date,
   parentId  : ObjectId,
-  parentType: String,
+  rootId    : ObjectId,
   userId    : ObjectId,
   slackId   : String,
   body      : String,
-  votes     : [Vote],
+  voters    : [String],
+  upvotes   : [Vote],
+  downvotes : [Vote],
   rating    : Number,
-  comments  : [Comment],
+  comments  : [Comment]
 });
 
 module.exports = mongoose.model('Comment', Comment);
