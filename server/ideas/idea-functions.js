@@ -50,10 +50,12 @@ function getIdeas (req, res) {
       users = User.find({sUserName:{$in:text} });
       ideas = Idea.find({ tags: { $in:text} })
                 .select(selectFields).limit(40);
-      users.exec().then(function(users){
-        result.users= users;
+      users.exec().then(function (users) {
+        users=users || [];
+        result.users = users;
       }).then(
         ideas.exec().then(function (idealist) {
+          idealist = idealist || [];
           result.ideas= idealist;
         }).then(function () {
           res.end(JSON.stringify(result));
@@ -75,7 +77,6 @@ function getIdeas (req, res) {
 
 function createIdea (req, res) {
   var now = Date.now();
-
   var idea = new Idea({
     createdAt    : now,
     updatedAt    : now,
@@ -90,13 +91,13 @@ function createIdea (req, res) {
     sCommand     : req.body.command || null,
     title        : req.body.title,
     body         : req.body.body,
-    tags         : req.body.tags || [],
+    tags         : req.body.tags || null,
     active       : true
   });
 
   idea.save(function (err) {
     if (err) {
-      console.log(err);
+      return err;
     }
     var reply = { 'text': 'Idea Posted! Idea_id: `' + idea.shortId + '` | Idea: ' + idea.body + ' | tags: ' + idea.tags || '' };
     slackPost.postSlack(reply);
@@ -107,7 +108,7 @@ function createIdea (req, res) {
 } // end createIdea
 
 // helper functions for mongodb search with async callbacks
-function setUserId (un,  callback){ 
+function setUserId (un,  callback){
   User.findOne({ sUserName: un }, function (err, user) {
     if (err) {
       callback(err, null);
@@ -126,74 +127,73 @@ function findId (pI, callback){
   });
 }
 
+function getComments (req, res) {
+  var parentId = JSON.parse(req.headers.data);
+
+  Idea.findById(parentId)
+    .populate('comments')
+    .exec(function(err, idea) {
+      if (err) console.log('populate ERR', err);
+      else {
+        res.end(JSON.stringify(idea.comments));
+      }
+    });
+} // end getComments
+
+
 //TODO:
 /*INCOMING POST REQ NEED THE FOLLOWING:*/
   // each incoming post req needs a parentId and a rootId associated
-  // each incoming post also needs parentType = 'comment'
-  
 // creating and inserting comments into db
 function createComment (req, res) {
   var now = Date.now();
 
   // Saves query data in async callback for userId
-  setUserId(req.body.user_name, function(err, uId){
-    
-    if (err) { console.log(err); }
-    req.body.userId = uId;    
+  console.log('req.body', req.body);
+  setUserId(req.body.sUserName, function(err, uId) {
+
+    if (err) console.log(err);
+    req.body.userId = uId;
+
+    var newComment = new Comment({
+      createdAt : now,
+      updatedAt : now,
+      parentId  : req.body.parentId,
+      parentType: req.body.parentType,
+      userId    : req.body.userId,
+      slackId   : req.body.slackId,
+      body      : req.body.body,
+      voters    : [],
+      rating    : 0,
+      comments  : []
+    });
 
     // if a comment is commenting directly on an idea
     if (req.body.parentType === 'idea') {
+      findId(req.body.parentId, function (err, idea) {
+        if (err) console.log(err);
 
-      findId(req.body.parentId, function (err, idea){
-        if (err) { console.log(err); }
+        idea.comments.push(newComment._id);
 
-        var newComment = new Comment({
-          createdAt : now,
-          updatedAt : now,
-          parentId  : req.body.parentId,
-          rootId    : req.body.parentId,
-          userId    : req.body.userId,
-          slackId   : req.body.slackId,
-          body      : req.body.body,
-          rating    : 0
-        });
-
-        idea.comments.push(newComment);
         idea.save(function(err){
-          if (err) {
-            console.log(err);
-          }
+          if (err) console.log('idea save error:', err);
           var reply = { 'text': 'Comment added to idea: ' + idea.shortId };
           slackPost.postSlack(reply);
         });
-
       }); // end of findId
-    } //if comment if commenting on a comment, traverse idea/comment tree
-      else if (req.body.parentType === 'comment') {
-
-        findId(req.body.rootId, function (err, idea){
-          if (err) { console.log(err); }
-
-          insertComment(idea);
-
-          function insertComment (node) {
-            node.comments.map(function (comment) {
-              if (comment._id === req.body.parentId) {
-                comment.comments.push(newComment);
-                res.end();
-                return;
-              } else {
-                insertComment(comment);
-              }
-            });
-          }
-        }); // end of findId
     }
+
+    newComment.save(function(err, val){
+      if (err) console.log('comment save error:', err);
+    });
+    // .then(function(val){
+    //   res.status(201).end(JSON.stringify(val));
+    // });
+
+    res.end();
   }); // end of setUserId
-  
-  res.end();
 } // end of createComment
-  
+
 
 function downvote (req, res) {
   var now = Date.now();
@@ -214,6 +214,10 @@ function downvote (req, res) {
       idea.voters.push(req.body.slackId);
       idea.downvotes.push(newDownvote);
       idea.rating = idea.upvotes.length - idea.downvotes.length;
+
+      idea.save(function (err) {
+        if (err) console.log(err);
+      });
     });
   }
 
@@ -253,6 +257,10 @@ function upvote (req, res) {
       idea.voters.push(req.body.slackId);
       idea.upvotes.push(newUpvote);
       idea.rating = idea.upvotes.length - idea.downvotes.length;
+
+      idea.save(function (err) {
+        if (err) console.log(err);
+      });
     });
   }
 
@@ -276,6 +284,7 @@ function upvote (req, res) {
 // expose functions
 module.exports = {
   getIdeas: getIdeas,
+  getComments: getComments,
   createIdea: createIdea,
   createComment: createComment,
   downvote: downvote,

@@ -1,5 +1,6 @@
 var Dispatcher = require('../dispatcher/dispatcher');
 var Constants  = require('../constants/constants');
+var cookie = require('react-cookie');
 var $          = require('jquery');
 
 var ideaActions = {
@@ -43,27 +44,22 @@ var ideaActions = {
 
   createIdea: function(newIdea){
     var ideaActions = this;
-    $.ajax({
-      url      :"/api/user",
-      dataType :'json',
-      method   :"GET"
-    }).done(function(userinfo){
-      var parsed = newIdea.title.split(" ").join("_");
-      userinfo          = userinfo.session.user;
-      newIdea.user_name = userinfo.sUserName;
-      newIdea.shortId   = parsed + "_" + newIdea.user_name;
-      newIdea.slackId   = userinfo.slackId;
-      newIdea.userId    = userinfo._id;
+    var parsed = newIdea.title.split(" ").join("_");
+    var userinfo      = cookie.load('userInfo');
 
-      $.ajax({
-        url      : "/ideas",
-        dataType : "json",
-        method   : "POST",
-        data     : newIdea
-      })
-      .done(function (ideaList) {
-        ideaActions.getIdeas('votes');
-      });
+    newIdea.user_name = userinfo.sUserName;
+    newIdea.shortId   = parsed + "_" + newIdea.user_name;
+    newIdea.slackId   = userinfo.slackId;
+    newIdea.userId    = userinfo._id;
+
+    $.ajax({
+      url      : "/ideas",
+      dataType : "json",
+      method   : "POST",
+      data     : newIdea
+    })
+    .done(function (ideaList) {
+      ideaActions.getIdeas('votes');
     });
   },
 
