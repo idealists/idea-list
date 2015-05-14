@@ -186,9 +186,12 @@ function createComment (req, res) {
 
     newComment.save(function(err, val){
       if (err) console.log('comment save error:', err);
-    }).then(function(val){
-      res.status(201).end(JSON.stringify(val));
     });
+    // .then(function(val){
+    //   res.status(201).end(JSON.stringify(val));
+    // });
+
+    res.end();
   }); // end of setUserId
 } // end of createComment
 
