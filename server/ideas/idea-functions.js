@@ -77,7 +77,6 @@ function getIdeas (req, res) {
 
 function createIdea (req, res) {
   var now = Date.now();
-  console.log(req.body)
   var idea = new Idea({
     createdAt    : now,
     updatedAt    : now,
