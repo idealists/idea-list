@@ -4,16 +4,16 @@ var $          = require('jquery');
 
 var commentActions = {
   getComments : function(query, data){
-    query = query || 'votes';
+    query = query || null;
     data  = data  || null;
 
     $.ajax({
-      url       : "/comment",
+      url       : "/ideas/comment",
       dataType  : "json",
       method    : "GET",
       headers   : {
         'query' : query,
-        'data'  : data
+        'data'  : JSON.stringify(data)
       }
     })
     .done(function (commentList) {
@@ -31,16 +31,18 @@ var commentActions = {
       dataType : "json",
       method   : "GET"
     }).done(function(userinfo){
-      userinfo           = userinfo.session;
-      newComment.userId  = userinfo._id;
-      newComment.slackId = userinfo.slackId;
+      console.log('userinfo', userinfo);
+      userinfo             = userinfo.session.user;
+      newComment.userId    = userinfo._id;
+      newComment.slackId   = userinfo.slackId;
+      newComment.sUserName = userinfo.sUserName;
       $.ajax({
-        url      : "/comment",
+        url      : "/ideas/comment",
         dataType : "json",
         method   : "POST",
         data     : newComment
       }).done(function(commentList){
-        commentActions.getComments('votes');
+        commentActions.getComments('votes', newComment.parentId);
       });
     });
   }
