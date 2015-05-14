@@ -5,7 +5,7 @@ var $          = require('jquery');
 
 var commentActions = {
   getComments : function(query, data){
-    query = 'votes';
+    query = query || null;
     data  = data  || null;
 
     $.ajax({
@@ -14,7 +14,7 @@ var commentActions = {
       method    : "GET",
       headers   : {
         'query' : query,
-        'data'  : data
+        'data'  : JSON.stringify(data)
       }
     })
     .done(function (commentList) {
@@ -26,24 +26,24 @@ var commentActions = {
   },
 
   createComment : function(newComment){
-    var parentId = newComment.parentId;
     var commentActions = this;
     $.ajax({
       url      : "/api/user",
       dataType : "json",
       method   : "GET"
     }).done(function(userinfo){
-      userinfo           = userinfo.session;
-      newComment.userId  = userinfo._id;
-      newComment.user_name = userinfo.sUserName;
-      newComment.slackId = userinfo.slackId;
+      console.log('userinfo', userinfo);
+      userinfo             = userinfo.session.user;
+      newComment.userId    = userinfo._id;
+      newComment.slackId   = userinfo.slackId;
+      newComment.sUserName = userinfo.sUserName;
       $.ajax({
         url      : "/ideas/comment",
         dataType : "json",
         method   : "POST",
         data     : newComment
       }).done(function(commentList){
-        commentActions.getComments('votes', parentId);
+        commentActions.getComments('votes', newComment.parentId);
       });
     });
   }
@@ -227,13 +227,15 @@ var CommentList = React.createClass({displayName: "CommentList",
     var list = this.props.comments.map(function(comment, index){
       return (
         React.createElement("div", {key: index}, 
-          React.createElement("p", null, " ", comment.body, " ")
+          React.createElement("div", {className: "text-primary"}, " - ", comment.body, " ")
         )
       );
+    });
 
-    })
     return (
-      React.createElement("ul", null, " ", list, " ")
+      React.createElement("div", null, 
+        React.createElement("ul", null, " ", list, " ")
+      )
     );
   }
 });
@@ -491,6 +493,9 @@ var IdeaView = React.createClass({displayName: "IdeaView",
 
 
   getInitialState: function () {
+    console.log('params', this.props.params);
+    commentActions.getComments('votes', this.props.params.id);
+
     return {
       idea     : ideaStore.fetchIdeas()[this.props.params.index],
       comments : commentStore.fetchComments()
@@ -527,6 +532,9 @@ var IdeaView = React.createClass({displayName: "IdeaView",
     commentActions.createComment(newComment);
 
     this.refs.parentComment.getDOMNode().value = '';
+
+    console.log('COMMENTS', this.state.comments);
+    console.log('IDEA', this.state.idea);
   },
 
   render: function(){

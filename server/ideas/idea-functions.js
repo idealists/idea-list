@@ -129,19 +129,16 @@ function findId (pI, callback){
 }
 
 function getComments (req, res) {
-  findId(req.headers.data, function (err, idea) {
-    if (err) console.log('getComments error:', err);
-    else {
-      var results = idea.comments.map(function (comment) {
-        Comment.findById(comment._id, function (err, val) {
-          if (err) console.log('commentfindbyid err:', err);
-          return val;
-        });
-      });
+  var parentId = JSON.parse(req.headers.data);
 
-      res.end(JSON.stringify(results));
-    }
-  });
+  Idea.findById(parentId)
+    .populate('comments')
+    .exec(function(err, idea) {
+      if (err) console.log('populate ERR', err);
+      else {
+        res.end(JSON.stringify(idea.comments));
+      }
+    });
 } // end getComments
 
 
@@ -153,7 +150,8 @@ function createComment (req, res) {
   var now = Date.now();
 
   // Saves query data in async callback for userId
-  setUserId(req.body.user_name, function(err, uId) {
+  console.log('req.body', req.body);
+  setUserId(req.body.sUserName, function(err, uId) {
 
     if (err) console.log(err);
     req.body.userId = uId;
