@@ -4,6 +4,7 @@ var Home   = require('./components/homeView.jsx');
 var ideaView= require('./components/ideaView.jsx')
 var Login = require('./components/login.jsx');
 var CreateIdeaView = require('./components/createIdeaView.jsx');
+var cookie = require('react-cookie');
 var $ = require('jquery');
 
 var Link = Router.Link;
@@ -12,6 +13,10 @@ var DefaultRoute = Router.DefaultRoute;
 var RouteHandler = Router.RouteHandler;
 
 var App = React.createClass({
+  getInitialState: function() {
+    return { userInfo: cookie.load('userInfo') };
+  },
+  login:false,
   render : function () {
     return(
       <div>
@@ -33,17 +38,25 @@ var routes = (
 );
 
 Router.run(routes, function (Handler) {
+  if(!App.login){
+
     $.ajax({
       url:"/api/user",
       dataType:'json',
-      methord:"GET"
+      method:"GET"
     })
     .done(function (value) {
       console.log('got auth')
      if (!value.loggedIn) {
+        //check if you have a cookie and remove it
         React.render(<Login/>, document.getElementById('main'));
       } else {
+        cookie.save('userInfo', value.session.user);
+        App.login = true;
         React.render(<Handler/>, document.getElementById('main'));
       }
     });
+  }else{
+      React.render(<Handler/>, document.getElementById('main'));    
+  }  
 });
