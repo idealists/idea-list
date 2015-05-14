@@ -4,11 +4,11 @@ var $          = require('jquery');
 
 var commentActions = {
   getComments : function(query, data){
-    query = query || 'votes';
+    query = 'votes';
     data  = data  || null;
 
     $.ajax({
-      url       : "/comment",
+      url       : "/ideas/comment",
       dataType  : "json",
       method    : "GET",
       headers   : {
@@ -25,6 +25,7 @@ var commentActions = {
   },
 
   createComment : function(newComment){
+    var parentId = newComment.parentId;
     var commentActions = this;
     $.ajax({
       url      : "/api/user",
@@ -35,12 +36,12 @@ var commentActions = {
       newComment.userId  = userinfo._id;
       newComment.slackId = userinfo.slackId;
       $.ajax({
-        url      : "/comment",
+        url      : "/ideas/comment",
         dataType : "json",
         method   : "POST",
         data     : newComment
       }).done(function(commentList){
-        commentActions.getComments('votes');
+        commentActions.getComments('votes', parentId);
       });
     });
   }

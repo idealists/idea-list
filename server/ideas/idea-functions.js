@@ -98,7 +98,7 @@ function createIdea (req, res) {
 
   idea.save(function (err) {
     if (err) {
-      console.log(err);
+      return err;
     }
     var reply = { 'text': 'Idea Posted! Idea_id: `' + idea.shortId + '` | Idea: ' + idea.body + ' | tags: ' + idea.tags || '' };
     slackPost.postSlack(reply);
@@ -128,6 +128,23 @@ function findId (pI, callback){
   });
 }
 
+function getComments (req, res) {
+  findId(req.headers.data, function (err, idea) {
+    if (err) console.log('getComments error:', err);
+    else {
+      var results = idea.comments.map(function (comment) {
+        Comment.findById(comment._id, function (err, val) {
+          if (err) console.log('commentfindbyid err:', err);
+          return val;
+        });
+      });
+
+      res.end(JSON.stringify(results));
+    }
+  });
+} // end getComments
+
+
 //TODO:
 /*INCOMING POST REQ NEED THE FOLLOWING:*/
   // each incoming post req needs a parentId and a rootId associated
@@ -145,6 +162,7 @@ function createComment (req, res) {
       createdAt : now,
       updatedAt : now,
       parentId  : req.body.parentId,
+      parentType: req.body.parentType,
       userId    : req.body.userId,
       slackId   : req.body.slackId,
       body      : req.body.body,
@@ -154,8 +172,8 @@ function createComment (req, res) {
     });
 
     // if a comment is commenting directly on an idea
-    if (req.body.parentId === null) {
-      findId(req.body.ideaid, function (err, idea) {
+    if (req.body.parentType === 'idea') {
+      findId(req.body.parentId, function (err, idea) {
         if (err) console.log(err);
 
         idea.comments.push(newComment._id);
@@ -168,8 +186,10 @@ function createComment (req, res) {
       }); // end of findId
     }
 
-    newComment.save(function(err){
+    newComment.save(function(err, val){
       if (err) console.log('comment save error:', err);
+    }).then(function(val){
+      res.status(201).end(JSON.stringify(val));
     });
   }); // end of setUserId
 } // end of createComment
@@ -264,6 +284,7 @@ function upvote (req, res) {
 // expose functions
 module.exports = {
   getIdeas: getIdeas,
+  getComments: getComments,
   createIdea: createIdea,
   createComment: createComment,
   downvote: downvote,

@@ -3,6 +3,8 @@ var NavBar      = require('./navBar.jsx');
 var CommentList = require('./commentList.jsx');
 var ideaActions = require('../actions/ideaActions');
 var ideaStore   = require('../stores/ideaStore');
+var commentStore   = require('../stores/commentStore');
+var commentActions = require('../actions/commentActions');
 
 var IdeaView = React.createClass({
 
@@ -31,6 +33,21 @@ var IdeaView = React.createClass({
     });
   },
 
+  handleSubmit : function(){
+    var commentBody = this.refs.parentComment.getDOMNode().value;
+    var ideaId      = this.state.idea._id
+
+    var newComment = {
+      body       : commentBody,
+      parentId   : ideaId,
+      parentType : 'idea'
+    };
+
+    commentActions.createComment(newComment);
+
+    this.refs.parentComment.getDOMNode().value = '';
+  },
+
   render: function(){
 
     return(
@@ -50,13 +67,13 @@ var IdeaView = React.createClass({
         </div>
 
         <div className="input-group container">
-          <textarea className="form-control" type='text' ref='parentComment' placeholder='some_commas' rows="4"></textarea>
+          <textarea className="form-control" type='text' ref='parentComment' placeholder='add comment' rows="4"></textarea>
         </div>
 
         <br />
 
         <div className="text-center">
-          <button className="btn btn-red btn-wide center">
+          <button className="btn btn-red btn-wide center" onClick={this.handleSubmit}>
             Add Comment
           </button>
         </div>
