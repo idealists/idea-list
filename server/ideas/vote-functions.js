@@ -2,11 +2,15 @@ var Comment = require('../models/comments');
 var Idea = require('../models/ideas');
 var User = require('../models/users');
 var slackPost = require('./slackPost');
+var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
+var ObjectId = Schema.ObjectId;
 
 var Vote = new Schema({
   createdAt : Date,
   voter     : ObjectId,
-  value     : Number
+  value     : Number,
+  url       : String
 });
 
 var voteoptions  = function(req,res){
@@ -41,13 +45,13 @@ var voteoptions  = function(req,res){
     function(err,object){
       var counter = 0;
       var exists = false;
-      object.votes.map(function(value,index)){
+      object.votes.map(function(value,index){
         if(value.voter===voteinfo.user_id){
           exists = true;
           value.value = rate; 
         }
         counter = counter+value.value;
-      }
+      });
       if(!exists){
          var now = Date.now();
         newvote = new Vote({
