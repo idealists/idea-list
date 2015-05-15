@@ -76,6 +76,8 @@ function getIdeas (req, res) {
 } // end getIdeas
 
 function createIdea (req, res) {
+  console.log('in createIdea, req: ', req);
+  
   var now = Date.now();
   var idea = new Idea({
     createdAt    : now,
