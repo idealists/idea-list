@@ -1,6 +1,7 @@
 var React    = require('react');
 var Router   = require('react-router');
 var ideaView = require('./ideaView.jsx');
+var VoteView = require('./voteView.jsx');
 
 var DefaultRoute = Router.DefaultRoute;
 var RouteHandler = Router.RouteHandler;
@@ -16,7 +17,8 @@ var IdeaList = React.createClass({
             <Link to="ideaView" params={{id: idea._id, index: index}}>
               <p> {idea.title} </p>
               <p> {idea.sUserName} </p>
-             </Link>
+            </Link>
+            <VoteView object={idea} />
           </div>
         );
       }else{
