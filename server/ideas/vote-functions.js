@@ -31,7 +31,7 @@ var voteoptions  = function(req,res){
   rating();
   
   var querytype;
-  
+  console.log(voteinfo);
   var type= function(){
     if(voteinfo.type=== "idea"){
       querytype= Idea;
