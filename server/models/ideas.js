@@ -2,6 +2,12 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
 
+var Vote = new Schema({
+  createdAt : Date,
+  voter     : ObjectId,
+  value      : Number
+});
+
 var Idea = new Schema({
   createdAt    : Date,
   updatedAt    : Date,
@@ -18,9 +24,7 @@ var Idea = new Schema({
   body         : String,
   tags         : [String],
   active       : Boolean,
-  voters       : [ObjectId],
-  upvotes      : [ObjectId],
-  downvotes    : [ObjectId],
+  voters       : [Vote],
   comments     : [{type: Schema.Types.ObjectId, ref: 'Comment'}],
   rating       : Number,
 });
