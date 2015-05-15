@@ -9,7 +9,8 @@ var ObjectId = Schema.ObjectId;
 var Vote = new Schema({
   createdAt : Date,
   voter     : ObjectId,
-  value      : Number
+  value     : Number,
+  url       : String
 });
 
 var voteoptions  = function(req,res){
