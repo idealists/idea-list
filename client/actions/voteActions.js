@@ -1,5 +1,4 @@
 var $ = require('jquery');
-//require back end vote file
 
 // send vote data to the server
 var sendVote = function(vote, cb){
