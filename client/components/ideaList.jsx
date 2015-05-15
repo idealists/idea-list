@@ -27,7 +27,7 @@ var IdeaList = React.createClass({
             <VoteView object={idea} />
           </div>
         );
-      }else{
+      } else {
         return(
           <div key={index}>
             <Link to="ideaView" params={{id: idea._id, index: index}}>

@@ -10,7 +10,6 @@ var commentStore   = require('../stores/commentStore');
 var Route = Router.Route;
 var Link  = Router.Link;
 
-
 var CommentList = React.createClass({
   render: function(){
     console.log('the commetst to reder',this.props.comments)
@@ -38,7 +37,7 @@ var CommentList = React.createClass({
       <div>
         {list}
       </div>
-    )
+    );
   }
 });
 
