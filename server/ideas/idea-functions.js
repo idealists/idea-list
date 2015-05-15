@@ -94,6 +94,7 @@ function createIdea (req, res) {
     title        : req.body.title,
     body         : req.body.body,
     tags         : req.body.tags || null,
+    rating       : 0,
     active       : true
   });
 

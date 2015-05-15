@@ -1,73 +1,102 @@
 var Comment = require('../models/comments');
 var Idea = require('../models/ideas');
 var User = require('../models/users');
+var Vote = require('../models/votes');
 var slackPost = require('./slackPost');
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var ObjectId = Schema.ObjectId;
-
-var Vote = new Schema({
-  createdAt : Date,
-  voter     : ObjectId,
-  value     : Number,
-  url       : String
-});
 
 var voteoptions  = function(req,res){
   var voteinfo = req.body;
-  var rate;
   
+  // calculate the voting rate
+  var rate;
+  console.log('vote rating', voteinfo.voteRating)
   var rating = function(){
-    if(req.body.vote>0){
+    if(req.body.voteRating>0){
       rate = 1;
-    }
-    else if(req.body.vote<0){
+    } else if (req.body.voteRating<0){
       rate =-1;
-    }
-    else{
+    } else {
       rate =0;
     }
-  } ;
+  };
   rating();
   
-  var querytype;
-  console.log(voteinfo);
-  var type= function(){
-    if(voteinfo.type=== "idea"){
-      querytype= Idea;
-    }else{
-      querytype=Comment;
-    }
-  }
-  type();
-  querytype.findOne(
-    { _id: ObjectId.fromString(voteinfo.parentId)},
-    function(err,object){
-      var counter = 0;
-      var exists = false;
-      object.votes.map(function(value,index){
-        if(value.voter===voteinfo.user_id){
-          exists = true;
-          value.value = rate; 
-        }
-        counter = counter+value.value;
-      });
-      if(!exists){
-         var now = Date.now();
-        newvote = new Vote({
-            createdAt : now,
-            voter     : voteinfo.user_id,
-            value      : rate
+
+  // if the vote is for an idea, search the ideas collection and
+  // add the vote to the idea, else search the comments
+  // collection and add the vote to the comment
+  if (voteinfo.voteType === "idea") {
+    Idea.findOne({ _id: voteinfo.parentId }, function(err, idea){
+        var counter = 0;
+        var exists = false;
+
+        // see if the voter has voted before
+        idea.voters.map(function(vote, index){
+          if(vote.voter === voteinfo.user_id){
+            exists = true;
+            vote.value = rate; 
+          }
+          counter = counter + vote.value;
         });
-      object.votes.push(newvote);
-      counter = counter + rate;
-      }
-      object.rating = counter;
-      object.save();
-    
-  }).exec(function(err, value){
-    var finalobj = {votearray:value.votes, rating : value.rating};
-    res.end(JSON.stringify(finalobj));
-  });
+
+        // if the user has not voted before, then create the vote object
+        if(!exists){
+          var now = Date.now();
+          var newVote = new Vote({
+              createdAt : now,
+              voter     : voteinfo.user_id,
+              value     : rate
+          });
+          idea.voters.push(newVote);
+          counter = counter + rate;
+        }
+        idea.rating = counter;
+        idea.save();
+      
+    }).exec(function(err, ideaObj){
+      var finalobj = { 
+          voteArray : ideaObj[0].voters, 
+          rating    : ideaObj[0].rating
+      };
+      res.end(JSON.stringify(finalobj));
+    });
+  } else if (voteinfo.voteType === "comment") {
+    Comment.findOne({ _id: voteinfo.parentId }, function(err, comment){
+        var counter = 0;
+        var exists = false;
+
+        // see if the voter has voted before
+        comment.voters.map(function(vote, index){
+          if(vote.voter === voteinfo.user_id){
+            exists = true;
+            vote.value = rate; 
+          }
+          counter = counter + vote.value;
+        });
+
+        // if the user has not voted before, then create the vote object
+        if(!exists){
+          var now = Date.now();
+          var newVote = new Vote({
+              createdAt : now,
+              voter     : voteinfo.user_id,
+              value     : rate
+          });
+          comment.voters.push(newVote);
+          counter = counter + rate;
+        }
+        comment.rating = counter;
+        comment.save();
+      
+    }).exec(function(err, commentObj){
+      var finalobj = { 
+          voteArray : commentObj[0].voters, 
+          rating    : commentObj[0].rating
+      };
+      res.end(JSON.stringify(finalobj));
+    });
+  }
 }
 module.exports = voteoptions
