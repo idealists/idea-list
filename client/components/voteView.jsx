@@ -5,20 +5,23 @@ var cookie = require('react-cookie');
 var VoteView = React.createClass({
   getInitialState: function(){
     return { 
-             userInfo: cookie.load('userInfo'),
-             voterInfo: this.props.object.voters // <-- array 
+      userInfo: cookie.load('userInfo'); 
     }
   },
-  modifyprops: function(rating){
-    //if (rating > 0)
-    //if rating >0 highlight up arrow
-    //if rating<0 highlight down array.
-    // set this.state.object.voters
+  modifyprops: function(voteData){
+    //{votes:[{}],rating}
+    if (voteData.rating > 0) {
+      //highlight the up arrow
+    } else if (rating.value < 0) {
+      //highlight the down arrow
+    } else {
+      //no highlighting
+    }
   },
 
-  ideaVote: function(rating){
+  sendVote: function(rating){
     var votedata = this.props.object;
-    
+    var here = this;
     var voteInfo = { 
         voterId    : userInfo.userId,
         parentId   : votedata.userId,
@@ -28,21 +31,22 @@ var VoteView = React.createClass({
         userImage  : userInfo.img['24']
     }
 
-    VoteActions.sendVote(voteInfo, this.modifyprops(rating));
+    VoteActions.sendVote(voteInfo, here.modifyprops);
   },
   render: function(){
     return(
       <div>
         <div>
-          <button className="" type="text" ref="upVote" onClick={ideaVote(1)}>
+          <button className="" type="text" ref="upVote" onClick={sendVote(1)}>
           </button>
         </div>
         <div>
           <button className="" type="text" ref="rating" onClick={}>
+            {.value}
           </button>
         </div>
         <div>
-          <button className="" type="text" ref="downVote" onClick={ideaVote(-1)}>
+          <button className="" type="text" ref="downVote" onClick={sendVote(-1)}>
           </button>
         </div>
       </div>

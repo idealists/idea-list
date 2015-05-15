@@ -6,7 +6,7 @@ var slackPost = require('./slackPost');
 var Vote = new Schema({
   createdAt : Date,
   voter     : ObjectId,
-  value      : Number
+  value     : Number
 });
 
 var voteoptions  = function(req,res){

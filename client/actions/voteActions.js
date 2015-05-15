@@ -9,7 +9,7 @@ var sendVote = function(vote, cb){
     data     : vote
   }).success(function(data){
     console.log(data);
-    
+    cb(data);
   })
 }
 
