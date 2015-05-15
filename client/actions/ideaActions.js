@@ -43,17 +43,15 @@ var ideaActions = {
   },
 
   createIdea: function(newIdea){
-    var ideaActions = this;
-    var parsed = newIdea.title.split(" ").join("_");
+    var ideaActions   = this;
     var userinfo      = cookie.load('userInfo');
+    var parsed        = newIdea.title.split(" ").join("_");
 
-    newIdea.user_name = userinfo.sUserName;
     newIdea.shortId   = parsed + "_" + newIdea.user_name;
+    newIdea.user_name = userinfo.sUserName;
     newIdea.slackId   = userinfo.slackId;
     newIdea.userId    = userinfo._id;
     newIdea.img       = userinfo.image['24'];
-
-    console.log('newIdea: ', newIdea, ' userinfo:', userinfo);
 
     $.ajax({
       url      : "/ideas",

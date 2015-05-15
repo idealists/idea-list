@@ -18,13 +18,16 @@ var IdeaList = React.createClass({
         return (
           <div key={index}>
             <Link to="ideaView" params={{id: idea._id, index: index}}>
-              <p> {idea.title} </p>
-              <p> {idea.sUserName} </p>
-            </Link>
+              <h3> + {idea.title} </h3>
+              <div>
+                <img src={idea.img}/>
+                {idea.sUserName}
+              </div>
+             </Link>
             <VoteView object={idea} />
           </div>
         );
-      } else {
+      }else{
         return(
           <div key={index}>
             <Link to="ideaView" params={{id: idea._id, index: index}}>
