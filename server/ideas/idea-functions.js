@@ -9,7 +9,7 @@ function getIdeas (req, res) {
   req.headers.query = req.headers.query || "";
   var ideas;
 
-  var selectFields = 'createdAt updatedAt shortId userId slackId sUserName title body tags active voters upvotes downvotes rating';
+  var selectFields = 'createdAt updatedAt shortId userId slackId sUserName title body tags active voters upvotes downvotes rating img';
 
   switch (req.headers.query) {
     case 'dateFirst':
@@ -64,18 +64,17 @@ function getIdeas (req, res) {
       break;
     default:
     //custom query (to do when need arises)
-      console.log('cant cant cant');
   }
 
   ideas.exec().then(
     function(value){
-      console.log('results',value);
       res.end(JSON.stringify(value));
     }
   );
 } // end getIdeas
 
 function createIdea (req, res) {
+
   var now = Date.now();
   var idea = new Idea({
     createdAt    : now,
@@ -84,6 +83,7 @@ function createIdea (req, res) {
     userId       : req.body.userId,
     slackId      : req.body.slackId,
     sUserName    : req.body.user_name,
+    img          : req.body.img,
     sTeamId      : req.body.team_id || null,
     sChannelId   : req.body.channel_id || null,
     sChannelName : req.body.channel_name || null,
@@ -101,7 +101,7 @@ function createIdea (req, res) {
     }
     var reply = { 'text': 'Idea Posted! Idea_id: `' + idea.shortId + '` | Idea: ' + idea.body + ' | tags: ' + idea.tags || '' };
     slackPost.postSlack(reply);
-    console.log('New idea', idea.title, 'saved');
+    console.log('New idea:', idea.title, 'SAVED');
   });
 
   res.end();
@@ -149,7 +149,6 @@ function createComment (req, res) {
   var now = Date.now();
 
   // Saves query data in async callback for userId
-  console.log('req.body', req.body);
   setUserId(req.body.sUserName, function(err, uId) {
 
     if (err) console.log(err);
@@ -162,6 +161,8 @@ function createComment (req, res) {
       parentType: req.body.parentType,
       userId    : req.body.userId,
       slackId   : req.body.slackId,
+      sUserName : req.body.sUserName,
+      img       : req.body.img,
       body      : req.body.body,
       voters    : [],
       rating    : 0,

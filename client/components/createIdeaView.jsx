@@ -5,7 +5,8 @@ var NavBar = require('./navBar.jsx');
 var Navigation = Router.Navigation;
 
 var CreateIdeaView = React.createClass({
-   mixins: [Navigation],
+  mixins: [Navigation],
+
   handleSubmit : function(){
     var tagsInput = this.refs.newIdeaTags.getDOMNode().value;
     var tagsArray = tagsInput.split(' ');
@@ -17,7 +18,7 @@ var CreateIdeaView = React.createClass({
     };
 
     // alert if no title or body
-        ideaActions.createIdea(newIdea);
+    ideaActions.createIdea(newIdea);
 
     this.refs.newIdeaTitle.getDOMNode().value = '';
     this.refs.newIdeaBody.getDOMNode().value = '';
@@ -27,7 +28,6 @@ var CreateIdeaView = React.createClass({
   },
 
   render : function(){
-    console.log(this.props,this.params)
     return(
       <div>
         <NavBar />

@@ -16,6 +16,8 @@ Comment.add({
   parentType: String,
   userId    : ObjectId,
   slackId   : String,
+  sUserName : String,
+  img       : String,
   body      : String,
   votes     : [Vote],
   rating    : Number,

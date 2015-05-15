@@ -1,13 +1,17 @@
 var React       = require('react');
-var CommentList = require('./commentList.jsx');
 
 var Comment = React.createClass({
   render: function(){
-    var comment = this.props.comment;
+    var comment = this.props.element;
+    console.log('comment:', comment);
+
     return (
-      <div>
-        <p>{comment.userid} says {comment.body}</p>
-        <Comments comments={comment.comments} />
+      <div className="text-primary">
+        <h3> + {comment.body} </h3>
+        <div>
+          <img src={comment.img}/>
+          {comment.sUserName}
+        </div>
       </div>
     )
   }
