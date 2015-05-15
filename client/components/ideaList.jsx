@@ -1,7 +1,6 @@
 var React    = require('react');
 var Router   = require('react-router');
 var ideaView = require('./ideaView.jsx');
-var VoteView = require('./voteView.jsx');
 
 var DefaultRoute = Router.DefaultRoute;
 var RouteHandler = Router.RouteHandler;
@@ -11,17 +10,16 @@ var Link  = Router.Link;
 var IdeaList = React.createClass({
   render: function(){
     var list = this.props.ideas.map(function(idea, index){
-      // ideas do not have email addresses, but users do
-      // this renders the idea or the user profile with image
       if(!idea.email){
-        idea.type = 'idea';
         return (
           <div key={index}>
             <Link to="ideaView" params={{id: idea._id, index: index}}>
-              <p> {idea.title} </p>
-              <p> {idea.sUserName} </p>
-            </Link>
-            <VoteView object={idea} />
+              <h3> + {idea.title} </h3>
+              <div>
+                <img src={idea.img}/>
+                {idea.sUserName}
+              </div>
+             </Link>
           </div>
         );
       } else {

@@ -16,6 +16,7 @@ var Idea = new Schema({
   userId       : ObjectId,
   slackId      : String,
   sUserName    : String,
+  img          : String,
   sTeamId      : String,
   sChannelId   : String,
   sChannelName : String,

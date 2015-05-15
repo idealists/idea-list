@@ -1,6 +1,6 @@
 var Dispatcher = require('../dispatcher/dispatcher');
 var Constants  = require('../constants/constants');
-var cookie     = require('react-cookie');
+var cookie = require('react-cookie');
 var $          = require('jquery');
 
 var ideaActions = {
@@ -52,8 +52,6 @@ var ideaActions = {
     newIdea.slackId   = userinfo.slackId;
     newIdea.userId    = userinfo._id;
     newIdea.img       = userinfo.image['24'];
-
-    console.log('newIdea: ', newIdea, ' userinfo:', userinfo);
 
     $.ajax({
       url      : "/ideas",
