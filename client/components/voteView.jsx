@@ -9,14 +9,16 @@ var VoteView = React.createClass({
       voteData: this.props.object
     }
   },
-  modifyprops: function(voteData){
+  modifyProps: function(voteData){
     var voteStatus = voteData.rating;
     if (voteStatus > 0) {
       //highlight the up arrow
+      console.log('HI VOTE');
     } else if (voteStatus < 0) {
       //highlight the down arrow
     } else {
       //no highlighting
+      console.log('low vote');
     }
   },
   sendVote: function(rating){
@@ -24,17 +26,16 @@ var VoteView = React.createClass({
     var here = this;
     var voteInfo = { 
         voterId    : this.state.userInfo.userId,
-        parentId   : votedata.userId,
+        parentId   : votedata._id,
         user_name  : this.state.userInfo.sUserName,
         voteType   : votedata.type,
         voteRating : rating,
         userImage  : this.state.userInfo.image['24']
     }
 
-    VoteActions.sendVote(voteInfo, here.modifyprops);
+    VoteActions.sendVote(voteInfo, here.modifyProps);
   },
   voteTypes: {
-
     up: function(){this.sendVote(1);} ,
     down: function(){this.sendVote(-1);}
   },
@@ -50,7 +51,7 @@ var VoteView = React.createClass({
           </button>
         </div>
         <div>
-          <button className="" type="text" ref="downVote" onClick={this.voteTypes.down}>
+          <button className="" type="text" ref="downVote" onClick={(this.voteTypes.down).bind(this)}>
           </button>
         </div>
       </div>
