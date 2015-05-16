@@ -54,7 +54,8 @@ function addIdeaVote(req, res) {
       var newVote = new Vote({
           createdAt : now,
           voter     : voteInfo.user_id,
-          value     : voteInfo.rate
+          value     : voteInfo.rate,
+          imgUrl    : voteInfo.userImage
       });
       idea.voters.push(newVote);
       counter = counter + voteInfo.rate;
@@ -98,7 +99,8 @@ function addCommVote() {
       var newVote = new Vote({
           createdAt : now,
           voter     : voteInfo.user_id,
-          value     : voteInfo.rate
+          value     : voteInfo.rate,
+          imgUrl    : voteInfo.userImage
       });
       comment.voters.push(newVote);
       counter = counter + voteInfo.rate;
