@@ -9,8 +9,9 @@ var VoteView = React.createClass({
       voteData: this.props.object
     }
   },
-  modifyProps: function(voteData){
-    var voteStatus = voteData.rating;
+  componentDidMount: function(){
+    console.log(this.props.object)
+    var voteStatus = this.state.voteData.rating;
     if (voteStatus > 0) {
       //highlight the up arrow
       console.log('HI VOTE');
@@ -19,8 +20,14 @@ var VoteView = React.createClass({
        console.log('low vote');
     } else {
       //no highlighting
-     
     }
+  },
+  modifyProps: function(newData){
+    var newstate = this.state.voteData;
+    newstate.rating = newData.rating;
+
+    this.setState({ voteData: newstate });
+    
   },
   sendVote: function(rating){
     var votedata = this.state.voteData;
@@ -49,6 +56,7 @@ var VoteView = React.createClass({
         </div>
         <div>
           <button className="" type="text" ref="rating">
+            {this.state.voteData.rating}
           </button>
         </div>
         <div>
