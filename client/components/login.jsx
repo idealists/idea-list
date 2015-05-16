@@ -11,8 +11,15 @@ var Login = React.createClass({
       <div className="text-center vertical-center" id="login">
         <img src="umbel-ui/assets/logo.png"></img>
         <br />
-        <div className="x-huge text-center text-primary"> I D E A - L I S T </div>
         <br />
+        <div className="x2-huge text-center text-white">
+
+          <span className="xxx-huge"> I </span>
+            D E A
+          <span className="xxx-huge"> L </span>
+            I S T
+
+        </div>
         <br />
         <br />
         <a href="/auth/slack">
