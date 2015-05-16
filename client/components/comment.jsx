@@ -1,17 +1,58 @@
-var React       = require('react');
+var React          = require('react');
+var commentActions = require('../actions/commentActions');
 
 var Comment = React.createClass({
+
+  getInitialState: function() {
+    return {
+      comment : this.props.element,
+      idea    : this.props.root
+    }
+  },
+
+  handleSubmit: function(e) {
+    e.preventDefault();
+
+    var commentBody = this.refs.nestedComment.getDOMNode().value;
+    var commentId   = this.state.comment._id;
+    var ideaId      = this.state.idea._id;
+
+    var newComment = {
+      body       : commentBody,
+      parentId   : commentId,
+      parentType : 'comment',
+      ideaId     : ideaId
+    };
+
+    commentActions.createComment(newComment);
+
+    this.refs.nestedComment.getDOMNode().value = '';
+  },
+
   render: function(){
-    var comment = this.props.element;
-    console.log('comment:', comment);
 
     return (
       <div className="text-primary">
-        <h3> + {comment.body} </h3>
+
+        <h3> + {this.state.comment.body} </h3>
+
         <div>
-          <img src={comment.img}/>
-          {comment.sUserName}
+          <img src={this.state.comment.img}/>
+          {this.state.comment.sUserName}
         </div>
+
+        <form className="form-inline">
+          <div className="form-group">
+
+            <input className="form-control" type='text' ref='nestedComment' placeholder='add comment'> </input>
+
+            <button className="btn btn-red btn-xs" onClick={this.handleSubmit}>
+              Reply
+            </button>
+
+          </div>
+        </form>
+
       </div>
     )
   }
