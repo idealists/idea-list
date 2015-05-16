@@ -3,6 +3,7 @@ var Idea = require('../models/ideas');
 var User = require('../models/users');
 var Vote = require('../models/votes');
 var slackPost = require('./slackPost');
+//var request = require('request');
 
 function getIdeas (req, res) {
   req.headers.query = req.headers.query || "";
