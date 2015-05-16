@@ -82,6 +82,7 @@ function slackInt (req, res){
       // if comment is on an idea, search for the correct parentId, etc. in the Idea collection
       // otherwise search in the Comment collection for the correct parentId, etc.
       //if( req.body.shortId === 'idea' ){
+      req.body.voteType = "idea";
       setParentId (req.body.shortId, function(err, pId) {
         if (err) console.log(err);
         req.body.parentId = pId;
@@ -92,7 +93,7 @@ function slackInt (req, res){
             voterId    : uId._id,
             parentId   : req.body.shortId,
             user_name  : req.body.user_name,
-            voteType   : '',
+            voteType   : req.body.voteType,
             voteRating : 1,
             userImage  : uId.image['24']
           };
