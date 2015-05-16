@@ -17,7 +17,7 @@ function slackInt (req, res){
   
   // helper functions for querying data with async callbacks for userId and parentId
   function setUserId (un, callback){ 
-    User.find({ sUserName: un }, function (err, user) {
+    User.findOne({ sUserName: un }, function (err, user) {
       if (err) {
         callback(err, null);
       } else {
@@ -50,7 +50,7 @@ function slackInt (req, res){
       }
       setUserId(req.body.user_name, function(err, uId) {
         if (err) console.log(err);
-        req.body.userId = uId;    
+        req.body.userId = uId._id;    
         IFuncs.createIdea(req, res);
       });
       break;
