@@ -3,7 +3,7 @@ var Idea = require('../models/ideas');
 var User = require('../models/users');
 var Vote = require('../models/votes');
 var IFuncs = require('./idea-functions');
-var VoteFunctions = require('./vote-functions');
+var VoteFuncs = require('./vote-functions');
 //var slackPost = require('./slackPost');
 //var request = require('request');
 
@@ -89,18 +89,18 @@ function slackInt (req, res){
         setUserId(req.body.user_name, function(err, uId) {
         console.log('INSIDE UPVOTE, req.body: ', req.body);
 
-          console.log('uId:', uId);
 
           var voteInfo = {
-            voterId    : '',
+            voterId    : uId._id,
             parentId   : req.body.shortId,
             user_name  : req.body.user_name,
             voteType   : '',
             voteRating : 1,
-            userImage  : ''
-          }
+            userImage  : uId.image['24']
+          };
 
-          // VoteFunctions.voteOptions(voteInfo);
+          console.log('voteInfo:', voteInfo);
+          VoteFunctions.voteOptions(voteInfo);
         });
       });
 
