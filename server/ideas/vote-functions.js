@@ -54,10 +54,10 @@ function addIdeaVote(req, res) {
       var newVote = new Vote({
           createdAt : now,
           voter     : voteInfo.user_id,
-          value     : rate
+          value     : voteInfo.rate
       });
       idea.voters.push(newVote);
-      counter = counter + rate;
+      counter = counter + voteInfo.rate;
     }
     idea.rating = counter;
 
@@ -98,10 +98,10 @@ function addCommVote() {
       var newVote = new Vote({
           createdAt : now,
           voter     : voteInfo.user_id,
-          value     : rate
+          value     : voteInfo.rate
       });
       comment.voters.push(newVote);
-      counter = counter + rate;
+      counter = counter + voteInfo.rate;
     }
     comment.rating = counter;
       
