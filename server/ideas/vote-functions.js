@@ -8,7 +8,7 @@ var Schema = mongoose.Schema;
 
 var voteOptions = function(req,res){
   var voteInfo = req.body;
-  
+  console.log('INSIDE VOTEOPTIONS, req.body: ', req.body);
   // calculate the voting rate
   (function rating(){
     if(req.body.voteRating > 0){
