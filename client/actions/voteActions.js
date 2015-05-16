@@ -10,7 +10,8 @@ var VoteActions = {
       data     : vote
     }).success(function(data){
       cb(data);
-    })
+    });
   }
-}
+};
+
 module.exports = VoteActions;
