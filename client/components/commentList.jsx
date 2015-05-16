@@ -1,42 +1,25 @@
 var React    = require('react');
 var Router   = require('react-router');
-// var Comment  = require('./comment.jsx');
 var commentActions = require('../actions/commentActions');
 
 var DefaultRoute = Router.DefaultRoute;
 var RouteHandler = Router.RouteHandler;
+var commentStore   = require('../stores/commentStore');
 var Route = Router.Route;
 var Link  = Router.Link;
 
 
 var CommentList = React.createClass({
-
-  getInitialState: function () {
-    return {
-      comments : this.props.comments
-    }
-  },
-
-  componentDidMount : function(){
-    this._onChange;
-  },
-
-  _onChange : function(){
-    this.setState({
-      comments : this.props.comments
-    });
-  },
-
   render: function(){
+    console.log('the state',this.state)
     var commentList = this;
-
+    var comments = 
+    var list = commentList.props.comments.map(function(){
+      
+    });
     return (
       <div>
-        {
-          this.state.comments.map(function(comment){
-            return (<Comment key={comment._id} element={comment} root={this.props.idea}/>)
-          })
-        }
+        {list}
       </div>
     )
   }
@@ -48,19 +31,19 @@ var CommentList = React.createClass({
 
 var Comment = React.createClass({
 
-  getInitialState: function() {
-    return {
-      comment : this.props.element,
-      idea    : this.props.root
-    }
-  },
+  // getInitialState: function() {
+  //   return {
+  //     comment : this.props.element,
+  //     idea    : this.props.root
+  //   }
+  // },
 
   handleSubmit: function(e) {
     e.preventDefault();
 
     var commentBody = this.refs.nestedComment.getDOMNode().value;
-    var commentId   = this.state.comment._id;
-    var ideaId      = this.state.idea._id;
+    var commentId   = this.props.element._id;
+    var ideaId      = this.props.root._id;
 
     var newComment = {
       body       : commentBody,
@@ -79,11 +62,11 @@ var Comment = React.createClass({
     return (
       <div className="comment text-primary">
 
-        <h3> + {this.state.comment.body} </h3>
+        <h3> + {this.props.element.body} </h3>
 
         <div>
-          <img src={this.state.comment.img}/>
-          {this.state.comment.sUserName}
+          <img src={this.props.element.img}/>
+          {this.props.element.sUserName}
         </div>
 
         <form className="form-inline">
