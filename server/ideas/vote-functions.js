@@ -35,10 +35,17 @@ var voteOptions = function(req,res){
         idea.voters.map(function(vote, index){
           if(vote.voter === voteInfo.user_id){
             exists = true;
-            vote.value = rate;
+            console.log('your vote ',rate, 'old vote',vote.value, ' counter ', counter)
+            if(vote.value===rate){vote.value=0}
+            else{vote.value = rate;}
+            counter = counter + vote.value;
+          }else{
+
+            counter = counter + vote.value;
           }
-          counter = counter + vote.value;
         });
+
+        console.log('counter after change: ', counter)
 
         // if the user has not voted before, then create the vote object
         if(!exists){
@@ -52,15 +59,19 @@ var voteOptions = function(req,res){
           counter = counter + rate;
         }
         idea.rating = counter;
-        idea.save();
+        console.log('idea.rating: ', idea.rating)
+        idea.save()
       
-    }).exec(function(err, ideaObj){
+    }).exec(function( ideaObj ){
       var voteObj = { 
           voteArray : ideaObj[0].voters, 
           rating    : ideaObj[0].rating
       };
+      console.log('vote data',voteObj,voteInfo)
       res.end(JSON.stringify(voteObj));
     });
+  
+
   } else if (voteInfo.voteType === "comment") {
     Comment.findOne({ _id: voteInfo.parentId }, function(err, comment){
         var counter = 0;
