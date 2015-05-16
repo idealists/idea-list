@@ -8,7 +8,7 @@ var VoteFunctions = require('./vote-functions');
 //var request = require('request');
 
 function slackInt (req, res){
-  console.log('req.body: ', req.body);
+
   // Parsing incoming request data
   // For ideas    : req.body.text = [ title | text | tags ];
   // For comments : req.body.text = [ shortId | text ];
@@ -17,7 +17,7 @@ function slackInt (req, res){
   
   // helper functions for querying data with async callbacks for userId and parentId
   function setUserId (un, callback){ 
-    User.findOne({ sUserName: un }, function (err, user) {
+    User.find({ sUserName: un }, function (err, user) {
       if (err) {
         callback(err, null);
       } else {
@@ -82,24 +82,26 @@ function slackInt (req, res){
       // if comment is on an idea, search for the correct parentId, etc. in the Idea collection
       // otherwise search in the Comment collection for the correct parentId, etc.
       //if( req.body.shortId === 'idea' ){
-        setParentId (req.body.shortId, function(err, pId) {
-          if (err) console.log(err);
-          req.body.parentId = pId;
+      setParentId (req.body.shortId, function(err, pId) {
+        if (err) console.log(err);
+        req.body.parentId = pId;
 
-          setUserId(req.body.user_name, function(err, uId) {
-            console.log('uId:', uId);
-            var voteInfo = {
-              voterId    : '',
-              parentId   : req.body.shortId,
-              user_name  : req.body.user_name,
-              voteType   : '',
-              voteRating : 1,
-              userImage  : ''
-            }
+        setUserId(req.body.user_name, function(err, uId) {
 
-            VoteFunctions.voteOptions(voteInfo);
-          });
+          console.log('uId:', uId);
+
+          var voteInfo = {
+            voterId    : '',
+            parentId   : req.body.shortId,
+            user_name  : req.body.user_name,
+            voteType   : '',
+            voteRating : 1,
+            userImage  : ''
+          }
+
+          // VoteFunctions.voteOptions(voteInfo);
         });
+      });
 
       // } else if ( req.body.shortId === 'comment' ) {
 
