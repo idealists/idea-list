@@ -11,14 +11,30 @@ var Link  = Router.Link;
 
 var CommentList = React.createClass({
 
+  getInitialState: function () {
+    return {
+      comments : this.props.comments
+    }
+  },
+
+  componentDidMount : function(){
+    this._onChange;
+  },
+
+  _onChange : function(){
+    this.setState({
+      comments : this.props.comments
+    });
+  },
+
   render: function(){
     var commentList = this;
 
     return (
       <div>
         {
-          this.props.comments.map(function(comment){
-            return (<Comment key={comment._id} element={comment} root={commentList.props.idea}/>)
+          this.state.comments.map(function(comment){
+            return (<Comment key={comment._id} element={comment} root={this.props.idea}/>)
           })
         }
       </div>
@@ -61,7 +77,7 @@ var Comment = React.createClass({
   render: function(){
 
     return (
-      <div className="text-primary">
+      <div className="comment text-primary">
 
         <h3> + {this.state.comment.body} </h3>
 

@@ -210,7 +210,8 @@ function createComment (req, res) {
     newComment.save(function(err, val){
       if (err) console.log('comment save error:', err);
     }).then(function(result){
-          res.end(JSON.stringify(result));
+      console.log('SERVER CREATECOMMENT:', result);
+      res.end(JSON.stringify(result));
     });
 
   }); // end of setUserId
