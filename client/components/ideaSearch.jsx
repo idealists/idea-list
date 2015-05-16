@@ -13,9 +13,13 @@ var IdeaSearch = React.createClass({
   render : function () {
     return(
       <div className="container">
-        <div className="input-group">
-          <span className="input-group-addon"><span className="glyphicon glyphicon-search"></span></span>
-          <input type='text' ref='search' className="form-control" placeholder='not working yet...'></input>
+        <div className="row">
+          <div className="col-lg-2"></div>
+          <div className="input-group col-lg-8">
+            <span className="input-group-addon"><span className="glyphicon glyphicon-search"></span></span>
+            <input type='text' ref='search' className="form-control" placeholder='search users and tags'></input>
+          </div>
+          <div className="col-lg-2"></div>
         </div>
         <br />
         <div className="text-center">

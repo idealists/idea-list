@@ -7,10 +7,12 @@ body {
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
+
+  margin-top: 65px;
 }
 #login {
-  margin-top: 10%
+  margin-top: 8%;
 }
 .comment {
-  margin-left: 10px
+  margin-left: 10px;
 }
