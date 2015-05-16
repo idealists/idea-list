@@ -54,6 +54,8 @@ function slackInt (req, res){
       break;
     case '/comment':
       // TODO: create hyperlink for comment id 
+      // *shortId* for comments will be different than shortIds for ideas
+
       req.body.shortId = parsed[0];
       req.body.body = parsed[1];
       req.body.parentType = 'idea';
@@ -72,7 +74,7 @@ function slackInt (req, res){
       });
       break;
     case '/upvote':
-      // call upvote function
+      console.log('IN /UPVOTE RIGHT NOW!!');
 
       /*
         Needed to save votes: 
@@ -81,8 +83,8 @@ function slackInt (req, res){
             var voteInfo = { 
                 voterId    : this.state.userInfo.userId, -- search user col
                 parentId   : votedata._id, -- find in db from shortId
-                user_name  : this.state.userInfo.sUserName,
-                voteType   : votedata.type,
+                user_name  : req.body.user_name, *
+                voteType   : votedata.type, -- get from the shortId
                 voteRating : rating, -- 1
                 userImage  : this.state.userInfo.image['24'] -- search user col
             }
