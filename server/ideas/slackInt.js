@@ -81,7 +81,7 @@ function slackInt (req, res){
 
       // if comment is on an idea, search for the correct parentId, etc. in the Idea collection
       // otherwise search in the Comment collection for the correct parentId, etc.
-      if( req.body.shortId === 'idea' ){
+      //if( req.body.shortId === 'idea' ){
         setParentId (req.body.shortId, function(err, pId) {
           if (err) console.log(err);
           req.body.parentId = pId;
@@ -101,9 +101,9 @@ function slackInt (req, res){
           });
         });
 
-      } else if ( req.body.shortId === 'comment' ) {
-        
-      }
+      // } else if ( req.body.shortId === 'comment' ) {
+
+      // }
       /*
         Needed to save votes: 
             -parentId of idea or comment
