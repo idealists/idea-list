@@ -4,13 +4,13 @@ var User = require('../models/users');
 var Vote = require('../models/votes');
 var IFuncs = require('./idea-functions');
 //var slackPost = require('./slackPost');
-var request = require('request');
 
 function slackInt (req, res){
-
+  console.log('req.body: ', req.body);
   // Parsing incoming request data
-  // For ideas: parsed = [ title | text | tags ];
-  // For comments: parsed = [ shortId | text ];
+  // For ideas    : req.body.text = [ title | text | tags ];
+  // For comments : req.body.text = [ shortId | text ];
+  // For votes    : req.body.text = [ shortId ];
   var parsed = req.body.text.split("|").map(function(y){ return y.trim(); });
   
   // helper functions for querying data with async callbacks for userId and parentId
@@ -73,6 +73,20 @@ function slackInt (req, res){
       break;
     case '/upvote':
       // call upvote function
+
+      /*
+        Needed to save votes: 
+            -parentId of idea or comment
+            -vote
+            var voteInfo = { 
+                voterId    : this.state.userInfo.userId, -- search user col
+                parentId   : votedata._id, -- find in db from shortId
+                user_name  : this.state.userInfo.sUserName,
+                voteType   : votedata.type,
+                voteRating : rating, -- 1
+                userImage  : this.state.userInfo.image['24'] -- search user col
+            }
+      */
       break;
     case '/downvote':
       // call downvote function
