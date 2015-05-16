@@ -7,7 +7,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var voteOptions = function(req,res){
-  var voteInfo = req.body;
+  var voteInfo = req.body || req;
   console.log('INSIDE VOTEOPTIONS, req.body: ', req.body);
   // calculate the voting rate
   (function rating(){
