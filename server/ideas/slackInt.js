@@ -87,8 +87,6 @@ function slackInt (req, res){
         req.body.parentId = pId;
 
         setUserId(req.body.user_name, function(err, uId) {
-        console.log('INSIDE UPVOTE, req.body: ', req.body);
-
 
           var voteInfo = {
             voterId    : uId._id,
