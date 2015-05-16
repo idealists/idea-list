@@ -21,7 +21,7 @@ function slackInt (req, res){
       if (err) {
         callback(err, null);
       } else {
-        callback(null, user._id);
+        callback(null, user);
       }
     });
   }
