@@ -7,7 +7,7 @@ var app = express();
 
 mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost:27017/idealist');
 
-app.use('/', express.static('../client'));
+app.use('/', express.static('client'));
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(session({
