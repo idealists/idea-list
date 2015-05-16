@@ -3,7 +3,9 @@ var Idea = require('../models/ideas');
 var User = require('../models/users');
 var Vote = require('../models/votes');
 var IFuncs = require('./idea-functions');
+var VoteFunctions = require('./vote-functions');
 //var slackPost = require('./slackPost');
+//var request = require('request');
 
 function slackInt (req, res){
   console.log('req.body: ', req.body);
@@ -74,19 +76,45 @@ function slackInt (req, res){
       });
       break;
     case '/upvote':
-      console.log('IN /UPVOTE RIGHT NOW!!');
 
+      req.body.shortId = parsed[0];
+
+      // if comment is on an idea, search for the correct parentId, etc. in the Idea collection
+      // otherwise search in the Comment collection for the correct parentId, etc.
+      if( req.body.shortId === 'idea' ){
+        setParentId (req.body.shortId, function(err, pId) {
+          if (err) console.log(err);
+          req.body.parentId = pId;
+
+          setUserId(req.body.user_name, function(err, uId) {
+            console.log('uId:', uId);
+            var voteInfo = {
+              voterId    : '',
+              parentId   : req.body.shortId,
+              user_name  : req.body.user_name,
+              voteType   : '',
+              voteRating : 1,
+              userImage  : ''
+            }
+
+            VoteFunctions.voteOptions(voteInfo);
+          });
+        });
+
+      } else if ( req.body.shortId === 'comment' ) {
+        
+      }
       /*
         Needed to save votes: 
             -parentId of idea or comment
             -vote
             var voteInfo = { 
-                voterId    : this.state.userInfo.userId, -- search user col
+                voterId    : this.state.userInfo.userId, -- search user col by user_name
                 parentId   : votedata._id, -- find in db from shortId
                 user_name  : req.body.user_name, *
                 voteType   : votedata.type, -- get from the shortId
                 voteRating : rating, -- 1
-                userImage  : this.state.userInfo.image['24'] -- search user col
+                userImage  : this.state.userInfo.image['24'] -- search user col by user_name
             }
       */
       break;
