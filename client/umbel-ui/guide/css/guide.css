@@ -1,11 +1,27 @@
 /*! normalize.css v3.0.0 | MIT License | git.io/normalize */
+@import url(http://fonts.googleapis.com/css?family=Montserrat:400,700);
 html {
-  font-family: sans-serif;
+  font-family: 'Montserrat', sans-serif;
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
 }
 body {
-  margin: 0;
+  background: url('../../assets/blurred-bg.jpg');
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-attachment: fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+
+  margin-top: 65px;
+}
+#login {
+  margin-top: 5%;
+}
+.idea {
+  margin: 10px;
 }
 article,
 aside,
@@ -265,7 +281,7 @@ html {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 body {
-  font-family: 'proxima-nova', Helvetica, Arial, sans-serif;
+  font-family: 'Montserrat', Helvetica, Arial, sans-serif;
   font-size: 14px;
   line-height: 1.42857143;
   color: #1d2125;
@@ -354,7 +370,7 @@ h6,
 .h4,
 .h5,
 .h6 {
-  font-family: 'proxima-nova', Helvetica, Arial, sans-serif;
+  font-family: 'Montserrat', Helvetica, Arial, sans-serif;
   font-weight: 500;
   line-height: 1.1;
   color: inherit;
@@ -499,6 +515,15 @@ cite {
 a.text-primary:hover {
   color: #378a8c;
 }
+.text-white {
+  color: #FFFFFF;
+}
+a.text-white:hover {
+  color: #999999;
+}
+.text-red {
+  color: #db3535;
+}
 .text-success {
   color: #3c763d;
 }
@@ -622,10 +647,10 @@ abbr[data-original-title] {
   text-transform: uppercase;
 }
 blockquote {
-  padding: 10px 20px;
+  padding: 10px 10px;
   margin: 0 0 20px;
-  font-size: 17.5px;
-  border-left: 5px solid #eeeeee;
+  font-size: 22px;
+  border-left: 5px solid #fff;
 }
 blockquote p:last-child,
 blockquote ul:last-child,
@@ -3287,6 +3312,7 @@ input[type="button"].btn-block {
   position: relative;
   display: table;
   border-collapse: separate;
+  padding-top: 5px;
 }
 .input-group[class*="col-"] {
   float: none;
@@ -5734,10 +5760,10 @@ button.close {
   }
 }
 .default_font {
-  font-family: 'proxima-nova', Helvetica, Arial, sans-serif;
+  font-family: 'Montserrat', Helvetica, Arial, sans-serif;
 }
 .proxima_nova {
-  font-family: 'proxima-nova', Helvetica, Arial, sans-serif;
+  font-family: 'Montserrat', Helvetica, Arial, sans-serif;
 }
 .lexia {
   font-family: 'lexia', serif;
@@ -5788,16 +5814,32 @@ button.close {
   font-size: 32px;
   line-height: 28px;
 }
+.kinda-huge {
+  font-size: 38px;
+  line-height: 35px;
+}
 .x-huge {
   font-size: 44px;
   line-height: 43px;
+}
+.x1-huge {
+  font-size: 50px;
+  line-height: 50px;
+}
+.x2-huge {
+  font-size: 60px;
+  line-height: 60px;
 }
 .xx-huge {
   font-size: 68px;
   line-height: 66px;
 }
+.xxx-huge {
+  font-size: 80px;
+  line-height: 72px;
+}
 body {
-  font-family: 'proxima-nova', Helvetica, Arial, sans-serif;
+  font-family: 'Montserrat', Helvetica, Arial, sans-serif;
 }
 .blackbox-title {
   margin-right: 16px;
@@ -5808,7 +5850,7 @@ body {
   margin-right: 14px;
 }
 .blackbox-title span {
-  font-family: 'proxima-nova', Helvetica, Arial, sans-serif;
+  font-family: 'Montserrat', Helvetica, Arial, sans-serif;
   color: #ffffff;
   display: inline-block;
   background: #001516;
@@ -5819,7 +5861,7 @@ body {
   text-transform: uppercase;
 }
 .graybar-title {
-  font-family: 'proxima-nova', Helvetica, Arial, sans-serif;
+  font-family: 'Montserrat', Helvetica, Arial, sans-serif;
   background: #e3e5e8;
   border-top: 1px solid #dadada;
   font-size: 14px;
@@ -6361,7 +6403,7 @@ body {
 }
 .btn,
 .btn:visited {
-  font-family: 'proxima-nova', Helvetica, Arial, sans-serif;
+  font-family: 'Montserrat', Helvetica, Arial, sans-serif;
   border: 1px solid #aaaaaa;
   background: transparent;
   color: #aaaaaa;

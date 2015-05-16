@@ -28,7 +28,7 @@ var NavBar = React.createClass({
 
           <ul className="nav navbar-nav navbar-right">
             <li>
-              <Link to="app">IDEA-LIST</Link>
+              <Link to="app">IDEA LIST</Link>
             </li>
             <li>
               <Link to="ideas">CREATE</Link>

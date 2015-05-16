@@ -9,21 +9,24 @@ var Link  = Router.Link;
 
 var IdeaList = React.createClass({
   render: function(){
-    var list = this.props.ideas.map(function(idea, index){
-      if(!idea.email){
+    var list = this.props.ideas.map(function (idea, index) {
+      if(!idea.email) {
         return (
-          <div key={index}>
+          <div className="idea" key={index}>
+
             <Link to="ideaView" params={{id: idea._id, index: index}}>
-              <h3> + {idea.title} </h3>
-              <div>
+              <div className="x-large text-white"> - {idea.title} </div>
+            </Link>
+
+              <div className="text-primary">
                 <img src={idea.img}/>
-                {idea.sUserName}
+                &nbsp;&nbsp; created by: {idea.sUserName}
               </div>
-             </Link>
+
           </div>
         );
       } else {
-        return(
+        return (
           <div key={index}>
             <Link to="ideaView" params={{id: idea._id, index: index}}>
               <img src={idea.image['24']}/>
@@ -35,7 +38,19 @@ var IdeaList = React.createClass({
 
     })
     return (
-      <ul> {list} </ul>
+      <div className="container">
+        <div className="row">
+
+          <div className="col-md-1"></div>
+
+          <div className="col-md-10">
+            <ul>{list}</ul>
+          </div>
+
+          <div className="col-md-1"></div>
+
+        </div>
+      </div>
     );
   }
 });
