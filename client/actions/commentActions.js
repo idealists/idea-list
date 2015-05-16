@@ -18,9 +18,6 @@ var commentActions = {
       }
     })
     .done(function (commentList) {
-
-      console.log('.done', commentList);
-
       Dispatcher.handleAction({
         actionType : Constants.RELOAD_COMMENTLIST,
         data       : commentList
