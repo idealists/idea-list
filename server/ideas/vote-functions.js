@@ -8,15 +8,15 @@ var Schema = mongoose.Schema;
 
 var voteOptions = function(req,res){
   var voteInfo = req.body || req;
-  console.log('INSIDE VOTEOPTIONS, req.body: ', req.body);
+  console.log('INSIDE VOTEOPTIONS, voteInfo: ', voteInfo);
   // calculate the voting rate
   (function rating(){
-    if(req.body.voteRating > 0){
-      req.body.rate = 1;
+    if(voteInfo.voteRating > 0){
+      voteInfo.rate = 1;
     } else if (req.body.voteRating < 0){
-      req.body.rate = -1;
+      voteInfo.rate = -1;
     } else {
-      req.body.rate = 0;
+      voteInfo.rate = 0;
     }
   })();
 
@@ -30,7 +30,7 @@ var voteOptions = function(req,res){
 }; // end of voteOptions
 
 function addIdeaVote(req, res) {
-  var voteInfo = req.body;
+  var voteInfo = req.body || req;
 
   Idea.findOne({ _id: voteInfo.parentId }, function(err, idea){
     var counter = 0;
@@ -75,7 +75,7 @@ function addIdeaVote(req, res) {
 } // end of addIdeaVote
 
 function addCommVote() {
-  var voteInfo = req.body;
+  var voteInfo = req.body || req;
   
   Comment.findOne({ _id: voteInfo.parentId }, function(err, comment){
     var counter = 0;
