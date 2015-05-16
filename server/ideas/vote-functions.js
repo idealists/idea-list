@@ -40,8 +40,8 @@ function addIdeaVote(req, res) {
     idea.voters.map(function(vote, index){
       if(vote.voter === voteInfo.user_id){
         exists = true;
-        if(vote.value === voteInfo.rate){vote.value=0}
-        else{vote.value = voteInfo.rate;}
+        if ( vote.value === voteInfo.rate ){ vote.value = 0; }
+        else { vote.value = voteInfo.rate; }
         counter = counter + vote.value;
       }else{
         counter = counter + vote.value;
@@ -70,7 +70,7 @@ function addIdeaVote(req, res) {
       res.end(JSON.stringify(voteObj));
     });
 
-  })
+  });
 } // end of addIdeaVote
 
 function addCommVote() {
@@ -84,7 +84,7 @@ function addCommVote() {
     comment.voters.map(function(vote, index){
       if(vote.voter === voteInfo.user_id){
         exists = true;
-        if ( vote.value === voteInfo.rate ){ vote.value = 0 }
+        if ( vote.value === voteInfo.rate ){ vote.value = 0; }
         else { vote.value = voteInfo.rate; }
         counter = counter + vote.value;
       } else {
@@ -113,7 +113,7 @@ function addCommVote() {
       };
       res.end(JSON.stringify(voteObj));
     });
-  })
+  });
 } // end of addCommVote
 
 module.exports = voteOptions;
