@@ -16,9 +16,10 @@ var VoteView = React.createClass({
       console.log('HI VOTE');
     } else if (voteStatus < 0) {
       //highlight the down arrow
+       console.log('low vote');
     } else {
       //no highlighting
-      console.log('low vote');
+     
     }
   },
   sendVote: function(rating){

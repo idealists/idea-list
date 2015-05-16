@@ -6,12 +6,11 @@ var slackPost = require('./slackPost');
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var voteoptions  = function(req,res){
-  var voteinfo = req.body;
+var voteOptions = function(req,res){
+  var voteInfo = req.body;
   
   // calculate the voting rate
   var rate;
-  console.log('vote rating', voteinfo.voteRating)
   var rating = function(){
     if(req.body.voteRating>0){
       rate = 1;
@@ -27,16 +26,16 @@ var voteoptions  = function(req,res){
   // if the vote is for an idea, search the ideas collection and
   // add the vote to the idea, else search the comments
   // collection and add the vote to the comment
-  if (voteinfo.voteType === "idea") {
-    Idea.findOne({ _id: voteinfo.parentId }, function(err, idea){
+  if (voteInfo.voteType === "idea") {
+    Idea.findOne({ _id: voteInfo.parentId }, function(err, idea){
         var counter = 0;
         var exists = false;
 
         // see if the voter has voted before
         idea.voters.map(function(vote, index){
-          if(vote.voter === voteinfo.user_id){
+          if(vote.voter === voteInfo.user_id){
             exists = true;
-            vote.value = rate; 
+            vote.value = rate;
           }
           counter = counter + vote.value;
         });
@@ -46,7 +45,7 @@ var voteoptions  = function(req,res){
           var now = Date.now();
           var newVote = new Vote({
               createdAt : now,
-              voter     : voteinfo.user_id,
+              voter     : voteInfo.user_id,
               value     : rate
           });
           idea.voters.push(newVote);
@@ -56,20 +55,20 @@ var voteoptions  = function(req,res){
         idea.save();
       
     }).exec(function(err, ideaObj){
-      var finalobj = { 
+      var voteObj = { 
           voteArray : ideaObj[0].voters, 
           rating    : ideaObj[0].rating
       };
-      res.end(JSON.stringify(finalobj));
+      res.end(JSON.stringify(voteObj));
     });
-  } else if (voteinfo.voteType === "comment") {
-    Comment.findOne({ _id: voteinfo.parentId }, function(err, comment){
+  } else if (voteInfo.voteType === "comment") {
+    Comment.findOne({ _id: voteInfo.parentId }, function(err, comment){
         var counter = 0;
         var exists = false;
 
         // see if the voter has voted before
         comment.voters.map(function(vote, index){
-          if(vote.voter === voteinfo.user_id){
+          if(vote.voter === voteInfo.user_id){
             exists = true;
             vote.value = rate; 
           }
@@ -81,7 +80,7 @@ var voteoptions  = function(req,res){
           var now = Date.now();
           var newVote = new Vote({
               createdAt : now,
-              voter     : voteinfo.user_id,
+              voter     : voteInfo.user_id,
               value     : rate
           });
           comment.voters.push(newVote);
@@ -91,12 +90,12 @@ var voteoptions  = function(req,res){
         comment.save();
       
     }).exec(function(err, commentObj){
-      var finalobj = { 
+      var voteObj = { 
           voteArray : commentObj[0].voters, 
           rating    : commentObj[0].rating
       };
-      res.end(JSON.stringify(finalobj));
+      res.end(JSON.stringify(voteObj));
     });
   }
-}
-module.exports = voteoptions
+};
+module.exports = voteOptions;
