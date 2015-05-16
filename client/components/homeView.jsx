@@ -37,7 +37,7 @@ var Home = React.createClass({
         <NavBar />
         <div className="container">
           <div className="page-header">
-            <div className="xx-huge text-center text-primary"> Idea + List = </div>
+            <div className="xx-huge text-center text-primary"> I D E A - L I S T </div>
           </div>
           <IdeaSearch />
           <br />

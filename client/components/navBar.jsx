@@ -19,17 +19,22 @@ var NavBar = React.createClass({
 
   render : function(){
     return(
-      <nav className="navbar navbar-inverse">
-        <div className="container">
-          <ul className="nav navbar-nav">
+      <nav className="navbar navbar-inverse transparent navbar-fixed-top">
+        <div className="container-fluid">
+
+          <a href="#">
+            <img alt="Brand" src="umbel-ui/assets/nav.png"/>
+          </a>
+
+          <ul className="nav navbar-nav navbar-right">
             <li>
-              <Link to="app">Home</Link>
+              <Link to="app">IDEA-LIST</Link>
             </li>
             <li>
-              <Link to="ideas">Create</Link>
+              <Link to="ideas">CREATE</Link>
             </li>
             <li>
-              <Link to="logout" onClick={this.handleLogout}>Logout</Link>
+              <Link to="logout" onClick={this.handleLogout}>LOGOUT</Link>
             </li>
           </ul>
         </div>
