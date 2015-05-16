@@ -76,6 +76,8 @@ function getIdeas (req, res) {
 } // end getIdeas
 
 function createIdea (req, res) {
+  console.log('in createIdea, req: ', req);
+  
   var now = Date.now();
   var idea = new Idea({
     createdAt    : now,
@@ -92,6 +94,7 @@ function createIdea (req, res) {
     title        : req.body.title,
     body         : req.body.body,
     tags         : req.body.tags || null,
+    rating       : 0,
     active       : true
   });
 
