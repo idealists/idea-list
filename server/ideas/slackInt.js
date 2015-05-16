@@ -100,7 +100,7 @@ function slackInt (req, res){
           };
 
           console.log('voteInfo:', voteInfo);
-          VoteFuncs.voteOptions(voteInfo);
+          VoteFuncs(voteInfo);
         });
       });
 
