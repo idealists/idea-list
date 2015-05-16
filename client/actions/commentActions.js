@@ -18,6 +18,9 @@ var commentActions = {
       }
     })
     .done(function (commentList) {
+
+      console.log('.done', commentList);
+
       Dispatcher.handleAction({
         actionType : Constants.RELOAD_COMMENTLIST,
         data       : commentList
@@ -40,7 +43,7 @@ var commentActions = {
       method   : "POST",
       data     : newComment
     }).done(function(commentList){
-      commentActions.getComments('votes', newComment.parentId);
+      commentActions.getComments('votes', newComment.ideaId);
     });
 
   }

@@ -14,6 +14,7 @@ Comment.add({
   updatedAt : Date,
   parentId  : ObjectId,
   parentType: String,
+  ideaId    : ObjectId,
   userId    : ObjectId,
   slackId   : String,
   sUserName : String,
