@@ -89,26 +89,27 @@ function slackInt (req, res){
           console.log('ShortId is not found.');
           reply = 'Id not found. See a list of active ideas with /ideaList'; 
           res.end(reply);
+        } else {
+          req.body.parentId = pId[0]._id;
+          req.body.parentTitle = pId[0].title;
+          setUserId(req.body.user_name, function(err, uId) {
+
+            var voteInfo = {
+              voterId    : uId._id,
+              parentId   : req.body.parentId,
+              parentTitle: req.body.parentTitle,
+              shortId    : req.body.shortId,
+              user_name  : req.body.user_name,
+              voteType   : req.body.voteType,
+              voteRating : 1,
+              userImage  : uId.image['24'],
+              slackReq   : true
+            };
+
+            console.log('voteInfo:', voteInfo);
+            VoteFuncs(voteInfo);
+          });
         }
-        req.body.parentId = pId[0]._id;
-        req.body.parentTitle = pId[0].title;
-        setUserId(req.body.user_name, function(err, uId) {
-
-          var voteInfo = {
-            voterId    : uId._id,
-            parentId   : req.body.parentId,
-            parentTitle: req.body.parentTitle,
-            shortId    : req.body.shortId,
-            user_name  : req.body.user_name,
-            voteType   : req.body.voteType,
-            voteRating : 1,
-            userImage  : uId.image['24'],
-            slackReq   : true
-          };
-
-          console.log('voteInfo:', voteInfo);
-          VoteFuncs(voteInfo);
-        });
       });
       break;
     case '/downvote':
@@ -125,26 +126,28 @@ function slackInt (req, res){
           console.log('ShortId is not found.');
           reply = 'Id not found. See a list of active ideas with /ideaList'; 
           res.end(reply);
+
+        } else {
+          req.body.parentId = pId[0]._id;
+          req.body.parentTitle = pId[0].title;
+          setUserId(req.body.user_name, function(err, uId) {
+
+            var voteInfo = {
+              voterId    : uId._id,
+              parentId   : req.body.parentId,
+              parentTitle: req.body.parentTitle,
+              shortId    : req.body.shortId,
+              user_name  : req.body.user_name,
+              voteType   : req.body.voteType,
+              voteRating : -1,
+              userImage  : uId.image['24'],
+              slackReq   : true
+            };
+
+            console.log('voteInfo:', voteInfo);
+            VoteFuncs(voteInfo);
+          });
         }
-        req.body.parentId = pId[0]._id;
-        req.body.parentTitle = pId[0].title;
-        setUserId(req.body.user_name, function(err, uId) {
-
-          var voteInfo = {
-            voterId    : uId._id,
-            parentId   : req.body.parentId,
-            parentTitle: req.body.parentTitle,
-            shortId    : req.body.shortId,
-            user_name  : req.body.user_name,
-            voteType   : req.body.voteType,
-            voteRating : -1,
-            userImage  : uId.image['24'],
-            slackReq   : true
-          };
-
-          console.log('voteInfo:', voteInfo);
-          VoteFuncs(voteInfo);
-        });
       });
       break;
     case '/allideas':
