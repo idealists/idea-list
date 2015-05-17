@@ -71,7 +71,8 @@ function addIdeaVote(req, res) {
       // if req is from the app client, res.end();
       // if req is from Slack, send response to Slack channel
       if(voteInfo.slackReq){
-        slackPost.postSlack(voteObj);
+        var reply = { 'text': 'Upvote recorded for idea ' + voteInfo.parentTitle + ' | Id: ' + voteInfo.shortId };
+        slackPost.postSlack(reply);
       } else {
         res.end(JSON.stringify(voteObj));
       }
