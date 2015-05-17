@@ -102,7 +102,8 @@ function slackInt (req, res){
               voteType   : req.body.voteType,
               voteRating : 1,
               userImage  : uId.image['24'],
-              slackReq   : true
+              slackReq   : true,
+              slackCommand  : '/upvote'
             };
 
             console.log('voteInfo:', voteInfo);
@@ -130,15 +131,16 @@ function slackInt (req, res){
           setUserId(req.body.user_name, function(err, uId) {
 
             var voteInfo = {
-              voterId    : uId._id,
-              parentId   : req.body.parentId,
-              parentTitle: req.body.parentTitle,
-              shortId    : req.body.shortId,
-              user_name  : req.body.user_name,
-              voteType   : req.body.voteType,
-              voteRating : -1,
-              userImage  : uId.image['24'],
-              slackReq   : true
+              voterId       : uId._id,
+              parentId      : req.body.parentId,
+              parentTitle   : req.body.parentTitle,
+              shortId       : req.body.shortId,
+              user_name     : req.body.user_name,
+              voteType      : req.body.voteType,
+              voteRating    : -1,
+              userImage     : uId.image['24'],
+              slackReq      : true,
+              slackCommand  : '/downvote'
             };
 
             console.log('voteInfo:', voteInfo);
