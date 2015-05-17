@@ -22,7 +22,7 @@ Comment.add({
   body      : String,
   votes     : [Vote],
   rating    : Number,
-  comments  : [Comment],
+  comments  : [{type: Schema.Types.ObjectId, ref: 'Comment'}],
 });
 
 module.exports = mongoose.model('Comment', Comment);
