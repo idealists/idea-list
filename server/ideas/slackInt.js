@@ -65,7 +65,7 @@ function slackInt (req, res){
 
       // search in the db for the shortId, if it does not exist, send error msg back to user
       setParentId (req.body.shortId, function(err, pId) {
-        if (pId === undefined) { 
+        if (pId[0] === undefined) { 
           console.log('ShortId is not found.');
           reply = 'Idea not found. See a list of active ideas with /ideaList'; 
           res.end(reply);
@@ -84,7 +84,7 @@ function slackInt (req, res){
       //if( req.body.shortId === 'idea' ){
       req.body.voteType = "idea";
       setParentId (req.body.shortId, function(err, pId) {
-        if (pId === undefined) { 
+        if (pId[0] === undefined) { 
           console.log('ShortId is not found.');
           reply = 'Id not found. See a list of active ideas with /ideaList'; 
           res.end(reply);
@@ -119,7 +119,7 @@ function slackInt (req, res){
       //if( req.body.shortId === 'idea' ){
       req.body.voteType = "idea";
       setParentId (req.body.shortId, function(err, pId) {
-        if (pId === undefined) { 
+        if (pId[0] === undefined) { 
           console.log('ShortId is not found.');
           reply = 'Id not found. See a list of active ideas with /ideaList'; 
           res.end(reply);
