@@ -31,7 +31,7 @@ var voteOptions = function(req,res){
 
 function addIdeaVote(req, res) {
   var voteInfo = req.body || req;
-
+  console.log('INSIDE ADDIDEAVOTE - req: ', req, ' voteInfo: ', voteInfo);
   Idea.findOne({ _id: voteInfo.parentId }, function(err, idea){
     var counter = 0;
     var exists = false;
