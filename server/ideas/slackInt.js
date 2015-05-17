@@ -13,9 +13,10 @@ function slackInt (req, res){
   // For ideas    : req.body.text = [ title | text | tags ];
   // For comments : req.body.text = [ shortId | text ];
   // For votes    : req.body.text = [ shortId ];
+
   var parsed = req.body.text.split("|").map(function(y){ return y.trim(); });
   
-  // helper functions for querying data with async callbacks for userId and parentId
+  // helper functions for querying data by userId and parentId with async callbacks
   function setUserId (un, callback){ 
     User.findOne({ sUserName: un }, function (err, user) {
       if (err) {
@@ -56,7 +57,8 @@ function slackInt (req, res){
       break;
     case '/comment':
       // TODO: create hyperlink for comment id 
-      // *shortId* for comments will be different than shortIds for ideas
+      // TODO: *shortId* for comments will be different than shortIds for ideas
+      // TODO: need logic for commenting on a comment
 
       req.body.shortId = parsed[0];
       req.body.body = parsed[1];
@@ -81,12 +83,13 @@ function slackInt (req, res){
 
       // if comment is on an idea, search for the correct parentId, etc. in the Idea collection
       // otherwise search in the Comment collection for the correct parentId, etc.
-      //if( req.body.shortId === 'idea' ){
-      req.body.voteType = "idea";
+      
+      req.body.voteType = "idea"; // <-- TODO: need logic for voteType = "comment"
+      
       setParentId (req.body.shortId, function(err, pId) {
         if (pId[0] === undefined) { 
           console.log('ShortId is not found.');
-          reply = 'Id not found. See a list of active ideas with /ideaList'; 
+          reply = 'ID not found. See a list of active ideas with /allideas'; 
           res.end(reply);
         } else {
           req.body.parentId = pId[0]._id;
@@ -118,12 +121,13 @@ function slackInt (req, res){
 
       // if comment is on an idea, search for the correct parentId, etc. in the Idea collection
       // otherwise search in the Comment collection for the correct parentId, etc.
-      //if( req.body.shortId === 'idea' ){
-      req.body.voteType = "idea";
+     
+      req.body.voteType = "idea"; // <-- TODO: need logic for voteType = "comment"
+
       setParentId (req.body.shortId, function(err, pId) {
         if (pId[0] === undefined) { 
           console.log('ShortId is not found.');
-          reply = 'Id not found. See a list of active ideas with /ideaList'; 
+          reply = 'ID not found. See a list of active ideas with /allideas'; 
           res.end(reply);
         } else {
           req.body.parentId = pId[0]._id;
