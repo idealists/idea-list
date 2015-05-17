@@ -11,12 +11,25 @@ var Link  = Router.Link;
 
 var CommentList = React.createClass({
   render: function(){
-    console.log('the state',this.state)
-    var commentList = this;
-    var comments = 
-    var list = commentList.props.comments.map(function(){
-      
-    });
+    console.log('the commetst to reder',this.props.comments)
+    var here = this           
+    var childcomments = function(com,parentId,level) {
+      if(com.length>0){
+        var result= com.map(function(comdata,index){
+          var ptype = 'comment'
+          if(level===0){ ptype === 'idea'}
+            // console.oog
+          return (
+            <div >              
+              <Comment element = {comdata} root= {parentId} level={level} ptype={ptype}/>
+                {childcomments(comdata.comments,parentId,level+1)}
+            </div>
+          )
+        });
+        return result
+      }
+    };
+    var list = childcomments(this.props.comments,this.props.idea,0) 
     return (
       <div>
         {list}
@@ -31,12 +44,6 @@ var CommentList = React.createClass({
 
 var Comment = React.createClass({
 
-  // getInitialState: function() {
-  //   return {
-  //     comment : this.props.element,
-  //     idea    : this.props.root
-  //   }
-  // },
 
   handleSubmit: function(e) {
     e.preventDefault();
@@ -44,11 +51,11 @@ var Comment = React.createClass({
     var commentBody = this.refs.nestedComment.getDOMNode().value;
     var commentId   = this.props.element._id;
     var ideaId      = this.props.root._id;
-
+    var ptype       = this.props.ptype
     var newComment = {
       body       : commentBody,
       parentId   : commentId,
-      parentType : 'comment',
+      parentType : ptype,
       ideaId     : ideaId
     };
 
@@ -68,27 +75,16 @@ var Comment = React.createClass({
           <img src={this.props.element.img}/>
           {this.props.element.sUserName}
         </div>
-
-        <form className="form-inline">
+        <form className="form-inline" onSubmit={this.handleSubmit}>
           <div className="form-group">
-
             <input className="form-control" type='text' ref='nestedComment' placeholder='add comment'> </input>
-
-            <button className="btn btn-red btn-xs" onClick={this.handleSubmit}>
-              Reply
-            </button>
-
+            <input className="btn btn-red btn-xs" type="submit" value="Post"> Reply </input>
           </div>
         </form>
-
-        <div>
-          <CommentList comments={this.state.comment.comments} idea={this.state.idea} />
-        </div>
-
       </div>
     )
   }
 });
-
+// 
 module.exports = CommentList;
 

@@ -128,13 +128,7 @@ function findId (pI, callback){
   });
 }
 function findIdComment (pI, callback){
-  Comment.findOne({ _id: pI }, function (err, idea) {
-    if (err) {
-      callback(err, null);
-    } else {
-      callback(null, idea);
-    }
-  });
+  Comment.findOne({ _id: pI },callback);
 }
 
 function getComments (req, res) {
@@ -144,8 +138,23 @@ function getComments (req, res) {
     .populate('comments')
     .exec(function(err, idea) {
       if (err) console.log('populate ERR', err);
-      else {
-        res.end(JSON.stringify(idea.comments));
+      else { 
+      var fillcomments = function(fillthis){
+        fillthis=fillthis || idea
+        return fillthis.comments.map(function(singlecomment){
+          if(singlecomment.comments.length>0){
+            singlecomment.populate('comments', function(err, value){
+              return fillcomments(value);
+            })
+          }else{
+          console.log(singlecomment)
+            return singlecomment;
+          }
+        })
+      };
+      var result = fillcomments(idea);
+      console.log('this is reust',result)  
+        res.end('[]');
       }
     });
 } // end getComments
