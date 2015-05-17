@@ -13,7 +13,7 @@ var voteOptions = function(req,res){
   (function rating(){
     if(voteInfo.voteRating > 0){
       voteInfo.rate = 1;
-    } else if (req.body.voteRating < 0){
+    } else if (voteInfo.voteRating < 0){
       voteInfo.rate = -1;
     } else {
       voteInfo.rate = 0;
