@@ -136,16 +136,18 @@ function getComments (req, res) {
     .exec(function(err, idea) {
       if (err) console.log('populate ERR', err);
       else {         
-        var fillcomments = function(fillthis){
+        function addtoidea(idealoc,index){
+        Comment.findOne({_id:idealoc[index]})
+                .exec(function(err,comm){
+                  idealoc[index]= comm
+                  fillcomments(idealoc[index])
+                })
+        }
+        function fillcomments (fillthis){
           fillthis=fillthis || idea;
           if(fillthis.comments.length>0){
             for(var x=0;x<fillthis.comments.length;x++){
-                Comment.findOne({_id:fillthis.comments[x]})
-                  .exec(function(err,comm){
-                    fillthis.comments[x]= comm;
-                    console.log('//////////////',fillthis)
-                    fillcomments(fillthis.comments[x]);
-                  })
+                addtoidea(fillthis.comments,x)
               }            
             }
           }
