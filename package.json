@@ -18,6 +18,7 @@
     "material-ui": "^0.7.5",
     "mongodb": "*",
     "mongoose": "^4.0.2",
+    "mpromise": "^0.5.5",
     "passport": "^0.2.1",
     "passport-slack": "0.0.1",
     "react": "*",
