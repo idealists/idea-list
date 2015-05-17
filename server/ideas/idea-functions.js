@@ -1,7 +1,6 @@
 var Comment = require('../models/comments');
 var Idea = require('../models/ideas');
 var User = require('../models/users');
-var Vote = require('../models/votes');
 var slackPost = require('./slackPost');
 //var request = require('request');
 
@@ -199,99 +198,10 @@ function createComment (req, res) {
   }); // end of setUserId
 } // end of createComment
 
-
-function downvote (req, res) {
-  var now = Date.now();
-
-  var newDownvote = new Vote({
-    createdAt : now,
-    voter     : req.body.user_name // Slack username
-  });
-
-  if (req.body.type === 'idea') {
-    Idea.find({ shortId: req.body.shortId }, function (err, idea) {
-      idea.voters.map(function (voter) {
-        if (voter === req.body.slackId) {
-          res.status(403).send('Voting only allowed once');
-        }
-      });
-
-      idea.voters.push(req.body.slackId);
-      idea.downvotes.push(newDownvote);
-      idea.rating = idea.upvotes.length - idea.downvotes.length;
-
-      idea.save(function (err) {
-        if (err) console.log(err);
-      });
-    });
-  }
-
-  if (req.body.type === 'comment') {
-    Comment.find({ shortId: req.body.shortId }, function (err, comment) {
-      comment.voters.map(function (voter) {
-        if (voter === req.body.slackId) {
-          res.status(403).send('Voting only allowed once');
-        }
-      });
-
-      comment.voters.push(req.body.slackId);
-      comment.downvotes.push(downvote);
-      comment.rating = comment.upvotes.length - comment.downvotes.length;
-    });
-  }
-
-  res.end();
-} // end downvote
-
-function upvote (req, res) {
-  var now = Date.now();
-
-  var newUpvote = new Vote({
-    createdAt : now,
-    voter     : req.body.user_name // Slack username
-  });
-
-  if (req.body.type === 'idea') {
-    Idea.find({ shortId: req.body.shortId }, function (err, idea) {
-      idea.voters.map(function (voter) {
-        if (voter === req.body.slackId) {
-          res.status(403).send('Voting only allowed once');
-        }
-      });
-
-      idea.voters.push(req.body.slackId);
-      idea.upvotes.push(newUpvote);
-      idea.rating = idea.upvotes.length - idea.downvotes.length;
-
-      idea.save(function (err) {
-        if (err) console.log(err);
-      });
-    });
-  }
-
-  if (req.body.type === 'comment') {
-    Comment.find({ shortId: req.body.shortId }, function (err, comment) {
-      comment.voters.map(function (voter) {
-        if (voter === req.body.slackId) {
-          res.status(403).send('Voting only allowed once');
-        }
-      });
-
-      comment.voters.push(req.body.slackId);
-      comment.upvotes.push(upvote);
-      comment.rating = comment.upvotes.length - comment.downvotes.length;
-    });
-  }
-
-  res.end();
-} // end upvote
-
 // expose functions
 module.exports = {
   getIdeas: getIdeas,
   getComments: getComments,
   createIdea: createIdea,
-  createComment: createComment,
-  downvote: downvote,
-  upvote: upvote
+  createComment: createComment
 };
