@@ -139,25 +139,22 @@ function getComments (req, res) {
     .exec(function(err, idea) {
       if (err) console.log('populate ERR', err);
       else {         
-        function addtoidea(idealoc,index){
-        Comment.findOne({_id:idealoc[index]})
-                .exec(function(err,comm){
-                  idealoc[index]= comm
-                  fillcomments(idealoc[index])
-                })
+        function addtoidea(idealoc){
+        Comment.findOne({_id:idealoc})
+                .exec().then(function(comm){ return fillcomments(comm)})
         }
         function fillcomments (fillthis){
-          fillthis=fillthis || idea;
           if(fillthis.comments.length>0){
-            for(var x=0;x<fillthis.comments.length;x++){
-                addtoidea(fillthis.comments,x)
-              }            
-            }
+            return fillthis.comments.map(function(singlecomment){
+                addtoidea(singlecomment);
+              })            
+            }return fillthis;
           }
         };
-        fillcomments()
-       // setTimeout(function(){console.log(idea)},1000)
+        console.log(fillcomments(idea))
        // res.end(JSON.stringify(idea.comments));
+    }).then(function(result){
+      res.end(JSON.stringify(idea.comments));
     });
 } // end getComments
 
