@@ -30,7 +30,7 @@ function slackInt (req, res){
       if(err) {
         callback(err, null);
       } else {
-        callback(null, idea[0]._id);
+        callback(null, idea);
       }
     });
   }
@@ -70,7 +70,7 @@ function slackInt (req, res){
           reply = 'Idea not found. See a list of active ideas with /ideaList'; 
           res.end(reply);
         } else {
-          req.body.parentId = pId;
+          req.body.parentId = pId[0]._id;
           IFuncs.createComment(req, res);
         }
       });
@@ -85,13 +85,15 @@ function slackInt (req, res){
       req.body.voteType = "idea";
       setParentId (req.body.shortId, function(err, pId) {
         if (err) console.log(err);
-        req.body.parentId = pId;
-
+        req.body.parentId = pId[0]._id;
+        req.body.parentTitle = pId[0].title;
         setUserId(req.body.user_name, function(err, uId) {
 
           var voteInfo = {
             voterId    : uId._id,
             parentId   : req.body.parentId,
+            parentTitle: req.body.parentTitle,
+            shortId    : req.body.shortId,
             user_name  : req.body.user_name,
             voteType   : req.body.voteType,
             voteRating : 1,
