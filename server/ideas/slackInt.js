@@ -91,7 +91,7 @@ function slackInt (req, res){
 
           var voteInfo = {
             voterId    : uId._id,
-            parentId   : req.body.shortId,
+            parentId   : req.body.parentId,
             user_name  : req.body.user_name,
             voteType   : req.body.voteType,
             voteRating : 1,
