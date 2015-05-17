@@ -25,7 +25,7 @@ var voteOptions = function(req,res){
   if (voteInfo.voteType === "idea") {
     addIdeaVote(req, res); 
   } else if (voteInfo.voteType === "comment") {
-    addCommVote();
+    addCommVote(req, res);
   }
 }; // end of voteOptions
 
@@ -43,7 +43,7 @@ function addIdeaVote(req, res) {
         if ( vote.value === voteInfo.rate ){ vote.value = 0; }
         else { vote.value = voteInfo.rate; }
         counter = counter + vote.value;
-      }else{
+      } else {
         counter = counter + vote.value;
       }
     });
@@ -68,7 +68,13 @@ function addIdeaVote(req, res) {
           voteArray : ideaObj.voters, 
           rating    : ideaObj.rating
       };
-      res.end(JSON.stringify(voteObj));
+      // if req is from the app client, res.end();
+      // if req is from Slack, send response to Slack channel
+      if(voteInfo.slackReq){
+        slackPost.postSlack(voteObj);
+      } else {
+        res.end(JSON.stringify(voteObj));
+      }
     });
 
   });
@@ -84,7 +90,7 @@ function addCommVote() {
     // see if the voter has voted before
     comment.voters.map(function(vote, index){
       if(vote.voter === voteInfo.user_id){
-        exists = true;
+        exists = true; 
         if ( vote.value === voteInfo.rate ){ vote.value = 0; }
         else { vote.value = voteInfo.rate; }
         counter = counter + vote.value;

@@ -95,7 +95,8 @@ function slackInt (req, res){
             user_name  : req.body.user_name,
             voteType   : req.body.voteType,
             voteRating : 1,
-            userImage  : uId.image['24']
+            userImage  : uId.image['24'],
+            slackReq   : true
           };
 
           console.log('voteInfo:', voteInfo);
