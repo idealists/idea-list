@@ -84,7 +84,11 @@ function slackInt (req, res){
       //if( req.body.shortId === 'idea' ){
       req.body.voteType = "idea";
       setParentId (req.body.shortId, function(err, pId) {
-        if (err) console.log(err);
+        if (err) { 
+          console.log(err);
+          reply = 'Id not found. See a list of active ideas with /ideaList'; 
+          res.end(reply);
+        }
         req.body.parentId = pId[0]._id;
         req.body.parentTitle = pId[0].title;
         setUserId(req.body.user_name, function(err, uId) {

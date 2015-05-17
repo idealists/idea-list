@@ -40,8 +40,9 @@ function addIdeaVote(req, res) {
     idea.voters.map(function(vote, index){
       if(vote.voter === voteInfo.user_id){
         exists = true;
-        if ( vote.value === voteInfo.rate ){ vote.value = 0; }
-        else { vote.value = voteInfo.rate; }
+        if ( vote.value === voteInfo.rate && !voteInfo.slackReq ){ 
+          vote.value = 0; 
+        } else { vote.value = voteInfo.rate; }
         counter = counter + vote.value;
       } else {
         counter = counter + vote.value;
@@ -120,7 +121,14 @@ function addCommVote() {
           voteArray : commentObj.voters, 
           rating    : commentObj.rating
       };
-      res.end(JSON.stringify(voteObj));
+      // if req is from the app client, res.end();
+      // if req is from Slack, send response to Slack channel
+      if(voteInfo.slackReq){
+        var reply = { 'text': 'Upvote recorded for comment ' + voteInfo.parentTitle + ' | Id: ' + voteInfo.shortId };
+        slackPost.postSlack(reply);
+      } else {
+        res.end(JSON.stringify(voteObj));
+      }
     });
   });
 } // end of addCommVote
