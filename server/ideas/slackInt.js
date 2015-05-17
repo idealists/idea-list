@@ -65,8 +65,8 @@ function slackInt (req, res){
 
       // search in the db for the shortId, if it does not exist, send error msg back to user
       setParentId (req.body.shortId, function(err, pId) {
-        if (err) { 
-          console.log(err);
+        if (pId === undefined) { 
+          console.log('ShortId is not found.');
           reply = 'Idea not found. See a list of active ideas with /ideaList'; 
           res.end(reply);
         } else {
@@ -84,8 +84,8 @@ function slackInt (req, res){
       //if( req.body.shortId === 'idea' ){
       req.body.voteType = "idea";
       setParentId (req.body.shortId, function(err, pId) {
-        if (err) { 
-          console.log(err);
+        if (pId === undefined) { 
+          console.log('ShortId is not found.');
           reply = 'Id not found. See a list of active ideas with /ideaList'; 
           res.end(reply);
         }
@@ -109,26 +109,41 @@ function slackInt (req, res){
           VoteFuncs(voteInfo);
         });
       });
-
-      // } else if ( req.body.shortId === 'comment' ) {
-
-      // }
-      /*
-        Needed to save votes: 
-            -parentId of idea or comment
-            -vote
-            var voteInfo = { 
-                voterId    : this.state.userInfo.userId, -- search user col by user_name
-                parentId   : votedata._id, -- find in db from shortId
-                user_name  : req.body.user_name, *
-                voteType   : votedata.type, -- get from the shortId
-                voteRating : rating, -- 1
-                userImage  : this.state.userInfo.image['24'] -- search user col by user_name
-            }
-      */
       break;
     case '/downvote':
-      // call downvote function
+
+      req.body.shortId = parsed[0];
+
+      // if comment is on an idea, search for the correct parentId, etc. in the Idea collection
+      // otherwise search in the Comment collection for the correct parentId, etc.
+      //if( req.body.shortId === 'idea' ){
+      req.body.voteType = "idea";
+      setParentId (req.body.shortId, function(err, pId) {
+        if (pId === undefined) { 
+          console.log('ShortId is not found.');
+          reply = 'Id not found. See a list of active ideas with /ideaList'; 
+          res.end(reply);
+        }
+        req.body.parentId = pId[0]._id;
+        req.body.parentTitle = pId[0].title;
+        setUserId(req.body.user_name, function(err, uId) {
+
+          var voteInfo = {
+            voterId    : uId._id,
+            parentId   : req.body.parentId,
+            parentTitle: req.body.parentTitle,
+            shortId    : req.body.shortId,
+            user_name  : req.body.user_name,
+            voteType   : req.body.voteType,
+            voteRating : -1,
+            userImage  : uId.image['24'],
+            slackReq   : true
+          };
+
+          console.log('voteInfo:', voteInfo);
+          VoteFuncs(voteInfo);
+        });
+      });
       break;
     case '/allideas':
       var selectFields = 'createdAt updatedAt shortId userId slackId sUserName title body tags active voters upvotes downvotes rating';
@@ -151,7 +166,7 @@ function slackInt (req, res){
       });
       break;
     default:
-      res.send("Invalid slash command entered: " + req.body.command);
+      res.end();
   }
 } // end slackInt
 
