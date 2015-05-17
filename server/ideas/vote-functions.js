@@ -73,10 +73,11 @@ function addIdeaVote(req, res) {
       // if req is from the app client, res.end();
       // if req is from Slack, send response to Slack channel
       if(voteInfo.slackReq){
+        var reply;
         if ( voteInfo.slackCommand === '/upvote' ) {
-          var reply = { 'text': 'Upvote recorded for idea: ' + voteInfo.parentTitle + ' | Id: ' + voteInfo.shortId };
+          reply = { 'text': 'Upvote recorded for idea: ' + voteInfo.parentTitle + ' | Id: ' + voteInfo.shortId };
         } else if ( voteInfo.slackCommand === '/downvote' ) {
-          var reply = { 'text': 'Downvote recorded for idea: ' + voteInfo.parentTitle + ' | Id: ' + voteInfo.shortId };
+          reply = { 'text': 'Downvote recorded for idea: ' + voteInfo.parentTitle + ' | Id: ' + voteInfo.shortId };
         }
         slackPost.postSlack(reply);
       } else {
