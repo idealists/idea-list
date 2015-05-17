@@ -141,32 +141,6 @@ function findById (id, callback){
       })
 }
 
-function getComments (req, res) {
-  var ideaId = JSON.parse(req.headers.data);
-  console.log('INSIDE GET COMMENTS, ideaID: ', ideaId);
-  findById(ideaId._id, function(err, comms){
-    var result;
-    if (err) { console.log('err: ', err);
-    } else {
-      console.log('OUTSIDE RESULT, comms: ', comms);
-      result = (function fillcomments (fillthis){
-        console.log('INSIDE RESULT, comms: ', comms);
-        fillthis = fillthis || comms;
-        return fillthis.comments.map(function(singlecomment){
-          if(singlecomment.comments.length>0){
-            singlecomment.populate('comments', function(err, value){
-              return fillcomments(value);
-            })
-          }else{
-          console.log(singlecomment)
-            return singlecomment;
-          }
-        })
-      })(comms);
-    }
-    res.end(result);
-  })
-} // end getComments
 
 
 //TODO:
@@ -236,99 +210,52 @@ function createComment (req, res) {
   }); // end of setUserId
 } // end of createComment
 
+function findById (id, callback){
+  Idea.find({ _id: id })
+      .populate('comments')
+      .exec(function(err, comms){
+        if(err){
+          callback(err, null)
+        } else {
+          callback(null, comms)
+        } 
+      })
+}
 
-function downvote (req, res) {
-  var now = Date.now();
+function getComments (req, res) {
+  var ideaId = JSON.parse(req.headers.data);
+  console.log('INSIDE GET COMMENTS, ideaID: ', ideaId);
+  findById(ideaId, function(err, comms){
+    var result;
+    if (comms.length === 0) { 
+      console.log('err: ', err);
+      result = '';
+    } else {
+      console.log('OUTSIDE RESULT, comms: ', comms);
+      result = (function fillcomments (fillthis){
+        fillthis = fillthis[0] || comms;
+        console.log('INSIDE RESULT, fillthis: ', fillthis);
+        return fillthis.comments.map(function(singlecomment){
+          if(singlecomment.comments.length>0){
+            singlecomment.populate('comments', function(err, value){
+              return fillcomments(value);
+            })
+          }else{
+          console.log(singlecomment)
+            return singlecomment;
+          }
+        })
+      })(comms);
+    }
+    res.end(result);
+  })
+} // end getComments
 
-  var newDownvote = new Vote({
-    createdAt : now,
-    voter     : req.body.user_name // Slack username
-  });
-
-  if (req.body.type === 'idea') {
-    Idea.find({ shortId: req.body.shortId }, function (err, idea) {
-      idea.voters.map(function (voter) {
-        if (voter === req.body.slackId) {
-          res.status(403).send('Voting only allowed once');
-        }
-      });
-
-      idea.voters.push(req.body.slackId);
-      idea.downvotes.push(newDownvote);
-      idea.rating = idea.upvotes.length - idea.downvotes.length;
-
-      idea.save(function (err) {
-        if (err) console.log(err);
-      });
-    });
-  }
-
-  if (req.body.type === 'comment') {
-    Comment.find({ shortId: req.body.shortId }, function (err, comment) {
-      comment.voters.map(function (voter) {
-        if (voter === req.body.slackId) {
-          res.status(403).send('Voting only allowed once');
-        }
-      });
-
-      comment.voters.push(req.body.slackId);
-      comment.downvotes.push(downvote);
-      comment.rating = comment.upvotes.length - comment.downvotes.length;
-    });
-  }
-
-  res.end();
-} // end downvote
-
-function upvote (req, res) {
-  var now = Date.now();
-
-  var newUpvote = new Vote({
-    createdAt : now,
-    voter     : req.body.user_name // Slack username
-  });
-
-  if (req.body.type === 'idea') {
-    Idea.find({ shortId: req.body.shortId }, function (err, idea) {
-      idea.voters.map(function (voter) {
-        if (voter === req.body.slackId) {
-          res.status(403).send('Voting only allowed once');
-        }
-      });
-
-      idea.voters.push(req.body.slackId);
-      idea.upvotes.push(newUpvote);
-      idea.rating = idea.upvotes.length - idea.downvotes.length;
-
-      idea.save(function (err) {
-        if (err) console.log(err);
-      });
-    });
-  }
-
-  if (req.body.type === 'comment') {
-    Comment.find({ shortId: req.body.shortId }, function (err, comment) {
-      comment.voters.map(function (voter) {
-        if (voter === req.body.slackId) {
-          res.status(403).send('Voting only allowed once');
-        }
-      });
-
-      comment.voters.push(req.body.slackId);
-      comment.upvotes.push(upvote);
-      comment.rating = comment.upvotes.length - comment.downvotes.length;
-    });
-  }
-
-  res.end();
-} // end upvote
 
 // expose functions
 module.exports = {
   getIdeas: getIdeas,
   getComments: getComments,
   createIdea: createIdea,
-  createComment: createComment,
-  downvote: downvote,
-  upvote: upvote
+  createComment: createComment
 };
