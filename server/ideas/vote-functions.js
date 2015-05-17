@@ -36,7 +36,7 @@ function addIdeaVote(req, res) {
     var counter = 0;
     var exists = false;
 
-    // see if the voter has voted before
+    // if the voter has voted before, then adjust their vote accordingly
     idea.voters.map(function(vote, index){
       if(vote.voter === voteInfo.user_id){
         exists = true;
@@ -61,6 +61,7 @@ function addIdeaVote(req, res) {
       idea.voters.push(newVote);
       counter = counter + voteInfo.rate;
     }
+    
     idea.rating = counter;
 
     idea.save(function(err, ideaObj ){
@@ -89,12 +90,13 @@ function addCommVote() {
     var counter = 0;
     var exists = false;
 
-    // see if the voter has voted before
+    // if the voter has voted before, then adjust their vote accordingly
     comment.voters.map(function(vote, index){
       if(vote.voter === voteInfo.user_id){
         exists = true; 
-        if ( vote.value === voteInfo.rate ){ vote.value = 0; }
-        else { vote.value = voteInfo.rate; }
+        if ( vote.value === voteInfo.rate && !voteInfo.slackReq ){ 
+          vote.value = 0; 
+        } else { vote.value = voteInfo.rate; }
         counter = counter + vote.value;
       } else {
         counter = counter + vote.value;
