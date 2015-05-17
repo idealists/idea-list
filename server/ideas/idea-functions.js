@@ -137,20 +137,19 @@ function getComments (req, res) {
     .exec(function(err, idea) {
       if (err) console.log('populate ERR', err);
       else { 
+        var result= []
       var fillcomments = function(fillthis){
         fillthis=fillthis || idea
-        return fillthis.comments.map(function(singlecomment){
+        result = fillthis.comments.map(function(singlecomment){
           if(singlecomment.comments.length>0){
-            singlecomment.populate('comments', function(err, value){
+            singlecomment.populate('comments',function(err, value){
+              console.log(value)
               return fillcomments(value);
             })
-          }else{
-          console.log(singlecomment)
-            return singlecomment;
-          }
+          }else{return singlecomment}
         })
       };
-      var result = fillcomments(idea);
+      fillcomments()
       console.log('this is reust',result)  
         res.end('[]');
       }
