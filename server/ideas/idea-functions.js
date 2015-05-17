@@ -129,17 +129,29 @@ function findId (pI, callback){
 function findIdComment (pI, callback){
   Comment.findOne({ _id: pI },callback);
 }
+function findById (id, callback){
+  Idea.find({ _id: id })
+      .populate('comments')
+      .exec(function(err, comms){
+        if(err){
+          callback(err, null)
+        } else {
+          callback(null, comms)
+        } 
+      })
+}
 
 function getComments (req, res) {
   var ideaId = JSON.parse(req.headers.data);
-
-  Idea.findById(ideaId)
-    .populate('comments')
-    .exec(function(err, idea) {
-      if (err) console.log('populate ERR', err);
-      else { 
-      var fillcomments = function(fillthis){
-        fillthis=fillthis || idea
+  console.log('INSIDE GET COMMENTS, ideaID: ', ideaId);
+  findById(ideaId._id, function(err, comms){
+    var result;
+    if (err) { console.log('err: ', err);
+    } else {
+      console.log('OUTSIDE RESULT, comms: ', comms);
+      result = (function fillcomments (fillthis){
+        console.log('INSIDE RESULT, comms: ', comms);
+        fillthis = fillthis || comms;
         return fillthis.comments.map(function(singlecomment){
           if(singlecomment.comments.length>0){
             singlecomment.populate('comments', function(err, value){
@@ -150,12 +162,10 @@ function getComments (req, res) {
             return singlecomment;
           }
         })
-      };
-      var result = fillcomments(idea);
-      console.log('this is reust',result)  
-        res.end('[]');
-      }
-    });
+      })(comms);
+    }
+    res.end(result);
+  })
 } // end getComments
 
 
