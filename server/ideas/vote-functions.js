@@ -8,7 +8,7 @@ var Schema = mongoose.Schema;
 
 var voteOptions = function(req,res){
   var voteInfo = req.body || req;
-  console.log('INSIDE VOTEOPTIONS, voteInfo: ', voteInfo);
+
   // calculate the voting rate
   (function rating(){
     if(voteInfo.voteRating > 0){
@@ -31,7 +31,7 @@ var voteOptions = function(req,res){
 
 function addIdeaVote(req, res) {
   var voteInfo = req.body || req;
-  console.log('INSIDE ADDIDEAVOTE - req: ', req, ' voteInfo: ', voteInfo);
+
   Idea.findOne({ _id: voteInfo.parentId }, function(err, idea){
     var counter = 0;
     var exists = false;
@@ -61,7 +61,7 @@ function addIdeaVote(req, res) {
       idea.voters.push(newVote);
       counter = counter + voteInfo.rate;
     }
-    
+
     idea.rating = counter;
 
     idea.save(function(err, ideaObj ){
