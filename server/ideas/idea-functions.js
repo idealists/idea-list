@@ -135,26 +135,26 @@ function getComments (req, res) {
   var ideaId = JSON.parse(req.headers.data);
 
   Idea.findById(ideaId)
-    .populate('comments')
     .exec(function(err, idea) {
       if (err) console.log('populate ERR', err);
-      else { 
-        var result= []
-      var fillcomments = function(fillthis){
-        fillthis=fillthis || idea
-        result = fillthis.comments.map(function(singlecomment){
-          if(singlecomment.comments.length>0){
-            singlecomment.populate('comments',function(err, value){
-              console.log(value)
-              return fillcomments(value);
-            })
-          }else{return singlecomment}
-        })
-      };
-      fillcomments()
-      console.log('this is reust',result)  
-        res.end('[]');
-      }
+      else {         
+        var fillcomments = function(fillthis){
+          fillthis=fillthis || idea;
+          if(fillthis.comments.length>0){
+            for(var x=0;x<fillthis.comments.length;x++){
+                Comment.findOne({_id:fillthis.comments[x]})
+                  .exec(function(err,comm){
+                    fillthis.comments[x]= comm;
+                    console.log('//////////////',fillthis)
+                    fillcomments(fillthis.comments[x]);
+                  })
+              }            
+            }
+          }
+        };
+        fillcomments();
+       // setTimeout(function(){console.log(idea)},1000)
+       // res.end(JSON.stringify(idea.comments));
     });
 } // end getComments
 
