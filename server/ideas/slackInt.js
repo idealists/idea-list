@@ -62,7 +62,7 @@ function slackInt (req, res){
           } else {
             IFuncs.createIdea(req, res);
           }
-        }    
+        });    
       });
       break;
     case '/comment':
