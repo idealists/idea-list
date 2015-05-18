@@ -99,7 +99,7 @@ function slackInt (req, res){
       
       req.body.voteType = "idea"; // <-- TODO: need logic for voteType = "comment"
       
-      if (this is an idea){
+      if (req.body.voteType === "idea"){
         getIdeaId (req.body.shortId, function(err, pId) {
           if (pId[0] === undefined) { 
             console.log('ShortId is not found.');
@@ -128,7 +128,7 @@ function slackInt (req, res){
             });
           }
         });
-      } else if (this is a comment) {
+      } else if (req.body.voteType === "idea") {
         // getIdeaId (req.body.shortId, function(err, pId) {
         //   if (pId[0] === undefined) { 
         //     console.log('ShortId is not found.');
