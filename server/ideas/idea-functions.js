@@ -135,9 +135,11 @@ function findId (pI, callback){
 function updateIdea (req, res) {
   var now = Date.now();
 
+  ////////////////////////////////////////////
   // TODO: change when known what comes from client request
   var ideaId = JSON.parse(req.headers.data);
   var incoming = JSON.parse(req.body);
+  ////////////////////////////////////////////
   
   Idea.findByIdAndUpdate(ideaId, 
     {
@@ -146,7 +148,7 @@ function updateIdea (req, res) {
         title     : incoming.title,
         body      : incoming.body,
         status    : incoming.status,
-      },
+      }
     },
     function (err, idea) {
       if (err) console.log(err);
@@ -166,7 +168,7 @@ function updateComment (req, res) {
       $set: {
         updatedAt : now,
         body      : incoming.body,
-      },
+      }
     },
     function (err, comment) {
       if (err) console.log(err);
@@ -256,7 +258,8 @@ function createComment (req, res) {
       userId    : req.body.userId,
       slackId   : req.body.slackId,
       body      : req.body.body,
-      voters    : [],
+      status    : Status.ACTIVE,
+      votes     : [],
       rating    : 0,
       comments  : []
     });
