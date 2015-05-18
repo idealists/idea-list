@@ -120,6 +120,10 @@ function updateIdea (req, res) {
         body: incoming.body,
         status: incoming.status
       }
+    },
+    function (err, idea) {
+      if (err) console.log(err);
+      res.send(idea);
     }
   );
 }
