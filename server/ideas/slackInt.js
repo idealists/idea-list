@@ -84,7 +84,7 @@ function slackInt (req, res){
       req.body.sUserName  = req.body.user_name;
 
       var ideaOrComm      = req.body.shortId.split("_");
-      ideaOrComm          = ideaOrComm[3].slice(0,4);
+      ideaOrComm          = ideaOrComm[ideaOrComm.length-1].slice(0,4);
       
       if (ideaOrComm === "comm") {
         req.body.parentType = "comment";
