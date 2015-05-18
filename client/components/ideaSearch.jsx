@@ -23,12 +23,12 @@ var IdeaSearch = React.createClass({
           <div className="col-md-4">
             <div className="input-group">
               <span className="input-group-addon"><span className="glyphicon glyphicon-search"></span></span>
-              <input type='text' ref='search' className="form-control input-md" placeholder='search users and tags'></input>
+              <input type='text' ref='search' className="form-control input-lg input-inverse" placeholder='search users and tags'></input>
             </div>
           </div>
 
           <div className="col-md-6">
-            <div className="btn btn-red btn-block" onClick={this.handleSubmit}>
+            <div className="btn btn-red btn-wide" onClick={this.handleSubmit}>
               Search
             </div>
           </div>
