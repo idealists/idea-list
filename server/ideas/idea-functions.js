@@ -2,6 +2,7 @@ var Comment = require('../models/comments');
 var Idea = require('../models/ideas');
 var User = require('../models/users');
 var slackPost = require('./slackPost');
+var Status = require('./status-constants');
 //var request = require('request');
 
 function getIdeas (req, res) {
@@ -91,7 +92,7 @@ function createIdea (req, res) {
     body         : req.body.body,
     tags         : req.body.tags || null,
     rating       : 0,
-    active       : true
+    status       : Status.OPEN,
   });
 
   idea.save(function (err) {
@@ -230,7 +231,8 @@ function createComment (req, res) {
       body      : req.body.body,
       voters    : [],
       rating    : 0,
-      comments  : []
+      comments  : [],
+      status    : Status.OPEN,
     });
 
     // if a comment is commenting directly on an idea
