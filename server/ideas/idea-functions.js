@@ -106,6 +106,23 @@ function createIdea (req, res) {
   res.end();
 } // end createIdea
 
+function updateIdea (req, res) {
+  var ideaId = JSON.parse(req.headers.data);
+  var incoming = JSON.parse(req.body);
+  var now = Date.now();
+
+  Idea.findByIdAndUpdate(ideaId,
+    {
+      $set: {
+        updatedAt: now,
+        title: incoming.title,
+        body: incoming.body,
+        status: incoming.status,
+      }
+    }
+  );
+}
+
 // helper functions for mongodb search with async callbacks
 function setUserId (un,  callback){
   User.findOne({ sUserName: un }, function (err, user) {
@@ -255,10 +272,32 @@ function createComment (req, res) {
   }); // end of setUserId
 } // end of createComment
 
+function updateComment (req, res) {
+  var ideaId = JSON.parse(req.headers.data);
+  var incoming = JSON.parse(req.body);
+  var now = Date.now();
+
+  Comment.findByIdAndUpdate(ideaId,
+    {
+      $set: {
+        updatedAt: now,
+        body: incoming.body,
+        status: incoming.status,
+      }
+    },
+    function (err, comment) {
+      if (err) console.log(err);
+      res.send(comment);
+    }
+  );
+}
+
 // expose functions
 module.exports = {
   getIdeas: getIdeas,
   getComments: getComments,
   createIdea: createIdea,
-  createComment: createComment
+  updateIdea: updateIdea,
+  createComment: createComment,
+  updateComment: updateComment,
 };

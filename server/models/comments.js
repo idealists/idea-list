@@ -21,7 +21,8 @@ Comment.add({
   sUserName : String,
   img       : String,
   body      : String,
-  voters     : [Vote],
+  status    : String,
+  voters    : [Vote],
   rating    : Number,
   comments  : [{type: Schema.Types.ObjectId, ref: 'Comment'}],
 });
