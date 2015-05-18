@@ -87,8 +87,9 @@ function slackInt (req, res){
       ideaOrComm          = ideaOrComm[ideaOrComm.length-1].slice(0,4);
       
       findUser(req.body.sUserName, function(err, uId){
-        req.body.img = uId.image['24'];
-
+        req.body.img      = uId.image['24'];
+        req.body.slackReq = true;
+        
         if (ideaOrComm === "comm") {
           req.body.parentType = "comment";
 
@@ -102,10 +103,6 @@ function slackInt (req, res){
               // creating a unique comment id based on the length of the comments array
               var count = pId[0].comments.length+1;
               req.body.commShortId = req.body.shortId + count;
-
-              //debugging
-              console.log('req.body.commShortId: ', req.body.commShortId);
-              
               req.body.parentId = pId[0]._id;
               IFuncs.createComment(req, res);
             }
