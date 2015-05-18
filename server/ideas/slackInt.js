@@ -44,7 +44,7 @@ function slackInt (req, res){
   switch(req.body.command){
     case '/idea':
       // TODO: create hyperlink for unique id
-      req.body.shortId = parsed[0].split(" ").slice(0,3).join("_")+"_"+req.body.user_name;
+      req.body.shortId = String(parsed[0].split(" ").slice(0,3).join("_")+"_"+req.body.user_name).toLowerCase();
       req.body.title = parsed[0];
       req.body.body = parsed[1];
       if (parsed.length === 3) {
@@ -71,7 +71,7 @@ function slackInt (req, res){
       // TODO: *shortId* for comments will be different than shortIds for ideas
       // TODO: need logic for commenting on a comment
 
-      req.body.shortId    = parsed[0];
+      req.body.shortId    = parsed[0].toLowerCase();
       req.body.body       = parsed[1];
       req.body.parentType = 'idea';
       req.body.sUserName  = req.body.user_name;
@@ -85,7 +85,7 @@ function slackInt (req, res){
         } else {
           // creating a unique comment id based on the ideaId and the length of the comments array
           var count = pId[0].comments.length+1;
-          req.body.commentId = parsed[0].split("_").slice(0,-1).join("_") + '_comm' + count;
+          req.body.commentId = String(parsed[0].split("_").slice(0,-1).join("_") + '_comm' + count).toLowerCase();
           req.body.parentId = pId[0]._id;
           IFuncs.createComment(req, res);
         }
@@ -93,7 +93,7 @@ function slackInt (req, res){
       break;
     case '/upvote':
 
-      req.body.shortId = parsed[0];
+      req.body.shortId = parsed[0].toLowerCase();
 
       // if comment is on an idea, search for the correct parentId, etc. in the Idea collection
       // otherwise search in the Comment collection for the correct parentId, etc.
