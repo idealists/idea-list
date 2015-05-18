@@ -1,6 +1,8 @@
 var React    = require('react');
 var Router   = require('react-router');
 var commentActions = require('../actions/commentActions');
+var VoteView = require('./voteView.jsx');
+
 
 var DefaultRoute = Router.DefaultRoute;
 var RouteHandler = Router.RouteHandler;
@@ -16,11 +18,13 @@ var CommentList = React.createClass({
     var childcomments = function(com,parentId,level) {
       if(com.length>0){
         var result= com.map(function(comdata,index){
+          comdata.type = 'comment'
           var ptype = 'comment'
           if(level===0){ ptype === 'idea'}
             // console.oog
           return (
-            <div >              
+            <div > 
+              <VoteView  object = {comdata}/>            
               <Comment element = {comdata} root= {parentId} level={level} ptype={ptype}/>
                 {childcomments(comdata.comments,parentId,level+1)}
             </div>
