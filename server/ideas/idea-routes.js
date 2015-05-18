@@ -13,5 +13,5 @@ module.exports = function(ideas){
   ideas.put('/comment', isAuth, ideaFunctions.updateComment);
 
   ideas.post('/api/idea', Slack.slackInt);
-  ideas.post('/vote',isAuth,Vote);
+  ideas.post('/vote', isAuth, Vote);
 };

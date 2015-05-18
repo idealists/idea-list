@@ -24,7 +24,7 @@ Comment.add({
   status    : String,
   voters    : [Vote],
   rating    : Number,
-  comments  : [{type: Schema.Types.ObjectId, ref: 'Comment'}],
+  comments  : [{type: Schema.Types.ObjectId, ref: 'Comment'}]
 });
 
 module.exports = mongoose.model('Comment', Comment);

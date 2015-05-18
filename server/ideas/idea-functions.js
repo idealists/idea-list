@@ -92,7 +92,7 @@ function createIdea (req, res) {
     body         : req.body.body,
     tags         : req.body.tags || null,
     rating       : 0,
-    status       : Status.OPEN,
+    status       : Status.OPEN
   });
 
   idea.save(function (err) {
@@ -118,7 +118,7 @@ function updateIdea (req, res) {
         updatedAt: now,
         title: incoming.title,
         body: incoming.body,
-        status: incoming.status,
+        status: incoming.status
       }
     }
   );
@@ -232,7 +232,7 @@ function createComment (req, res) {
       voters    : [],
       rating    : 0,
       comments  : [],
-      status    : Status.OPEN,
+      status    : Status.OPEN
     });
 
     // if a comment is commenting directly on an idea
@@ -284,7 +284,7 @@ function updateComment (req, res) {
       $set: {
         updatedAt: now,
         body: incoming.body,
-        status: incoming.status,
+        status: incoming.status
       }
     },
     function (err, comment) {
@@ -301,5 +301,5 @@ module.exports = {
   createIdea: createIdea,
   updateIdea: updateIdea,
   createComment: createComment,
-  updateComment: updateComment,
+  updateComment: updateComment
 };
