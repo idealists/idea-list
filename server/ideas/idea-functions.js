@@ -4,7 +4,6 @@ var User = require('../models/users');
 var Vote = require('../models/votes');
 var slackPost = require('./slackPost');
 var request = require('request');
-var Promise = require('mpromise')
 
 function getIdeas (req, res) {
   req.headers.query = req.headers.query || "";
@@ -137,7 +136,7 @@ function getComments (req, res) {
 
   Idea.findById(ideaId).lean()
     .populate('comments').exec(function (err, idea) {
-      if(err){console.log(err)}
+      if(err){console.log(err);}
       var opts = {
           path: 'comments.comments'
       };
@@ -151,7 +150,7 @@ function getComments (req, res) {
           };
           Comment.populate(idea, opts, function(err, docs) {
             result = 
-            res.end(JSON.stringify( [docs]));
+            res.end(JSON.stringify( docs.comments));
           });
 
         });
