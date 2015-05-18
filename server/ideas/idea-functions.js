@@ -135,35 +135,61 @@ function getComments (req, res) {
 
   var ideaId = JSON.parse(req.headers.data);
 
-  Idea.findById(ideaId)
-    .exec(function(err, idea) {
-      if (err) console.log('populate ERR', err);
-      else {         
-        function addtoidea(idealoc){
-        Comment.findOne({_id:idealoc})
-                .exec().then(function(comm){ 
-                  console.log(comm)
-                  return fillcomments(comm)})
-        }
-        function fillcomments (fillthis){
-          if(fillthis.comments.length>0){
-            return fillthis.comments.map(function(singlecomment){
-                console.log('single comment', singlecomment)
-                return addtoidea(singlecomment);
-              })            
-            }return fillthis;
-          }
-        };
-         var result = fillcomments(idea);
-         setTimeout(function(){console.log('should be right',result)},1000)
-       // res.end(JSON.stringify(idea.comments));
-    })
+  Idea.findById(ideaId).lean()
+    .populate('comments').exec(function (err, idea) {
+      if(err){console.log(err)}
+      var opts = {
+          path: 'comments.comments'
+      };
+      Comment.populate(idea, opts, function(err, docs) {
+      var opts = {
+          path: 'comments.comments.comments'
+      };
+        Comment.populate(idea, opts, function(err, docs) {
+          var opts = {
+            path: 'comments.comments.comments.comments'
+          };
+          Comment.populate(idea, opts, function(err, docs) {
+            result = 
+            res.end(JSON.stringify( [docs]));
+          });
+
+        });
+      });
+  });
+  // Idea.findById(ideaId)
+  //   .exec(function(err, idea) {
+  //     if (err) console.log('populate ERR', err);
+  //     else {         
+
+  //       function commentarray (array){
+  //         return  array.map(function(singlecomment){
+  //             return fillcomments(singlecomment)
+  //         })
+  //       }
+  //       function fillcomments (fillthis){
+  //         if(fillthis.comments[0]){
+  //             console.log(fillthis)
+  //             fillthis.populate('comments',function(err, result){
+  //               result.comments = commentarray(result.comments) 
+  //               // console.log('the resutl',result)
+  //               return result
+  //             })
+  //         }else{
+  //           return fillthis
+  //         };
+  //       }
+  //   };
+  //        var result = fillcomments(idea);
+  //        console.log('fianl out',result)
+  //        setTimeout(function(){res.end(JSON.stringify(result))},2000)
+  //      // res.end(JSON.stringify(idea.comments));
+  //   })
     // .then(function(result){
     //   console.log(result)
     //   res.end(JSON.stringify(idea.comments));
     // });
 } // end getComments
-
 
 //TODO:
 /*INCOMING POST REQ NEED THE FOLLOWING:*/
