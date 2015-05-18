@@ -215,7 +215,7 @@ function createComment (req, res) {
       comments   : []
     });
 
-    // if a comment is commenting directly on an idea
+    // if a comment is commenting on an idea ...
     if (req.body.parentType === 'idea') {
       findId(req.body.parentId, function (err, idea) {
         if (err) console.log(err);
@@ -224,12 +224,13 @@ function createComment (req, res) {
 
         idea.save(function(err){
           if (err) console.log('idea save error:', err);
-          var reply = { 'text': 'Comment added to idea: ' + idea.shortId };
+          var reply = { 'text': 'Comment added to idea: ' + idea.shortId + ' / To comment on this comment, use commentId: ' + newComment.commShortId};
           slackPost.postSlack(reply);
         });
       }); // end of findId
     }
 
+    // if a comment is commenting on a comment ... 
     if (req.body.parentType === 'comment') {
       findIdComment(req.body.parentId, function (err, comment) {
         if (err) { console.log('adding comment to comment ERROR:', err); }
@@ -238,7 +239,7 @@ function createComment (req, res) {
 
         comment.save(function (err) {
           if (err) { console.log('comment save ERROR:', err); }
-          var reply = { 'text': 'Comment added to comment: ' + comment.parentId };
+          var reply = { 'text': 'Comment added to comment: ' + comment.parentId + ' / To comment on this comment, use commentId: ' + newComment.commShortId};
           slackPost.postSlack(reply);
         });
       });
