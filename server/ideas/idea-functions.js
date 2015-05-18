@@ -188,9 +188,7 @@ function getComments (req, res) {
     // });
 } // end getComments
 
-//TODO:
-/*INCOMING POST REQ NEED THE FOLLOWING:*/
-  // each incoming post req needs a parentId and a rootId associated
+
 // creating and inserting comments into db
 function createComment (req, res) {
   var now = Date.now();
@@ -202,18 +200,19 @@ function createComment (req, res) {
     req.body.userId = uId;
 
     var newComment = new Comment({
-      createdAt : now,
-      updatedAt : now,
-      parentId  : req.body.parentId,
-      parentType: req.body.parentType,
-      userId    : req.body.userId,
-      slackId   : req.body.slackId,
-      sUserName : req.body.sUserName,
-      img       : req.body.img,
-      body      : req.body.body,
-      voters    : [],
-      rating    : 0,
-      comments  : []
+      createdAt  : now,
+      updatedAt  : now,
+      parentId   : req.body.parentId,
+      parentType : req.body.parentType,
+      commShortId: req.body.commShortId,
+      userId     : req.body.userId,
+      slackId    : req.body.slackId,
+      sUserName  : req.body.sUserName,
+      img        : req.body.img,
+      body       : req.body.body,
+      voters     : [],
+      rating     : 0,
+      comments   : []
     });
 
     // if a comment is commenting directly on an idea

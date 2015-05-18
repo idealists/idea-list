@@ -47,7 +47,7 @@ var ideaActions = {
     var userinfo      = cookie.load('userInfo');
     var parsed        = newIdea.title.split(" ").join("_");
 
-    newIdea.shortId   = parsed + "_" + newIdea.user_name;
+    newIdea.shortId   = String(parsed + "_" + newIdea.user_name).toLowerCase();
     newIdea.user_name = userinfo.sUserName;
     newIdea.slackId   = userinfo.slackId;
     newIdea.userId    = userinfo._id;

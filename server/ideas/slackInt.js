@@ -82,23 +82,46 @@ function slackInt (req, res){
 
       req.body.shortId    = parsed[0].toLowerCase();
       req.body.body       = parsed[1];
-      req.body.parentType = 'idea';
       req.body.sUserName  = req.body.user_name;
 
-      // search in the db for the shortId, if it does not exist, send error msg back to user
-      getIdeaId (req.body.shortId, function(err, pId) {
-        if (pId[0] === undefined) { 
-          console.log('ShortId is not found.');
-          reply = 'Idea not found. See a list of active ideas with /ideaList'; 
-          res.end(reply);
-        } else {
-          // creating a unique comment id based on the ideaId and the length of the comments array
-          var count = pId[0].comments.length+1;
-          req.body.commentId = String(parsed[0].split("_").slice(0,-1).join("_") + '_comm' + count).toLowerCase();
-          req.body.parentId = pId[0]._id;
-          IFuncs.createComment(req, res);
-        }
-      });
+      var ideaOrComm      = req.body.shortId.split("_");
+      ideaOrComm          = ideaOrComm[3].slice(0,4);
+      
+      if (ideaOrComm === "comm") {
+        req.body.parentType = "comment";
+
+        // search in the db for the shortId, if it does not exist, send error msg back to user
+        getIdeaId (req.body.shortId, function(err, pId) {
+          if (pId[0] === undefined) { 
+            console.log('ShortId is not found.');
+            reply = 'Comment not found.'; 
+            res.end(reply);
+          } else {
+            // creating a unique comment id based on the ideaId and the length of the comments array
+            var count = pId[0].comments.length+1;
+            req.body.commShortId = String(parsed[0].split("_").slice(0,-1).join("_") + '_comm' + count).toLowerCase();
+            req.body.parentId = pId[0]._id;
+            IFuncs.createComment(req, res);
+          }
+        });
+      } else {
+        req.body.parentType = 'idea';
+        
+        // search in the db for the shortId, if it does not exist, send error msg back to user
+        getCommId (req.body.shortId, function(err, pId) {
+          if (pId[0] === undefined) { 
+            console.log('ShortId is not found.');
+            reply = 'Idea not found. See a list of active ideas with /allideas'; 
+            res.end(reply);
+          } else {
+            // creating a unique comment id based on the ideaId and the length of the comments array
+            var count = pId[0].comments.length+1;
+            req.body.commShortId = String(parsed[0].split("_").slice(0,-1).join("_") + '_comm' + count).toLowerCase();
+            req.body.parentId = pId[0]._id;
+            IFuncs.createComment(req, res);
+          }
+        });
+      }
       break;
     case '/upvote':
 
