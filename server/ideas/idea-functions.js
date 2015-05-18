@@ -224,7 +224,8 @@ function createComment (req, res) {
 
         idea.save(function(err){
           if (err) console.log('idea save error:', err);
-          var reply = { 'text': 'Comment added to idea: ' + idea.shortId };
+          var reply = { 'text': 'Comment added to idea: ' + idea.shortId, ' You can comment
+                        on this comment using the commentId: ' + idea.commShortId };
           slackPost.postSlack(reply);
         });
       }); // end of findId

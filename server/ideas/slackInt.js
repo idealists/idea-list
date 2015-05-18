@@ -91,15 +91,15 @@ function slackInt (req, res){
         req.body.parentType = "comment";
 
         // search in the db for the shortId, if it does not exist, send error msg back to user
-        getIdeaId (req.body.shortId, function(err, pId) {
+        getCommId (req.body.shortId, function(err, pId) {
           if (pId[0] === undefined) { 
             console.log('ShortId is not found.');
             reply = 'Comment not found.'; 
             res.end(reply);
           } else {
-            // creating a unique comment id based on the ideaId and the length of the comments array
+            // creating a unique comment id based on the length of the comments array
             var count = pId[0].comments.length+1;
-            req.body.commShortId = String(parsed[0].split("_").slice(0,-1).join("_") + '_comm' + count).toLowerCase();
+            req.body.commShortId = req.body.shortId + count;
             req.body.parentId = pId[0]._id;
             IFuncs.createComment(req, res);
           }
@@ -108,7 +108,7 @@ function slackInt (req, res){
         req.body.parentType = 'idea';
         
         // search in the db for the shortId, if it does not exist, send error msg back to user
-        getCommId (req.body.shortId, function(err, pId) {
+        getIdeaId (req.body.shortId, function(err, pId) {
           if (pId[0] === undefined) { 
             console.log('ShortId is not found.');
             reply = 'Idea not found. See a list of active ideas with /allideas'; 
