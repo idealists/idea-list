@@ -204,7 +204,7 @@ function createComment (req, res) {
       updatedAt  : now,
       parentId   : req.body.parentId,
       parentType : req.body.parentType,
-      commShortId: req.body.commShortId,
+      commShortId: req.body.commShortId || null,
       userId     : req.body.userId,
       slackId    : req.body.slackId,
       sUserName  : req.body.sUserName,
@@ -224,7 +224,7 @@ function createComment (req, res) {
 
         idea.save(function(err){
           if (err) console.log('idea save error:', err);
-          var reply = { 'text': 'Comment added to idea: ' + idea.shortId + ' You can comment on this comment using the commentId: ' + idea.commShortId };
+          var reply = { 'text': 'Comment added to idea: ' + idea.shortId };
           slackPost.postSlack(reply);
         });
       }); // end of findId
