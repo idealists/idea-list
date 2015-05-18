@@ -246,7 +246,7 @@ function createComment (req, res) {
 
         comment.save(function (err) {
           if (err) { console.log('comment save ERROR:', err); }
-          var reply = { 'text': 'Comment added to comment: ' + comment.parentId + ' / To comment on this comment, use commentId: ' + newComment.commShortId};
+          var reply = { 'text': 'Comment added to comment: ' + comment.commShortId + ' / To comment on this comment, use commentId: ' + newComment.commShortId};
           slackPost.postSlack(reply);
         });
       });
