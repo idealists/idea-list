@@ -14,18 +14,22 @@ var IdeaList = React.createClass({
       if(!idea.email){
         idea.type = 'idea';
         return (
-          <div className="idea" key={index}>
+          <div className="idea row" key={index}>
 
-            <Link to="ideaView" params={{id: idea._id, index: index}}>
-              <div className="x-large text-white"> - {idea.title} </div>
-            </Link>
+            <div className="col-md-1">
+              <VoteView object={idea} />
+            </div>
 
+            <div className="col-md-11">
+              <Link to="ideaView" params={{id: idea._id, index: index}}>
+                <div className="x-large text-white"> - {idea.title} </div>
+              </Link>
               <div className="text-primary">
                 <img src={idea.img}/>
                 &nbsp;&nbsp; created by: {idea.sUserName}
               </div>
+            </div>
 
-            <VoteView object={idea} />
           </div>
         );
       } else {

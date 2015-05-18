@@ -4,7 +4,7 @@ var cookie = require('react-cookie');
 
 var VoteView = React.createClass({
   getInitialState: function(){
-    return { 
+    return {
       userInfo: cookie.load('userInfo'),
       voteData: this.props.object
     }
@@ -27,12 +27,12 @@ var VoteView = React.createClass({
     newstate.rating = newData.rating;
 
     this.setState({ voteData: newstate });
-    
+
   },
   sendVote: function(rating){
     var votedata = this.state.voteData;
     var here = this;
-    var voteInfo = { 
+    var voteInfo = {
         voterId    : this.state.userInfo.userId,
         parentId   : votedata._id,
         user_name  : this.state.userInfo.sUserName,
@@ -50,18 +50,16 @@ var VoteView = React.createClass({
   render: function(){
     return(
       <div>
-        <div>
-          <button className="" type="text" ref="upVote" onClick={(this.voteTypes.up).bind(this)}>
-          </button>
+        <div className="text-primary">
+          <span className="glyphicon glyphicon-chevron-up" ref="upVote" onClick={(this.voteTypes.up).bind(this)}></span>
         </div>
-        <div>
-          <button className="" type="text" ref="rating">
+        <div className="text-primary" ref="rating">
+
             {this.state.voteData.rating}
-          </button>
+
         </div>
-        <div>
-          <button className="" type="text" ref="downVote" onClick={(this.voteTypes.down).bind(this)}>
-          </button>
+        <div className="text-primary">
+          <span className="glyphicon glyphicon-chevron-down" ref="downVote" onClick={(this.voteTypes.down).bind(this)}></span>
         </div>
       </div>
     )
