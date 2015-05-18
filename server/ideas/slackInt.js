@@ -55,6 +55,7 @@ function slackInt (req, res){
         req.body.userId = uId._id;
         getIdeaId(req.body.shortId, function(err, pId) {
           // if shortId already exists, send user req information back and have them choose a different title
+          console.log('pId: ', pId);
           if (pId !== undefined) {
             var reply = 'Please select a different title for your idea request. This one has already been used: ' 
               + '\n\n shortId: '+ req.body.shortId + '\n title: ' + req.body.title + '\n body: ' + req.body.body + '\n tags: ' + req.body.tags;
