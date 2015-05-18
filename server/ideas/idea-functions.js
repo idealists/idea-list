@@ -255,7 +255,7 @@ function createComment (req, res) {
       if (err) console.log('comment save error:', err);
     }).then(function(result){
       console.log('SERVER CREATECOMMENT:', result);
-      if(req.body.slackReq){
+      if(!req.body.slackReq){
         res.end(JSON.stringify(result));
       } else { res.end(); }
     });
