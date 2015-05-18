@@ -53,11 +53,11 @@ var VoteView = React.createClass({
         <div className="text-primary">
           <span className="glyphicon glyphicon-chevron-up" ref="upVote" onClick={(this.voteTypes.up).bind(this)}></span>
         </div>
+
         <div className="text-primary" ref="rating">
-
-            {this.state.voteData.rating}
-
+          {this.state.voteData.rating}
         </div>
+
         <div className="text-primary">
           <span className="glyphicon glyphicon-chevron-down" ref="downVote" onClick={(this.voteTypes.down).bind(this)}></span>
         </div>

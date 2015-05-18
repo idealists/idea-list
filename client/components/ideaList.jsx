@@ -2,6 +2,7 @@ var React    = require('react');
 var Router   = require('react-router');
 var ideaView = require('./ideaView.jsx');
 var VoteView = require('./voteView.jsx');
+var moment   = require('moment');
 
 var DefaultRoute = Router.DefaultRoute;
 var RouteHandler = Router.RouteHandler;
@@ -9,10 +10,21 @@ var Route = Router.Route;
 var Link  = Router.Link;
 
 var IdeaList = React.createClass({
+  getInitialState: function (){
+    return {
+      format: 'MMMM Do YYYY, h:mm:ss a'
+    }
+  },
+
   render: function(){
     var list = this.props.ideas.map(function(idea, index){
       if(!idea.email){
         idea.type = 'idea';
+
+        var time = idea.createdAt
+        console.log(time);
+        var timestamp = moment(time).format(this.state.format);
+
         return (
           <div className="idea row" key={index}>
 
@@ -21,12 +33,27 @@ var IdeaList = React.createClass({
             </div>
 
             <div className="col-md-11">
+
               <Link to="ideaView" params={{id: idea._id, index: index}}>
-                <div className="x-large text-white"> - {idea.title} </div>
+                <div className="xx-large text-white">
+                  {idea.title}
+                </div>
               </Link>
               <div className="text-primary">
+                tags:
+                &nbsp;
+                {idea.tags.join(', ')}
+              </div>
+              <div className="text-primary">
+                created by:
+                &nbsp;
                 <img src={idea.img}/>
-                &nbsp;&nbsp; created by: {idea.sUserName}
+                &nbsp;
+                {idea.sUserName}
+                &nbsp;
+                @p
+                &nbsp;
+                {timestamp}
               </div>
             </div>
 
