@@ -53,7 +53,7 @@ module.exports= commentActions;
 },{"../constants/constants":17,"../dispatcher/dispatcher":18,"jquery":27,"react-cookie":28}],2:[function(require,module,exports){
 var Dispatcher = require('../dispatcher/dispatcher');
 var Constants  = require('../constants/constants');
-var cookie = require('react-cookie');
+var cookie     = require('react-cookie');
 var $          = require('jquery');
 
 var ideaActions = {
@@ -96,12 +96,12 @@ var ideaActions = {
   },
 
   createIdea: function(newIdea){
-    var ideaActions = this;
-    var parsed = newIdea.title.split(" ").join("_");
+    var ideaActions   = this;
     var userinfo      = cookie.load('userInfo');
+    var parsed        = newIdea.title.split(" ").join("_");
 
-    newIdea.user_name = userinfo.sUserName;
     newIdea.shortId   = parsed + "_" + newIdea.user_name;
+    newIdea.user_name = userinfo.sUserName;
     newIdea.slackId   = userinfo.slackId;
     newIdea.userId    = userinfo._id;
     newIdea.img       = userinfo.image['24'];

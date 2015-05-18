@@ -131,7 +131,7 @@ function getComments (req, res) {
   var parentId = JSON.parse(req.headers.data);
 
   var ideaId = JSON.parse(req.headers.data);
-
+/////////5 levl nesting////////////////
   Idea.findById(ideaId).lean()
     .populate('comments').exec(function (err, idea) {
       if(err){console.log(err);}
@@ -154,6 +154,7 @@ function getComments (req, res) {
         });
       });
   });
+  ///////////////////Infinite nested comments/////////////
   // Idea.findById(ideaId)
   //   .exec(function(err, idea) {
   //     if (err) console.log('populate ERR', err);
@@ -177,16 +178,13 @@ function getComments (req, res) {
   //         };
   //       }
   //   };
-  //        var result = fillcomments(idea);
-  //        console.log('fianl out',result)
-  //        setTimeout(function(){res.end(JSON.stringify(result))},2000)
-  //      // res.end(JSON.stringify(idea.comments));
+  //    return fillcomments(idea);
   //   })
     // .then(function(result){
     //   console.log(result)
     //   res.end(JSON.stringify(idea.comments));
     // });
-} // end getComments
+}
 
 
 //TODO:
