@@ -28,7 +28,7 @@ function getIdeaId (pi, callback) {
   });
 } 
 function getCommId (pi, callback) {
-  Comment.find({ shortId: pi }, function(err, comment){
+  Comment.find({ commShortId: pi }, function(err, comment){
     if(err) {
       callback(err, null);
     } else {
