@@ -29,10 +29,16 @@ var IdeaFilter = React.createClass({
           <div>
             <ul className="nav nav-tabs nav-justified">
               <li role="presentation" onClick={this.byvote}>
-                <a href="#">Sort by Votes</a>
+                <a href="#" className="filter">
+                  <span className="glyphicon glyphicon-sort"></span>
+                  &nbsp; Votes
+                </a>
               </li>
               <li role="presentation" onClick={(this.bydate.filter).bind(this)}>
-                <a href="#">Sort by Date</a>
+                <a href="#" className="filter">
+                  <span className="glyphicon glyphicon-sort"></span>
+                  &nbsp; Date
+                </a>
               </li>
             </ul>
           </div>

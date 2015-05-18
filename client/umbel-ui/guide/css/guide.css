@@ -30,6 +30,33 @@ body {
   padding: 9px;
   opacity: 1;
 }
+.idea > a,
+.idea > a:hover {
+  text-decoration: none;
+}
+#searchBar {
+  background-color: transparent;
+  /*border: none;*/
+  color: #fff;
+
+  height: 54px;
+  padding: 10px 16px;
+  font-size: 18px;
+  line-height: 1.33;
+  border-radius: 0px;
+}
+#search {
+  color: #fff;
+  background-color: transparent;
+}
+.btn.btn-xwide,
+.btn:visited.btn-xwide {
+  padding: 12px 190px;
+  font-size: 20px;
+}
+.filter {
+  font-size: 18px;
+}
 article,
 aside,
 details,
@@ -3319,7 +3346,7 @@ input[type="button"].btn-block {
   position: relative;
   display: table;
   border-collapse: separate;
-  padding-top: 5px;
+  /*padding-top: 5px;*/
 }
 .input-group[class*="col-"] {
   float: none;

@@ -31,17 +31,38 @@ var CreateIdeaView = React.createClass({
     return(
       <div>
         <NavBar />
+
         <div className="page-header container">
-          <div className="xx-huge text-center text-primary">Create + Idea = </div>
+          <div className="xx-huge text-center text-primary"> Create An Idea </div>
         </div>
+
         <div className="input-group container">
-          <input className="form-control" type='text' ref='newIdeaTitle' placeholder='title'></input>
-          <br />
-          <br />
-          <input className="form-control" type='text' ref='newIdeaTags' placeholder='tags (split by space)'></input>
-          <br />
-          <br />
-          <textarea className="form-control" type='text' ref='newIdeaBody' placeholder='body' rows="8"></textarea>
+          <div className="row">
+            <div className="col-lg-2"></div>
+
+            <div className="col-lg-4">
+              <input className="form-control" type='text' ref='newIdeaTitle' placeholder='title'></input>
+            </div>
+
+            <div className="col-lg-4">
+              <input className="form-control" type='text' ref='newIdeaTags' placeholder='tags (split by space)'></input>
+            </div>
+
+            <div className="col-lg-2"></div>
+
+            <br />
+            <br />
+            <br />
+
+            <div className="col-lg-2"></div>
+
+            <div className="col-lg-8">
+              <textarea className="form-control" type='text' ref='newIdeaBody' placeholder='body' rows="8"></textarea>
+            </div>
+
+            <div className="col-lg-2"></div>
+
+          </div>
         </div>
           <br />
           <div className="text-center">
