@@ -4,6 +4,7 @@ var User = require('../models/users');
 var Vote = require('../models/votes');
 var slackPost = require('./slackPost');
 var request = require('request');
+var Status = require('./status-constants');
 
 function getIdeas (req, res) {
   req.headers.query = req.headers.query || "";
@@ -15,18 +16,21 @@ function getIdeas (req, res) {
     case 'dateFirst':
       ideas = Idea.find()
                 .select(selectFields)
+                .where('status').equals(Status.ACTIVE)
                 .sort('-updatedAt')
                 .limit(10);
       break;
     case 'dateLast':
       ideas = Idea.find()
                 .select(selectFields)
+                .where('status').equals(Status.ACTIVE)
                 .sort('updatedAt')
                 .limit(10);
       break;
     case 'votes':
       ideas = Idea.find()
                 .select(selectFields)
+                .where('status').equals(Status.ACTIVE)
                 .sort('-rating')
                 .limit(10);
       break;
@@ -34,6 +38,7 @@ function getIdeas (req, res) {
     //add username to tags array for easy find of people also.
       ideas = Idea.find({ tags: { $in:req.headers.tags } })
                 .select(selectFields)
+                .where('status').equals(Status.ACTIVE)
                 .limit(10);
       break;
     case 'userId':
@@ -92,7 +97,7 @@ function createIdea (req, res) {
     title        : req.body.title,
     body         : req.body.body,
     tags         : req.body.tags || null,
-    active       : true
+    status       : Status.ACTIVE,
   });
 
   idea.save(function (err) {
@@ -127,8 +132,50 @@ function findId (pI, callback){
   });
 }
 
+function updateIdea (req, res) {
+  var now = Date.now();
+
+  // TODO: change when known what comes from client request
+  var ideaId = JSON.parse(req.headers.data);
+  var incoming = JSON.parse(req.body);
+  
+  Idea.findByIdAndUpdate(ideaId, 
+    {
+      $set: {
+        updatedAt : now,
+        title     : incoming.title,
+        body      : incoming.body,
+        status    : incoming.status,
+      },
+    },
+    function (err, idea) {
+      if (err) console.log(err);
+      res.send(idea);
+    }
+  );
+}
+
+function updateComment (req, res) {
+  var now = Date.now();
+
+  var commentId = JSON.parse(req.headers.data);
+  var incoming = JSON.parse(req.headers.body);
+
+  Comment.findByIdAndUpdate(commentId,
+    {
+      $set: {
+        updatedAt : now,
+        body      : incoming.body,
+      },
+    },
+    function (err, comment) {
+      if (err) console.log(err);
+      res.send(comment);
+    }
+  );
+}
+
 function getComments (req, res) {
-  var parentId = JSON.parse(req.headers.data);
 
   var ideaId = JSON.parse(req.headers.data);
 /////////5 levl nesting////////////////
@@ -334,7 +381,9 @@ module.exports = {
   getIdeas: getIdeas,
   getComments: getComments,
   createIdea: createIdea,
+  updateIdea: updateIdea,
   createComment: createComment,
+  updateComment: updateComment,
   downvote: downvote,
   upvote: upvote
 };
