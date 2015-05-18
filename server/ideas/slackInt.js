@@ -68,8 +68,7 @@ function slackInt (req, res){
           if (pId.length === 0) {
             IFuncs.createIdea(req, res);
           } else {
-            var reply = 'Please select a different title for your idea request. This one has already been used: ' 
-              + '\n\n shortId: '+ req.body.shortId + '\n title: ' + req.body.title + '\n body: ' + req.body.body + '\n tags: ' + req.body.tags;
+            var reply = 'Please select a different title for your idea request. This one has already been used: ' + '\n\n shortId: '+ req.body.shortId + '\n title: ' + req.body.title + '\n body: ' + req.body.body + '\n tags: ' + req.body.tags;
             res.end(reply);
           }
         });    
@@ -128,11 +127,11 @@ function slackInt (req, res){
       req.body.shortId = parsed[0].toLowerCase();
       
       // determine whether the vote is for a comment or an idea via the shortId
-      var ideaOrComm   = req.body.shortId.split("_");
-      if (ideaOrComm[3].slice(0,4) === "comm") {
-        req.body.voteType === "comment";
+      var ideaOrCom   = req.body.shortId.split("_");
+      if (ideaOrCom[3].slice(0,4) === "comm") {
+        req.body.voteType = "comment";
       } else {
-        req.body.voteType === "idea";
+        req.body.voteType = "idea";
       }
 
       // if comment is on an idea, search for the correct parentId, etc. in the Idea collection
