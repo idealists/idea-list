@@ -5,7 +5,6 @@ var Vote = require('../models/votes');
 var slackPost = require('./slackPost');
 var request = require('request');
 
-
 function getIdeas (req, res) {
   req.headers.query = req.headers.query || "";
   var ideas;
@@ -77,7 +76,6 @@ function getIdeas (req, res) {
 } // end getIdeas
 
 function createIdea (req, res) {
-
   var now = Date.now();
   var idea = new Idea({
     createdAt    : now,
@@ -128,11 +126,9 @@ function findId (pI, callback){
     }
   });
 }
-function findIdComment (pI, callback){
-  Comment.findOne({ _id: pI },callback);
-}
 
 function getComments (req, res) {
+  var parentId = JSON.parse(req.headers.data);
 
   var ideaId = JSON.parse(req.headers.data);
 
@@ -192,6 +188,7 @@ function getComments (req, res) {
     // });
 } // end getComments
 
+
 //TODO:
 /*INCOMING POST REQ NEED THE FOLLOWING:*/
   // each incoming post req needs a parentId and a rootId associated
@@ -224,7 +221,7 @@ function createComment (req, res) {
       findId(req.body.parentId, function (err, idea) {
         if (err) console.log(err);
 
-        idea.comments.push(newComment);
+        idea.comments.push(newComment._id);
 
         idea.save(function(err){
           if (err) console.log('idea save error:', err);
@@ -234,26 +231,15 @@ function createComment (req, res) {
       }); // end of findId
     }
 
-    if (req.body.parentType === 'comment') {
-      findIdComment(req.body.parentId, function (err, comment) {
-        if (err) { console.log('adding comment to comment ERROR:', err); }
-
-        comment.comments.push(newComment);
-
-        comment.save(function (err) {
-          if (err) { console.log('comment save ERROR:', err); }
-          var reply = { 'text': 'Comment added to comment: ' + comment.parentId };
-          slackPost.postSlack(reply);
-        });
-      });
-    }
-
     newComment.save(function(err, val){
       if (err) console.log('comment save error:', err);
     }).then(function(result){
-      console.log('SERVER CREATECOMMENT:', result);
-      res.end(JSON.stringify(result));
+          res.end(JSON.stringify(result));
     });
+    // .then(function(val){
+    //   res.status(201).end(JSON.stringify(val));
+    // });
+
 
   }); // end of setUserId
 } // end of createComment
