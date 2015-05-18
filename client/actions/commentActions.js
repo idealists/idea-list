@@ -1,5 +1,6 @@
 var Dispatcher = require('../dispatcher/dispatcher');
 var Constants  = require('../constants/constants');
+var cookie     = require('react-cookie');
 var $          = require('jquery');
 
 var commentActions = {
@@ -17,6 +18,7 @@ var commentActions = {
       }
     })
     .done(function (commentList) {
+      console.log('commentList',commentList);
       Dispatcher.handleAction({
         actionType : Constants.RELOAD_COMMENTLIST,
         data       : commentList
@@ -26,25 +28,22 @@ var commentActions = {
 
   createComment : function(newComment){
     var commentActions = this;
+    var userinfo       = cookie.load('userInfo');
+
+    newComment.userId    = userinfo._id;
+    newComment.slackId   = userinfo.slackId;
+    newComment.sUserName = userinfo.sUserName;
+    newComment.img       = userinfo.image['24'];
+
     $.ajax({
-      url      : "/api/user",
+      url      : "/ideas/comment",
       dataType : "json",
-      method   : "GET"
-    }).done(function(userinfo){
-      console.log('userinfo', userinfo);
-      userinfo             = userinfo.session.user;
-      newComment.userId    = userinfo._id;
-      newComment.slackId   = userinfo.slackId;
-      newComment.sUserName = userinfo.sUserName;
-      $.ajax({
-        url      : "/ideas/comment",
-        dataType : "json",
-        method   : "POST",
-        data     : newComment
-      }).done(function(commentList){
-        commentActions.getComments('votes', newComment.parentId);
-      });
+      method   : "POST",
+      data     : newComment
+    }).done(function(commentList){
+      commentActions.getComments('votes', newComment.ideaId);
     });
+
   }
 };
 

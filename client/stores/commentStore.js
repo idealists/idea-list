@@ -2,9 +2,11 @@ var Dispatcher   = require('../dispatcher/dispatcher');
 var Constants    = require('../constants/constants');
 var EventEmitter = require('events').EventEmitter;
 var ObjectAssign = require('react/lib/Object.assign');
-
+// var events        = require('events');
 var CHANGE_EVENT = 'change';
 var _commentList = [];
+
+
 
 var populateStore = function(commentList){
   _commentList = commentList;
@@ -17,6 +19,7 @@ var commentStore = ObjectAssign({}, EventEmitter.prototype, {
 
   addChangeListener : function(cb){
     this.on(CHANGE_EVENT, cb);
+    this.setMaxListeners(100);
   },
 
   removeChangeListener : function(cb){

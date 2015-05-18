@@ -88,13 +88,12 @@ function addIdeaVote(req, res) {
   });
 } // end of addIdeaVote
 
-function addCommVote() {
+function addCommVote(req, res) {
   var voteInfo = req.body || req;
   
   Comment.findOne({ _id: voteInfo.parentId }, function(err, comment){
     var counter = 0;
     var exists = false;
-
     // if the voter has voted before, then adjust their vote accordingly
     comment.voters.map(function(vote, index){
       if(vote.voter === voteInfo.user_id){

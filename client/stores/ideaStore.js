@@ -17,6 +17,7 @@ var ideaStore = ObjectAssign({}, EventEmitter.prototype, {
 
   addChangeListener : function (cb) {
     this.on(CHANGE_EVENT, cb);
+    this.setMaxListeners(100);
   },
 
   removeChangeListener : function (cb) {

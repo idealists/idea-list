@@ -8,7 +8,7 @@ function getIdeas (req, res) {
   req.headers.query = req.headers.query || "";
   var ideas;
 
-  var selectFields = 'createdAt updatedAt shortId userId slackId sUserName title body tags active voters upvotes downvotes rating';
+  var selectFields = 'createdAt updatedAt shortId userId slackId sUserName title body tags active voters upvotes downvotes rating img';
 
   switch (req.headers.query) {
     case 'dateFirst':
@@ -63,20 +63,16 @@ function getIdeas (req, res) {
       break;
     default:
     //custom query (to do when need arises)
-      console.log('cant cant cant');
   }
 
   ideas.exec().then(
     function(value){
-      console.log('results',value);
       res.end(JSON.stringify(value));
     }
   );
 } // end getIdeas
 
 function createIdea (req, res) {
-  console.log('in createIdea, req: ', req);
-  
   var now = Date.now();
   var idea = new Idea({
     createdAt    : now,
@@ -85,6 +81,7 @@ function createIdea (req, res) {
     userId       : req.body.userId,
     slackId      : req.body.slackId,
     sUserName    : req.body.user_name,
+    img          : req.body.img,
     sTeamId      : req.body.team_id || null,
     sChannelId   : req.body.channel_id || null,
     sChannelName : req.body.channel_name || null,
@@ -103,7 +100,7 @@ function createIdea (req, res) {
     }
     var reply = { 'text': 'Idea Posted! Idea_id: `' + idea.shortId + '` | Idea: ' + idea.body + ' | tags: ' + idea.tags || '' };
     slackPost.postSlack(reply);
-    console.log('New idea', idea.title, 'saved');
+    console.log('New idea:', idea.title, 'SAVED');
   });
 
   res.end();
@@ -128,20 +125,68 @@ function findId (pI, callback){
     }
   });
 }
+function findIdComment (pI, callback){
+  Comment.findOne({ _id: pI },callback);
+}
 
 function getComments (req, res) {
-  var parentId = JSON.parse(req.headers.data);
+  var ideaId = JSON.parse(req.headers.data);
 
-  Idea.findById(parentId)
-    .populate('comments')
-    .exec(function(err, idea) {
-      if (err) console.log('populate ERR', err);
-      else {
-        res.end(JSON.stringify(idea.comments));
-      }
-    });
+  Idea.findById(ideaId).lean()
+    .populate('comments').exec(function (err, idea) {
+      if(err){console.log(err);}
+      var opts = {
+          path: 'comments.comments'
+      };
+      Comment.populate(idea, opts, function(err, docs) {
+      var opts = {
+          path: 'comments.comments.comments'
+      };
+        Comment.populate(idea, opts, function(err, docs) {
+          var opts = {
+            path: 'comments.comments.comments.comments'
+          };
+          Comment.populate(idea, opts, function(err, docs) {
+            result = 
+            res.end(JSON.stringify( docs.comments));
+          });
+
+        });
+      });
+  });
+  // Idea.findById(ideaId)
+  //   .exec(function(err, idea) {
+  //     if (err) console.log('populate ERR', err);
+  //     else {         
+
+  //       function commentarray (array){
+  //         return  array.map(function(singlecomment){
+  //             return fillcomments(singlecomment)
+  //         })
+  //       }
+  //       function fillcomments (fillthis){
+  //         if(fillthis.comments[0]){
+  //             console.log(fillthis)
+  //             fillthis.populate('comments',function(err, result){
+  //               result.comments = commentarray(result.comments) 
+  //               // console.log('the resutl',result)
+  //               return result
+  //             })
+  //         }else{
+  //           return fillthis
+  //         };
+  //       }
+  //   };
+  //        var result = fillcomments(idea);
+  //        console.log('fianl out',result)
+  //        setTimeout(function(){res.end(JSON.stringify(result))},2000)
+  //      // res.end(JSON.stringify(idea.comments));
+  //   })
+    // .then(function(result){
+    //   console.log(result)
+    //   res.end(JSON.stringify(idea.comments));
+    // });
 } // end getComments
-
 
 //TODO:
 /*INCOMING POST REQ NEED THE FOLLOWING:*/
@@ -151,7 +196,6 @@ function createComment (req, res) {
   var now = Date.now();
 
   // Saves query data in async callback for userId
-  console.log('req.body', req.body);
   setUserId(req.body.sUserName, function(err, uId) {
 
     if (err) console.log(err);
@@ -164,6 +208,8 @@ function createComment (req, res) {
       parentType: req.body.parentType,
       userId    : req.body.userId,
       slackId   : req.body.slackId,
+      sUserName : req.body.sUserName,
+      img       : req.body.img,
       body      : req.body.body,
       voters    : [],
       rating    : 0,
@@ -175,7 +221,7 @@ function createComment (req, res) {
       findId(req.body.parentId, function (err, idea) {
         if (err) console.log(err);
 
-        idea.comments.push(newComment._id);
+        idea.comments.push(newComment);
 
         idea.save(function(err){
           if (err) console.log('idea save error:', err);
@@ -185,15 +231,26 @@ function createComment (req, res) {
       }); // end of findId
     }
 
+    if (req.body.parentType === 'comment') {
+      findIdComment(req.body.parentId, function (err, comment) {
+        if (err) { console.log('adding comment to comment ERROR:', err); }
+
+        comment.comments.push(newComment);
+
+        comment.save(function (err) {
+          if (err) { console.log('comment save ERROR:', err); }
+          var reply = { 'text': 'Comment added to comment: ' + comment.parentId };
+          slackPost.postSlack(reply);
+        });
+      });
+    }
+
     newComment.save(function(err, val){
       if (err) console.log('comment save error:', err);
     }).then(function(result){
-          res.end(JSON.stringify(result));
+      console.log('SERVER CREATECOMMENT:', result);
+      res.end(JSON.stringify(result));
     });
-    // .then(function(val){
-    //   res.status(201).end(JSON.stringify(val));
-    // });
-
 
   }); // end of setUserId
 } // end of createComment

@@ -15,12 +15,15 @@ Comment.add({
   updatedAt : Date,
   parentId  : ObjectId,
   parentType: String,
+  ideaId    : ObjectId,
   userId    : ObjectId,
   slackId   : String,
+  sUserName : String,
+  img       : String,
   body      : String,
-  votes     : [Vote],
+  voters     : [Vote],
   rating    : Number,
-  comments  : [Comment],
+  comments  : [{type: Schema.Types.ObjectId, ref: 'Comment'}],
 });
 
 module.exports = mongoose.model('Comment', Comment);

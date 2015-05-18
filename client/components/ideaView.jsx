@@ -10,7 +10,6 @@ var IdeaView = React.createClass({
 
 
   getInitialState: function () {
-    console.log('params', this.props.params);
     commentActions.getComments('votes', this.props.params.id);
 
     return {
@@ -20,18 +19,18 @@ var IdeaView = React.createClass({
   },
 
   componentDidMount : function(){
-    ideaStore.addChangeListener(this._onChange);
+    // ideaStore.addChangeListener(this._onChange);
     commentStore.addChangeListener(this._onChange);
   },
 
   componentWillUnmount : function(){
-    ideaStore.removeChangeListener(this._onChange);
+    // ideaStore.removeChangeListener(this._onChange);
     commentStore.removeChangeListener(this._onChange);
   },
 
   _onChange : function(){
     this.setState({
-      idea     : ideaStore.fetchIdeas()[this.props.params.index],
+      // idea     : ideaStore.fetchIdeas()[this.props.params.index],
       comments : commentStore.fetchComments()
     });
   },
@@ -43,15 +42,13 @@ var IdeaView = React.createClass({
     var newComment = {
       body       : commentBody,
       parentId   : ideaId,
-      parentType : 'idea'
+      parentType : 'idea',
+      ideaId     : ideaId
     };
 
     commentActions.createComment(newComment);
 
     this.refs.parentComment.getDOMNode().value = '';
-
-    console.log('COMMENTS', this.state.comments);
-    console.log('IDEA', this.state.idea);
   },
 
   render: function(){
@@ -87,7 +84,7 @@ var IdeaView = React.createClass({
         <br />
 
         <div className="container">
-          <CommentList comments={this.state.comments} />
+          <CommentList comments={this.state.comments} idea={this.state.idea} />
         </div>
 
       </div>
