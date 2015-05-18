@@ -142,21 +142,27 @@ function getComments (req, res) {
       else {         
         function addtoidea(idealoc){
         Comment.findOne({_id:idealoc})
-                .exec().then(function(comm){ return fillcomments(comm)})
+                .exec().then(function(comm){ 
+                  console.log(comm)
+                  return fillcomments(comm)})
         }
         function fillcomments (fillthis){
           if(fillthis.comments.length>0){
             return fillthis.comments.map(function(singlecomment){
-                addtoidea(singlecomment);
+                console.log('single comment', singlecomment)
+                return addtoidea(singlecomment);
               })            
             }return fillthis;
           }
         };
-        console.log(fillcomments(idea))
+         var result = fillcomments(idea);
+         setTimeout(function(){console.log('should be right',result)},1000)
        // res.end(JSON.stringify(idea.comments));
-    }).then(function(result){
-      res.end(JSON.stringify(idea.comments));
-    });
+    })
+    // .then(function(result){
+    //   console.log(result)
+    //   res.end(JSON.stringify(idea.comments));
+    // });
 } // end getComments
 
 
