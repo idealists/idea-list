@@ -26,7 +26,16 @@ function getIdeaId (pi, callback) {
       callback(null, idea);
     }
   });
-} // end helper db functions
+} 
+function getCommId (pi, callback) {
+  Comment.find({ shortId: pi }, function(err, comment){
+    if(err) {
+      callback(err, null);
+    } else {
+      callback(null, comment);
+    }
+  });
+}// end helper db functions
 
 function slackInt (req, res){
 
@@ -94,13 +103,18 @@ function slackInt (req, res){
     case '/upvote':
 
       req.body.shortId = parsed[0].toLowerCase();
+      
+      // determine whether the vote is for a comment or an idea via the shortId
+      var ideaOrComm   = req.body.shortId.split("_");
+      if (ideaOrComm[3].slice(0,4) === "comm") {
+        req.body.voteType === "comment";
+      } else {
+        req.body.voteType === "idea";
+      }
 
       // if comment is on an idea, search for the correct parentId, etc. in the Idea collection
       // otherwise search in the Comment collection for the correct parentId, etc.
-      
-      req.body.voteType = "idea"; // <-- TODO: need logic for voteType = "comment"
-      
-      if (req.body.voteType === "idea"){
+      if (req.body.voteType === "idea") {
         getIdeaId (req.body.shortId, function(err, pId) {
           if (pId[0] === undefined) { 
             console.log('ShortId is not found.');
@@ -130,34 +144,34 @@ function slackInt (req, res){
           }
         });
       } else if (req.body.voteType === "idea") {
-        // getIdeaId (req.body.shortId, function(err, pId) {
-        //   if (pId[0] === undefined) { 
-        //     console.log('ShortId is not found.');
-        //     reply = 'ID not found. See a list of active ideas with /allideas'; 
-        //     res.end(reply);
-        //   } else {
-        //     req.body.parentId = pId[0]._id;
-        //     req.body.parentTitle = pId[0].title;
-        //     findUser(req.body.user_name, function(err, uId) {
+        getCommId (req.body.shortId, function(err, pId) {
+          if (pId[0] === undefined) { 
+            console.log('ShortId is not found.');
+            reply = 'ID not found. See a list of active ideas with /allideas'; 
+            res.end(reply);
+          } else {
+            req.body.parentId = pId[0]._id;
+            req.body.parentTitle = pId[0].title;
+            findUser(req.body.user_name, function(err, uId) {
 
-        //       var voteInfo = {
-        //         voterId    : uId._id,
-        //         parentId   : req.body.parentId,
-        //         parentTitle: req.body.parentTitle,
-        //         shortId    : req.body.shortId,
-        //         user_name  : req.body.user_name,
-        //         voteType   : req.body.voteType,
-        //         voteRating : 1,
-        //         userImage  : uId.image['24'],
-        //         slackReq   : true,
-        //         slackCommand  : '/upvote'
-        //       };
+              var voteInfo = {
+                voterId    : uId._id,
+                parentId   : req.body.parentId,
+                parentTitle: req.body.parentTitle,
+                shortId    : req.body.shortId,
+                user_name  : req.body.user_name,
+                voteType   : req.body.voteType,
+                voteRating : 1,
+                userImage  : uId.image['24'],
+                slackReq   : true,
+                slackCommand  : '/upvote'
+              };
 
-        //       console.log('voteInfo:', voteInfo);
-        //       VoteFuncs(voteInfo);
-        //     });
-        //   }
-        // });
+              console.log('voteInfo:', voteInfo);
+              VoteFuncs(voteInfo);
+            });
+          }
+        });
       }
       break;
     case '/downvote':
