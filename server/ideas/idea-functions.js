@@ -15,18 +15,21 @@ function getIdeas (req, res) {
     case 'dateFirst':
       ideas = Idea.find()
                 .select(selectFields)
+                .where('status').equals(Status.OPEN)
                 .sort('-updatedAt')
                 .limit(10);
       break;
     case 'dateLast':
       ideas = Idea.find()
                 .select(selectFields)
+                .where('status').equals(Status.OPEN)
                 .sort('updatedAt')
                 .limit(10);
       break;
     case 'votes':
       ideas = Idea.find()
                 .select(selectFields)
+                .where('status').equals(Status.OPEN)
                 .sort('-rating')
                 .limit(10);
       break;
@@ -34,10 +37,12 @@ function getIdeas (req, res) {
     //add username to tags array for easy find of people also.
       ideas = Idea.find({ tags: { $in:req.headers.tags } })
                 .select(selectFields)
+                .where('status').equals(Status.OPEN)
                 .limit(10);
       break;
     case 'userId':
       ideas = Idea.find({ userId:req.headers.userId })
+                .where('status').equals(Status.OPEN)
                 .select(selectFields);
       break;
     case 'id':
