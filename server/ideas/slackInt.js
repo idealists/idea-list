@@ -174,7 +174,7 @@ function slackInt (req, res){
             });
           }
         });
-      } else if (req.body.voteType === "idea") {
+      } else if (req.body.voteType === "comment") {
         getCommId (req.body.shortId, function(err, pId) {
           if (pId[0] === undefined) { 
             console.log('ShortId is not found.');
@@ -248,7 +248,7 @@ function slackInt (req, res){
             });
           }
         });
-      } else if (req.body.voteType === "idea") {
+      } else if (req.body.voteType === "comment") {
         getCommId (req.body.shortId, function(err, pId) {
           if (pId[0] === undefined) { 
             console.log('ShortId is not found.');
