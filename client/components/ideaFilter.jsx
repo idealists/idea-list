@@ -30,14 +30,16 @@ var IdeaFilter = React.createClass({
             <ul className="nav nav-tabs nav-justified">
               <li role="presentation" onClick={this.byvote}>
                 <a href="#" className="filter">
+                  Votes
+                  &nbsp;
                   <span className="glyphicon glyphicon-sort"></span>
-                  &nbsp; Votes
                 </a>
               </li>
               <li role="presentation" onClick={(this.bydate.filter).bind(this)}>
                 <a href="#" className="filter">
+                  Date
+                  &nbsp;
                   <span className="glyphicon glyphicon-sort"></span>
-                  &nbsp; Date
                 </a>
               </li>
             </ul>

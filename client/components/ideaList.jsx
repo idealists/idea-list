@@ -2,7 +2,6 @@ var React    = require('react');
 var Router   = require('react-router');
 var ideaView = require('./ideaView.jsx');
 var VoteView = require('./voteView.jsx');
-var moment   = require('moment');
 
 var DefaultRoute = Router.DefaultRoute;
 var RouteHandler = Router.RouteHandler;
@@ -20,10 +19,7 @@ var IdeaList = React.createClass({
     var list = this.props.ideas.map(function(idea, index){
       if(!idea.email){
         idea.type = 'idea';
-
-        var time = idea.createdAt
-        console.log(time);
-        var timestamp = moment(time).format(this.state.format);
+        var time = new Date(idea.createdAt).toLocaleString();
 
         return (
           <div className="idea row" key={index}>
@@ -49,11 +45,11 @@ var IdeaList = React.createClass({
                 &nbsp;
                 <img src={idea.img}/>
                 &nbsp;
-                {idea.sUserName}
+                <span className="text-white">{idea.sUserName}</span>
                 &nbsp;
-                @p
+                @
                 &nbsp;
-                {timestamp}
+                {time}
               </div>
             </div>
 

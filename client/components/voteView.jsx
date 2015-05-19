@@ -55,6 +55,7 @@ var VoteView = React.createClass({
         </div>
 
         <div className="text-primary" ref="rating">
+          &nbsp;
           {this.state.voteData.rating}
         </div>
 

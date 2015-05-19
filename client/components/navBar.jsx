@@ -28,13 +28,28 @@ var NavBar = React.createClass({
 
           <ul className="nav navbar-nav navbar-right">
             <li>
-              <Link to="app">IDEA LIST</Link>
+              <Link to="app">
+                IDEA LIST &nbsp;
+                <span className="glyphicon glyphicon-home"></span>
+              </Link>
             </li>
             <li>
-              <Link to="ideas">CREATE</Link>
+              <Link to="app">
+                ARCHIVES &nbsp;
+                <span className="glyphicon glyphicon-time"></span>
+              </Link>
             </li>
             <li>
-              <Link to="logout" onClick={this.handleLogout}>LOGOUT</Link>
+              <Link to="ideas">
+                CREATE &nbsp;
+                <span className="glyphicon glyphicon-pencil"></span>
+              </Link>
+            </li>
+            <li>
+              <Link to="logout" onClick={this.handleLogout}>
+                LOGOUT &nbsp;
+                <span className="glyphicon glyphicon-log-out"></span>
+              </Link>
             </li>
           </ul>
         </div>
