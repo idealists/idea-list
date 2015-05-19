@@ -204,6 +204,7 @@ function slackInt (req, res){
           }
         });
       }
+      res.end();
       break;
     case '/downvote':
 

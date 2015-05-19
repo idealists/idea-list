@@ -29,11 +29,12 @@ var commentActions = {
   createComment : function(newComment){
     var commentActions = this;
     var userinfo       = cookie.load('userInfo');
-
+    
     newComment.userId    = userinfo._id;
     newComment.slackId   = userinfo.slackId;
     newComment.sUserName = userinfo.sUserName;
     newComment.img       = userinfo.image['24'];
+
 
     $.ajax({
       url      : "/ideas/comment",
