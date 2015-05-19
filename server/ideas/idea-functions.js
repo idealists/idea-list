@@ -196,20 +196,6 @@ function createComment (req, res) {
 
   //debugging
   console.log('req: ', req); 
-  // TODO:
-  // need from req: parentType, parentId || access to the comments length of that parentId
-  // need shortId of parent to manipulate if it is a comment on an id, or append the count to
-
-  // if comment is coming from the client, create commShortId
-  if (!req.body.commShortId) {
-    var count = pId[0].comments.length+1;
-
-    if (req.body.parentType === "idea") {
-      req.body.commShortId = String(parsed[0].split("_").slice(0,-1).join("_") + '_comm' + count).toLowerCase();
-    } else if (req.body.parentType === "comment"){
-      req.body.commShortId = req.body.shortId + count;
-    }
-  }
 
   // Saves query data in async callback for userId
   setUserId(req.body.sUserName, function(err, uId) {
@@ -263,8 +249,8 @@ function createComment (req, res) {
         if (err) { console.log('adding comment to comment ERROR:', err); }
 
         if ( !newComment.commShortId ) {
-          var count = idea.comments.length+1;
-          req.body.commShortId = comment.commShortId + count;
+          var count1 = idea.comments.length+1;
+          req.body.commShortId = comment.commShortId + count1;
         }
 
         comment.comments.push(newComment);
