@@ -11,19 +11,20 @@ var Vote = new Schema({
 
 var Comment = new Schema();
 Comment.add({
-  createdAt : Date,
-  updatedAt : Date,
-  parentId  : ObjectId,
-  parentType: String,
-  ideaId    : ObjectId,
-  userId    : ObjectId,
-  slackId   : String,
-  sUserName : String,
-  img       : String,
-  body      : String,
+  createdAt  : Date,
+  updatedAt  : Date,
+  parentId   : ObjectId,
+  parentType : String,
+  commShortId: String,
+  //ideaId   : ObjectId, <-- same as parentId?
+  userId     : ObjectId,
+  slackId    : String,
+  sUserName  : String,
+  img        : String,
+  body       : String,
   voters     : [Vote],
-  rating    : Number,
-  comments  : [{type: Schema.Types.ObjectId, ref: 'Comment'}],
+  rating     : Number,
+  comments   : [{type: Schema.Types.ObjectId, ref: 'Comment'}],
 });
 
 module.exports = mongoose.model('Comment', Comment);

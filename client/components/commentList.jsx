@@ -81,7 +81,7 @@ var Comment = React.createClass({
         <form className="form-inline" onSubmit={this.handleSubmit}>
           <div className="form-group">
             <input className="form-control" type='text' ref='nestedComment' placeholder='add comment'> </input>
-            <input className="btn btn-red btn-xs" type="submit" value="Post"> Reply </input>
+            <input className="btn btn-red btn-xs" type="submit" value="Post"> </input>
           </div>
         </form>
       </div>

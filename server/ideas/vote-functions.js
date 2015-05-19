@@ -38,7 +38,7 @@ function addIdeaVote(req, res) {
 
     // if the voter has voted before, then adjust their vote accordingly
     idea.voters.map(function(vote, index){
-      if(vote.voter === voteInfo.user_id){
+      if(vote.voter === voteInfo.voterId){
         exists = true;
         if ( vote.value === voteInfo.rate && !voteInfo.slackReq ){ 
           vote.value = 0; 
@@ -54,7 +54,7 @@ function addIdeaVote(req, res) {
       var now = Date.now();
       var newVote = new Vote({
           createdAt : now,
-          voter     : voteInfo.user_id,
+          voter     : voteInfo.voterId,
           value     : voteInfo.rate,
           imgUrl    : voteInfo.userImage
       });
@@ -80,6 +80,7 @@ function addIdeaVote(req, res) {
           reply = { 'text': 'Downvote recorded for idea: ' + voteInfo.parentTitle + ' | Id: ' + voteInfo.shortId };
         }
         slackPost.postSlack(reply);
+        //res.end();
       } else {
         res.end(JSON.stringify(voteObj));
       }
@@ -94,9 +95,14 @@ function addCommVote(req, res) {
   Comment.findOne({ _id: voteInfo.parentId }, function(err, comment){
     var counter = 0;
     var exists = false;
+
     // if the voter has voted before, then adjust their vote accordingly
     comment.voters.map(function(vote, index){
-      if(vote.voter === voteInfo.user_id){
+
+      // debugging
+      console.log('vote: ', vote, ' voteInfo: ', voteInfo);
+
+      if(vote.voter === voteInfo.voterId){
         exists = true; 
         if ( vote.value === voteInfo.rate && !voteInfo.slackReq ){ 
           vote.value = 0; 
@@ -112,7 +118,7 @@ function addCommVote(req, res) {
       var now = Date.now();
       var newVote = new Vote({
           createdAt : now,
-          voter     : voteInfo.user_id,
+          voter     : voteInfo.voterId,
           value     : voteInfo.rate,
           imgUrl    : voteInfo.userImage
       });
@@ -130,8 +136,14 @@ function addCommVote(req, res) {
       // if req is from the app client, res.end();
       // if req is from Slack, send response to Slack channel
       if(voteInfo.slackReq){
-        var reply = { 'text': 'Upvote recorded for comment ' + voteInfo.parentTitle + ' | Id: ' + voteInfo.shortId };
+        var reply;
+        if(voteInfo.voteRating < 0){
+          reply = { 'text': 'Downvote recorded for comment ' + voteInfo.parentTitle + ' | Id: ' + voteInfo.shortId };
+        } else {
+          reply = { 'text': 'Upvote recorded for comment ' + voteInfo.parentTitle + ' | Id: ' + voteInfo.shortId };
+        }
         slackPost.postSlack(reply);
+        //res.end();
       } else {
         res.end(JSON.stringify(voteObj));
       }
