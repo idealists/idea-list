@@ -194,9 +194,6 @@ function getComments (req, res) {
 function createComment (req, res) {
   var now = Date.now();
 
-  //debugging
-  console.log('req: ', req); 
-
   // Saves query data in async callback for userId
   setUserId(req.body.sUserName, function(err, uId) {
 
@@ -233,9 +230,6 @@ function createComment (req, res) {
 
         idea.save(function(err){
           if (err) console.log('idea save error:', err);
-
-          //debugging
-          console.log('idea.shortId: ', idea.shortId, ' idea: ', idea);
 
           var reply = { 'text': 'Comment added to idea: ' + idea.shortId + ' / Text: ' + idea.body + ' / To comment on this comment, use commentId: `' + newComment.commShortId + '`'};
           slackPost.postSlack(reply);

@@ -97,6 +97,10 @@ function addCommVote(req, res) {
     var exists = false;
     // if the voter has voted before, then adjust their vote accordingly
     comment.voters.map(function(vote, index){
+
+      // debugging
+      console.log('vote: ', vote, ' voteInfo: ', voteInfo);
+
       if(vote.voter === voteInfo.user_id){
         exists = true; 
         if ( vote.value === voteInfo.rate && !voteInfo.slackReq ){ 
