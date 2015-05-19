@@ -326,7 +326,7 @@ var Comment = React.createClass({displayName: "Comment",
         React.createElement("form", {className: "form-inline", onSubmit: this.handleSubmit}, 
           React.createElement("div", {className: "form-group"}, 
             React.createElement("input", {className: "form-control", type: "text", ref: "nestedComment", placeholder: "add comment"}, " "), 
-            React.createElement("input", {className: "btn btn-red btn-xs", type: "submit", value: "Post"}, " Reply ")
+            React.createElement("input", {className: "btn btn-red btn-xs", type: "submit", value: "Post"}, " ")
           )
         )
       )

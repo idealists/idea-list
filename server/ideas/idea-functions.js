@@ -244,7 +244,7 @@ function createComment (req, res) {
         if (err) { console.log('adding comment to comment ERROR:', err); }
 
         if ( !newComment.commShortId ) {
-          var count1 = idea.comments.length+1;
+          var count1 = comment.comments.length+1;
           req.body.commShortId = comment.commShortId + count1;
         }
 
