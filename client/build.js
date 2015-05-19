@@ -829,7 +829,7 @@ var VoteView = React.createClass({displayName: "VoteView",
     console.log('this.state.userInfo' , this.state.userInfo);
     var here = this;
     var voteInfo = { 
-        voterId    : this.state.userInfo.userId,
+        voterId    : this.state.userInfo._id,
         parentId   : votedata._id,
         user_name  : this.state.userInfo.sUserName,
         voteType   : votedata.type,
