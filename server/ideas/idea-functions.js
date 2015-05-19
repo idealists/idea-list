@@ -73,6 +73,7 @@ function getIdeas (req, res) {
 } // end getIdeas
 
 function createIdea (req, res) {
+
   var now = Date.now();
   var idea = new Idea({
     createdAt    : now,
@@ -147,7 +148,7 @@ function getComments (req, res) {
             path: 'comments.comments.comments.comments'
           };
           Comment.populate(idea, opts, function(err, docs) {
-            result = 
+            result =
             res.end(JSON.stringify( docs.comments));
           });
 
@@ -157,7 +158,7 @@ function getComments (req, res) {
   // Idea.findById(ideaId)
   //   .exec(function(err, idea) {
   //     if (err) console.log('populate ERR', err);
-  //     else {         
+  //     else {
 
   //       function commentarray (array){
   //         return  array.map(function(singlecomment){
@@ -168,7 +169,7 @@ function getComments (req, res) {
   //         if(fillthis.comments[0]){
   //             console.log(fillthis)
   //             fillthis.populate('comments',function(err, result){
-  //               result.comments = commentarray(result.comments) 
+  //               result.comments = commentarray(result.comments)
   //               // console.log('the resutl',result)
   //               return result
   //             })

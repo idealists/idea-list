@@ -9,25 +9,53 @@ var Route = Router.Route;
 var Link  = Router.Link;
 
 var IdeaList = React.createClass({
+  getInitialState: function (){
+    return {
+      format: 'MMMM Do YYYY, h:mm:ss a'
+    }
+  },
+
   render: function(){
     var list = this.props.ideas.map(function(idea, index){
-      // ideas do not have email addresses, but users do
-      // this renders the idea or the user profile with image
       if(!idea.email){
         idea.type = 'idea';
+        var time = new Date(idea.createdAt).toLocaleString();
+
         return (
-          <div key={index}>
-            <Link to="ideaView" params={{id: idea._id, index: index}}>
-              <h3> + {idea.title} </h3>
-              <div>
-                <img src={idea.img}/>
-                {idea.sUserName}
+          <div className="idea row" key={index}>
+
+            <div className="col-md-1">
+              <VoteView object={idea} />
+            </div>
+
+            <div className="col-md-11">
+
+              <Link to="ideaView" params={{id: idea._id, index: index}}>
+                <div className="xx-large text-white">
+                  {idea.title}
+                </div>
+              </Link>
+              <div className="text-primary">
+                tags:
+                &nbsp;
+                {idea.tags.join(', ')}
               </div>
-             </Link>
-            <VoteView object={idea} />
+              <div className="text-primary">
+                created by:
+                &nbsp;
+                <img src={idea.img}/>
+                &nbsp;
+                <span className="text-white">{idea.sUserName}</span>
+                &nbsp;
+                @
+                &nbsp;
+                {time}
+              </div>
+            </div>
+
           </div>
         );
-      }else{
+      } else {
         return(
           <div key={index}>
             <Link to="ideaView" params={{id: idea._id, index: index}}>
@@ -40,7 +68,19 @@ var IdeaList = React.createClass({
 
     })
     return (
-      <ul> {list} </ul>
+      <div className="container">
+        <div className="row">
+
+          <div className="col-md-1"></div>
+
+          <div className="col-md-10">
+            <ul>{list}</ul>
+          </div>
+
+          <div className="col-md-1"></div>
+
+        </div>
+      </div>
     );
   }
 });

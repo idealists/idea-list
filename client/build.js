@@ -19,7 +19,6 @@ var commentActions = {
       }
     })
     .done(function (commentList) {
-      console.log('commentList',commentList);
       Dispatcher.handleAction({
         actionType : Constants.RELOAD_COMMENTLIST,
         data       : commentList
@@ -44,7 +43,6 @@ var commentActions = {
     }).done(function(commentList){
       commentActions.getComments('votes', newComment.ideaId);
     });
-
   }
 };
 
@@ -214,61 +212,18 @@ Router.run(routes, function (Handler) {
 });
 
 },{"./components/createIdeaView.jsx":8,"./components/homeView.jsx":9,"./components/ideaView.jsx":13,"./components/login.jsx":14,"./stores/authStore":19,"jquery":27,"react":223,"react-cookie":28,"react-router":54}],5:[function(require,module,exports){
-var React          = require('react');
-var commentActions = require('../actions/commentActions');
+var React       = require('react');
 
 var Comment = React.createClass({displayName: "Comment",
-
-  getInitialState: function() {
-    return {
-      comment : this.props.element,
-      idea    : this.props.root
-    }
-  },
-
-  handleSubmit: function(e) {
-    e.preventDefault();
-
-    var commentBody = this.refs.nestedComment.getDOMNode().value;
-    var commentId   = this.state.comment._id;
-    var ideaId      = this.state.idea._id;
-
-    var newComment = {
-      body       : commentBody,
-      parentId   : commentId,
-      parentType : 'comment',
-      ideaId     : ideaId
-    };
-
-    commentActions.createComment(newComment);
-
-    this.refs.nestedComment.getDOMNode().value = '';
-  },
-
   render: function(){
 
     return (
       React.createElement("div", {className: "text-primary"}, 
-
-        React.createElement("h3", null, " + ", this.state.comment.body, " "), 
-
+        React.createElement("h3", null, " + ", comment.body, " "), 
         React.createElement("div", null, 
-          React.createElement("img", {src: this.state.comment.img}), 
-          this.state.comment.sUserName
-        ), 
-
-        React.createElement("form", {className: "form-inline"}, 
-          React.createElement("div", {className: "form-group"}, 
-
-            React.createElement("input", {className: "form-control", type: "text", ref: "nestedComment", placeholder: "add comment"}, " "), 
-
-            React.createElement("button", {className: "btn btn-red btn-xs", onClick: this.handleSubmit}, 
-              "Reply"
-            )
-
-          )
+          React.createElement("img", {src: comment.img}), 
+          comment.sUserName
         )
-
       )
     )
   }
@@ -276,7 +231,7 @@ var Comment = React.createClass({displayName: "Comment",
 
 module.exports = Comment;
 
-},{"../actions/commentActions":1,"react":223}],6:[function(require,module,exports){
+},{"react":223}],6:[function(require,module,exports){
 var React       = require('react');
 
 
@@ -300,7 +255,6 @@ var RouteHandler = Router.RouteHandler;
 var commentStore   = require('../stores/commentStore');
 var Route = Router.Route;
 var Link  = Router.Link;
-
 
 var CommentList = React.createClass({displayName: "CommentList",
   render: function(){
@@ -329,7 +283,7 @@ var CommentList = React.createClass({displayName: "CommentList",
       React.createElement("div", null, 
         list
       )
-    )
+    );
   }
 });
 
@@ -418,17 +372,38 @@ var CreateIdeaView = React.createClass({displayName: "CreateIdeaView",
     return(
       React.createElement("div", null, 
         React.createElement(NavBar, null), 
+
         React.createElement("div", {className: "page-header container"}, 
-          React.createElement("div", {className: "xx-huge text-center text-primary"}, "Create + Idea = ")
+          React.createElement("div", {className: "xx-huge text-center text-primary"}, " Create An Idea ")
         ), 
+
         React.createElement("div", {className: "input-group container"}, 
-          React.createElement("input", {className: "form-control", type: "text", ref: "newIdeaTitle", placeholder: "title"}), 
-          React.createElement("br", null), 
-          React.createElement("br", null), 
-          React.createElement("input", {className: "form-control", type: "text", ref: "newIdeaTags", placeholder: "tags (split by space)"}), 
-          React.createElement("br", null), 
-          React.createElement("br", null), 
-          React.createElement("textarea", {className: "form-control", type: "text", ref: "newIdeaBody", placeholder: "body", rows: "8"})
+          React.createElement("div", {className: "row"}, 
+            React.createElement("div", {className: "col-lg-2"}), 
+
+            React.createElement("div", {className: "col-lg-4"}, 
+              React.createElement("input", {className: "form-control", type: "text", ref: "newIdeaTitle", placeholder: "title"})
+            ), 
+
+            React.createElement("div", {className: "col-lg-4"}, 
+              React.createElement("input", {className: "form-control", type: "text", ref: "newIdeaTags", placeholder: "tags (split by space)"})
+            ), 
+
+            React.createElement("div", {className: "col-lg-2"}), 
+
+            React.createElement("br", null), 
+            React.createElement("br", null), 
+            React.createElement("br", null), 
+
+            React.createElement("div", {className: "col-lg-2"}), 
+
+            React.createElement("div", {className: "col-lg-8"}, 
+              React.createElement("textarea", {className: "form-control", type: "text", ref: "newIdeaBody", placeholder: "body", rows: "8"})
+            ), 
+
+            React.createElement("div", {className: "col-lg-2"})
+
+          )
         ), 
           React.createElement("br", null), 
           React.createElement("div", {className: "text-center"}, 
@@ -481,14 +456,30 @@ var Home = React.createClass({displayName: "Home",
     return(
       React.createElement("div", null, 
         React.createElement(NavBar, null), 
-        React.createElement("div", {className: "container"}, 
+        React.createElement("div", {className: "container-fluid"}, 
           React.createElement("div", {className: "page-header"}, 
-            React.createElement("div", {className: "xx-huge text-center text-primary"}, " Idea + List = ")
+            React.createElement("div", {className: "row"}, 
+
+              React.createElement("div", {className: "col-md-6"}, 
+                React.createElement("div", {className: "x-huge text-right text-white"}, 
+                  React.createElement("b", {className: "text-primary"}, "FEATURE"), " ", React.createElement("b", null, "REQUESTS.")
+                ), 
+                React.createElement("div", {className: "x-huge text-right text-white"}, 
+                  React.createElement("b", {className: "text-primary"}, "IDEA"), " ", React.createElement("b", null, "DISCUSSION.")
+                )
+              ), 
+
+              React.createElement("div", {className: "col-md-6"}, 
+                React.createElement("blockquote", {className: "text-muted"}, " A PLATFORM TO FACILITATE ", React.createElement("br", null), 
+                  "CONCEPT PROPOSAL & DEVELOPMENT"
+                )
+              )
+
+            )
           ), 
           React.createElement(IdeaSearch, null), 
           React.createElement("br", null), 
           React.createElement(IdeaFilter, null), 
-          React.createElement("br", null), 
           React.createElement(IdeaList, {ideas: this.state.list})
         )
       )
@@ -502,38 +493,50 @@ module.exports = Home;
 var React = require('react');
 var ideaActions    = require('../actions/ideaActions');
 
-
 var IdeaFilter = React.createClass({displayName: "IdeaFilter",
-  bydate:{
-    first:false,
-    filter: function(e){
+  bydate: {
+    first: false,
+    filter: function (e) {
       e.preventDefault();
-      if(this.bydate.first){
+
+      if(this.bydate.first) {
         this.bydate.first = false;
         ideaActions.getIdeas('dateFirst');
-      }else{
+      } else {
         this.bydate.first = true;
         ideaActions.getIdeas('dateLast');
       }
-    },
+    }
   },
-  byvote:function(e){
+
+  byvote: function (e) {
     e.preventDefault();
     ideaActions.getIdeas('votes');
   },
 
-  bytags:function(){
-    console.log('test');
-  },
-
   render : function(){
     return(
-      React.createElement("div", {className: "container"}, 
-        React.createElement("ul", {className: "nav nav-tabs nav-justified"}, 
-          React.createElement("li", {role: "presentation", onClick: this.byvote}, React.createElement("a", {href: "#"}, "Votes")), 
-          React.createElement("li", {role: "presentation", onClick: (this.bydate.filter).bind(this)}, React.createElement("a", {href: "#"}, "Date")), 
-          React.createElement("li", {role: "presentation"}, React.createElement("a", {href: "#"}, "Tags"))
-        )
+      React.createElement("div", null, 
+
+          React.createElement("div", null, 
+            React.createElement("ul", {className: "nav nav-tabs nav-justified"}, 
+              React.createElement("li", {role: "presentation", onClick: this.byvote}, 
+                React.createElement("a", {href: "#", className: "filter"}, 
+                  "Votes" + ' ' +
+                  " ", 
+                  React.createElement("span", {className: "glyphicon glyphicon-sort"})
+                )
+              ), 
+              React.createElement("li", {role: "presentation", onClick: (this.bydate.filter).bind(this)}, 
+                React.createElement("a", {href: "#", className: "filter"}, 
+                  "Date" + ' ' +
+                  " ", 
+                  React.createElement("span", {className: "glyphicon glyphicon-sort"})
+                )
+              )
+            )
+          )
+
       )
     );
   }
@@ -553,25 +556,53 @@ var Route = Router.Route;
 var Link  = Router.Link;
 
 var IdeaList = React.createClass({displayName: "IdeaList",
+  getInitialState: function (){
+    return {
+      format: 'MMMM Do YYYY, h:mm:ss a'
+    }
+  },
+
   render: function(){
     var list = this.props.ideas.map(function(idea, index){
-      // ideas do not have email addresses, but users do
-      // this renders the idea or the user profile with image
       if(!idea.email){
         idea.type = 'idea';
+        var time = new Date(idea.createdAt).toLocaleString();
+
         return (
-          React.createElement("div", {key: index}, 
-            React.createElement(Link, {to: "ideaView", params: {id: idea._id, index: index}}, 
-              React.createElement("h3", null, " + ", idea.title, " "), 
-              React.createElement("div", null, 
+          React.createElement("div", {className: "idea row", key: index}, 
+
+            React.createElement("div", {className: "col-md-1"}, 
+              React.createElement(VoteView, {object: idea})
+            ), 
+
+            React.createElement("div", {className: "col-md-11"}, 
+
+              React.createElement(Link, {to: "ideaView", params: {id: idea._id, index: index}}, 
+                React.createElement("div", {className: "xx-large text-white"}, 
+                  idea.title
+                )
+              ), 
+              React.createElement("div", {className: "text-primary"}, 
+                "tags:" + ' ' +
+                " ", 
+                idea.tags.join(', ')
+              ), 
+              React.createElement("div", {className: "text-primary"}, 
+                "created by:" + ' ' +
+                " ", 
                 React.createElement("img", {src: idea.img}), 
-                idea.sUserName
+                " ", 
+                React.createElement("span", {className: "text-white"}, idea.sUserName), 
+                " " + ' ' +
+                "@" + ' ' +
+                " ", 
+                time
               )
-             ), 
-            React.createElement(VoteView, {object: idea})
+            )
+
           )
         );
-      }else{
+      } else {
         return(
           React.createElement("div", {key: index}, 
             React.createElement(Link, {to: "ideaView", params: {id: idea._id, index: index}}, 
@@ -584,7 +615,19 @@ var IdeaList = React.createClass({displayName: "IdeaList",
 
     })
     return (
-      React.createElement("ul", null, " ", list, " ")
+      React.createElement("div", {className: "container"}, 
+        React.createElement("div", {className: "row"}, 
+
+          React.createElement("div", {className: "col-md-1"}), 
+
+          React.createElement("div", {className: "col-md-10"}, 
+            React.createElement("ul", null, list)
+          ), 
+
+          React.createElement("div", {className: "col-md-1"})
+
+        )
+      )
     );
   }
 });
@@ -609,22 +652,36 @@ var IdeaSearch = React.createClass({displayName: "IdeaSearch",
   render : function () {
     return(
       React.createElement("div", {className: "container"}, 
-        React.createElement("div", {className: "input-group"}, 
-          React.createElement("span", {className: "input-group-addon"}, React.createElement("span", {className: "glyphicon glyphicon-search"})), 
-          React.createElement("input", {type: "text", ref: "search", className: "form-control", placeholder: "not working yet..."})
-        ), 
         React.createElement("br", null), 
-        React.createElement("div", {className: "text-center"}, 
-          React.createElement("button", {className: "btn btn-red btn-wide center", onClick: this.handleSubmit}, 
-            "Search"
+        React.createElement("br", null), 
+
+        React.createElement("div", {className: "row"}, 
+          React.createElement("div", {className: "col-md-1"}), 
+
+          React.createElement("div", {className: "col-md-5"}, 
+            React.createElement("div", {className: "input-group"}, 
+              React.createElement("span", {className: "input-group-addon", id: "search"}, React.createElement("span", {className: "glyphicon glyphicon-search"})), 
+              React.createElement("input", {type: "text", ref: "search", className: "form-control input-lg", id: "searchBar", placeholder: "looking for specific users or tags?"})
+            )
+          ), 
+
+          React.createElement("div", {className: "col-md-6"}, 
+            React.createElement("div", {className: "btn btn-xwide btn-red", onClick: this.handleSubmit}, 
+              "Search"
+            )
           )
-        )
+
+        ), 
+
+        React.createElement("br", null)
       )
     );
   }
 });
 
 module.exports = IdeaSearch;
+
+
 
 },{"../actions/ideaActions":2,"react":223}],13:[function(require,module,exports){
 var React       = require('react');
@@ -736,7 +793,17 @@ var Login = React.createClass({displayName: "Login",
     return(
       React.createElement("div", {className: "text-center vertical-center", id: "login"}, 
         React.createElement("img", {src: "umbel-ui/assets/logo.png"}), 
-        React.createElement("div", {className: "x-huge text-center text-primary"}, " IdeaList "), 
+        React.createElement("br", null), 
+        React.createElement("br", null), 
+        React.createElement("div", {className: "x2-huge text-center text-white"}, 
+
+          React.createElement("span", {className: "xxx-huge"}, " I "), 
+            "D E A", 
+          React.createElement("span", {className: "xxx-huge"}, " L "), 
+            "I S T"
+
+        ), 
+        React.createElement("br", null), 
         React.createElement("br", null), 
         React.createElement("a", {href: "/auth/slack"}, 
           React.createElement("button", {className: "btn btn-red btn-large center", id: "login-btn"}, 
@@ -772,17 +839,37 @@ var NavBar = React.createClass({displayName: "NavBar",
 
   render : function(){
     return(
-      React.createElement("nav", {className: "navbar navbar-inverse"}, 
-        React.createElement("div", {className: "container"}, 
-          React.createElement("ul", {className: "nav navbar-nav"}, 
+      React.createElement("nav", {className: "navbar navbar-inverse transparent navbar-fixed-top"}, 
+        React.createElement("div", {className: "container-fluid"}, 
+
+          React.createElement("a", {href: "#"}, 
+            React.createElement("img", {alt: "Brand", src: "umbel-ui/assets/nav.png"})
+          ), 
+
+          React.createElement("ul", {className: "nav navbar-nav navbar-right"}, 
             React.createElement("li", null, 
-              React.createElement(Link, {to: "app"}, "Home")
+              React.createElement(Link, {to: "app"}, 
+                "IDEA LIST  ", 
+                React.createElement("span", {className: "glyphicon glyphicon-home"})
+              )
             ), 
             React.createElement("li", null, 
-              React.createElement(Link, {to: "ideas"}, "Create")
+              React.createElement(Link, {to: "app"}, 
+                "ARCHIVES  ", 
+                React.createElement("span", {className: "glyphicon glyphicon-time"})
+              )
             ), 
             React.createElement("li", null, 
-              React.createElement(Link, {to: "logout", onClick: this.handleLogout}, "Logout")
+              React.createElement(Link, {to: "ideas"}, 
+                "CREATE  ", 
+                React.createElement("span", {className: "glyphicon glyphicon-pencil"})
+              )
+            ), 
+            React.createElement("li", null, 
+              React.createElement(Link, {to: "logout", onClick: this.handleLogout}, 
+                "LOGOUT  ", 
+                React.createElement("span", {className: "glyphicon glyphicon-log-out"})
+              )
             )
           )
         )
@@ -800,7 +887,7 @@ var cookie = require('react-cookie');
 
 var VoteView = React.createClass({displayName: "VoteView",
   getInitialState: function(){
-    return { 
+    return {
       userInfo: cookie.load('userInfo'),
       voteData: this.props.object
     }
@@ -823,12 +910,12 @@ var VoteView = React.createClass({displayName: "VoteView",
     newstate.rating = newData.rating;
 
     this.setState({ voteData: newstate });
-    
+
   },
   sendVote: function(rating){
     var votedata = this.state.voteData;
     var here = this;
-    var voteInfo = { 
+    var voteInfo = {
         voterId    : this.state.userInfo.userId,
         parentId   : votedata._id,
         user_name  : this.state.userInfo.sUserName,
@@ -846,18 +933,17 @@ var VoteView = React.createClass({displayName: "VoteView",
   render: function(){
     return(
       React.createElement("div", null, 
-        React.createElement("div", null, 
-          React.createElement("button", {className: "", type: "text", ref: "upVote", onClick: (this.voteTypes.up).bind(this)}
-          )
+        React.createElement("div", {className: "text-primary"}, 
+          React.createElement("span", {className: "glyphicon glyphicon-chevron-up", ref: "upVote", onClick: (this.voteTypes.up).bind(this)})
         ), 
-        React.createElement("div", null, 
-          React.createElement("button", {className: "", type: "text", ref: "rating"}, 
-            this.state.voteData.rating
-          )
+
+        React.createElement("div", {className: "text-primary", ref: "rating"}, 
+          " ", 
+          this.state.voteData.rating
         ), 
-        React.createElement("div", null, 
-          React.createElement("button", {className: "", type: "text", ref: "downVote", onClick: (this.voteTypes.down).bind(this)}
-          )
+
+        React.createElement("div", {className: "text-primary"}, 
+          React.createElement("span", {className: "glyphicon glyphicon-chevron-down", ref: "downVote", onClick: (this.voteTypes.down).bind(this)})
         )
       )
     )
@@ -865,6 +951,7 @@ var VoteView = React.createClass({displayName: "VoteView",
 });
 
 module.exports = VoteView;
+
 },{"../actions/voteActions":3,"react":223,"react-cookie":28}],17:[function(require,module,exports){
 var Constants = {
   ADD_IDEA           : 'ADD_IDEA',

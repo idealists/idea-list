@@ -16,6 +16,7 @@
     "hashids": "^1.0.1",
     "jquery": "^2.1.4",
     "material-ui": "^0.7.5",
+    "moment": "^2.10.3",
     "mongodb": "*",
     "mongoose": "^4.0.2",
     "mpromise": "^0.5.5",

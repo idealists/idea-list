@@ -35,14 +35,30 @@ var Home = React.createClass({
     return(
       <div>
         <NavBar />
-        <div className="container">
+        <div className="container-fluid">
           <div className="page-header">
-            <div className="xx-huge text-center text-primary"> Idea + List = </div>
+            <div className="row">
+
+              <div className="col-md-6">
+                <div className="x-huge text-right text-white">
+                  <b className="text-primary">FEATURE</b> <b>REQUESTS.</b>
+                </div>
+                <div className="x-huge text-right text-white">
+                  <b className="text-primary">IDEA</b> <b>DISCUSSION.</b>
+                </div>
+              </div>
+
+              <div className="col-md-6">
+                <blockquote className="text-muted"> A PLATFORM TO FACILITATE <br />
+                  CONCEPT PROPOSAL & DEVELOPMENT
+                </blockquote>
+              </div>
+
+            </div>
           </div>
           <IdeaSearch />
           <br />
           <IdeaFilter />
-          <br />
           <IdeaList ideas={this.state.list}/>
         </div>
       </div>

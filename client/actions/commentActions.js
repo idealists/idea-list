@@ -18,7 +18,6 @@ var commentActions = {
       }
     })
     .done(function (commentList) {
-      console.log('commentList',commentList);
       Dispatcher.handleAction({
         actionType : Constants.RELOAD_COMMENTLIST,
         data       : commentList
@@ -43,7 +42,6 @@ var commentActions = {
     }).done(function(commentList){
       commentActions.getComments('votes', newComment.ideaId);
     });
-
   }
 };
 
