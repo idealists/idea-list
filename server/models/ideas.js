@@ -6,7 +6,7 @@ var Vote = new Schema({
   createdAt : Date,
   voter     : ObjectId,
   value     : Number,
-  url       : String
+  imgUrl    : String
 });
 
 var Idea = new Schema({
