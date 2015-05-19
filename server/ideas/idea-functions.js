@@ -243,7 +243,7 @@ function createComment (req, res) {
       findIdComment(req.body.parentId, function (err, comment) {
         if (err) { console.log('adding comment to comment ERROR:', err); }
 
-        if ( !newComment.commShortId ) {
+        if ( newComment.commShortId === undefined ) {
           var count1 = comment.comments.length+1;
           newComment.commShortId = comment.commShortId + count1;
         }
