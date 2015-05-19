@@ -38,7 +38,7 @@ function addIdeaVote(req, res) {
 
     // if the voter has voted before, then adjust their vote accordingly
     idea.voters.map(function(vote, index){
-      if(vote.voter === voteInfo.user_id){
+      if(vote.voter === voteInfo.voterId){
         exists = true;
         if ( vote.value === voteInfo.rate && !voteInfo.slackReq ){ 
           vote.value = 0; 
@@ -54,7 +54,7 @@ function addIdeaVote(req, res) {
       var now = Date.now();
       var newVote = new Vote({
           createdAt : now,
-          voter     : voteInfo.user_id,
+          voter     : voteInfo.voterId,
           value     : voteInfo.rate,
           imgUrl    : voteInfo.userImage
       });
@@ -95,13 +95,14 @@ function addCommVote(req, res) {
   Comment.findOne({ _id: voteInfo.parentId }, function(err, comment){
     var counter = 0;
     var exists = false;
+
     // if the voter has voted before, then adjust their vote accordingly
     comment.voters.map(function(vote, index){
 
       // debugging
       console.log('vote: ', vote, ' voteInfo: ', voteInfo);
 
-      if(vote.voter === voteInfo.user_id){
+      if(vote.voter === voteInfo.voterId){
         exists = true; 
         if ( vote.value === voteInfo.rate && !voteInfo.slackReq ){ 
           vote.value = 0; 
@@ -117,7 +118,7 @@ function addCommVote(req, res) {
       var now = Date.now();
       var newVote = new Vote({
           createdAt : now,
-          voter     : voteInfo.user_id,
+          voter     : voteInfo.voterId,
           value     : voteInfo.rate,
           imgUrl    : voteInfo.userImage
       });
