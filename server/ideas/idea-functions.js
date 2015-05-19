@@ -196,7 +196,7 @@ function createComment (req, res) {
 
   //debugging
   console.log('req: ', req);
-
+  
   // Saves query data in async callback for userId
   setUserId(req.body.sUserName, function(err, uId) {
 
@@ -259,7 +259,7 @@ function createComment (req, res) {
       console.log('SERVER CREATECOMMENT:', result);
       if(!req.body.slackReq){
         res.end(JSON.stringify(result));
-      }
+      } else { res.end(); }
     });
 
   }); // end of setUserId
