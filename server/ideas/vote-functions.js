@@ -80,7 +80,7 @@ function addIdeaVote(req, res) {
           reply = { 'text': 'Downvote recorded for idea: ' + voteInfo.parentTitle + ' | Id: ' + voteInfo.shortId };
         }
         slackPost.postSlack(reply);
-        res.end();
+        //res.end();
       } else {
         res.end(JSON.stringify(voteObj));
       }
@@ -138,7 +138,7 @@ function addCommVote(req, res) {
           reply = { 'text': 'Upvote recorded for comment ' + voteInfo.parentTitle + ' | Id: ' + voteInfo.shortId };
         }
         slackPost.postSlack(reply);
-        res.end();
+        //res.end();
       } else {
         res.end(JSON.stringify(voteObj));
       }
