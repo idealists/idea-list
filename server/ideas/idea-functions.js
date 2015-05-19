@@ -231,7 +231,7 @@ function createComment (req, res) {
           //debugging
           console.log('newComment: ', newComment);
 
-          var reply = { 'text': 'Comment added to idea: ' + idea.shortId + ' / To comment on this comment, use commentId: ' + newComment.commShortId};
+          var reply = { 'text': 'Comment added to idea: ' + idea.shortId + ' / Text: ' + idea.body + ' / To comment on this comment, use commentId: `' + newComment.commShortId + '`'};
           slackPost.postSlack(reply);
         });
       }); // end of findId
@@ -246,7 +246,7 @@ function createComment (req, res) {
 
         comment.save(function (err) {
           if (err) { console.log('comment save ERROR:', err); }
-          var reply = { 'text': 'Comment added to comment: ' + comment.commShortId + ' / To comment on this comment, use commentId: ' + newComment.commShortId};
+          var reply = { 'text': 'Comment added to comment: ' + comment.commShortId + ' / Text: ' + comment.body + ' / To comment on this comment, use commentId: `' + newComment.commShortId + '`'};
           slackPost.postSlack(reply);
         });
       });
