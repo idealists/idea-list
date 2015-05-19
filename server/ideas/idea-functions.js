@@ -194,7 +194,8 @@ function createComment (req, res) {
   var now = Date.now();
 
   //debugging
-  console.log('req: ', req)
+  console.log('req: ', req);
+  
   // Saves query data in async callback for userId
   setUserId(req.body.sUserName, function(err, uId) {
 

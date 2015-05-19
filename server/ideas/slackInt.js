@@ -137,7 +137,7 @@ function slackInt (req, res){
       
       // determine whether the vote is for a comment or an idea via the shortId
       var ideaOrCom   = req.body.shortId.split("_");
-      if (ideaOrCom[3].slice(0,4) === "comm") {
+      if (ideaOrCom[ideaOrCom.length-1].slice(0,4) === "comm") {
         req.body.voteType = "comment";
       } else {
         req.body.voteType = "idea";
@@ -210,8 +210,8 @@ function slackInt (req, res){
       req.body.shortId = parsed[0].toLowerCase();
 
       // determine whether the vote is for a comment or an idea via the shortId
-      var ideaOrCom   = req.body.shortId.split("_");
-      if (ideaOrCom[3].slice(0,4) === "comm") {
+      var ideaOrCo   = req.body.shortId.split("_");
+      if (ideaOrCo[ideaOrCo.length-1].slice(0,4) === "comm") {
         req.body.voteType = "comment";
       } else {
         req.body.voteType = "idea";
