@@ -245,7 +245,7 @@ function createComment (req, res) {
 
         if ( !newComment.commShortId ) {
           var count1 = comment.comments.length+1;
-          req.body.commShortId = comment.commShortId + count1;
+          newComment.commShortId = comment.commShortId + count1;
         }
 
         comment.comments.push(newComment);
