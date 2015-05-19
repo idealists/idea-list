@@ -89,7 +89,7 @@ function slackInt (req, res){
       findUser(req.body.sUserName, function(err, uId){
         req.body.img      = uId.image['24'];
         req.body.slackReq = true;
-        
+
         if (ideaOrComm === "comm") {
           req.body.parentType = "comment";
 
@@ -186,15 +186,15 @@ function slackInt (req, res){
             findUser(req.body.user_name, function(err, uId) {
 
               var voteInfo = {
-                voterId    : uId._id,
-                parentId   : req.body.parentId,
-                parentTitle: req.body.parentTitle,
-                shortId    : req.body.shortId,
-                user_name  : req.body.user_name,
-                voteType   : req.body.voteType,
-                voteRating : 1,
-                userImage  : uId.image['24'],
-                slackReq   : true,
+                voterId       : uId._id,
+                parentId      : req.body.parentId,
+                parentTitle   : req.body.parentTitle,
+                shortId       : req.body.shortId,
+                user_name     : req.body.user_name,
+                voteType      : req.body.voteType,
+                voteRating    : 1,
+                userImage     : uId.image['24'],
+                slackReq      : true,
                 slackCommand  : '/upvote'
               };
 
@@ -207,41 +207,77 @@ function slackInt (req, res){
       break;
     case '/downvote':
 
-      req.body.shortId = parsed[0];
+      req.body.shortId = parsed[0].toLowerCase();
+
+      // determine whether the vote is for a comment or an idea via the shortId
+      var ideaOrCom   = req.body.shortId.split("_");
+      if (ideaOrCom[3].slice(0,4) === "comm") {
+        req.body.voteType = "comment";
+      } else {
+        req.body.voteType = "idea";
+      }
 
       // if comment is on an idea, search for the correct parentId, etc. in the Idea collection
       // otherwise search in the Comment collection for the correct parentId, etc.
-     
-      req.body.voteType = "idea"; // <-- TODO: need logic for voteType = "comment"
+      if (req.body.voteType === "idea") {
+        getIdeaId (req.body.shortId, function(err, pId) {
+          if (pId[0] === undefined) { 
+            console.log('ShortId is not found.');
+            reply = 'ID not found. See a list of active ideas with /allideas'; 
+            res.end(reply);
+          } else {
+            req.body.parentId = pId[0]._id;
+            req.body.parentTitle = pId[0].title;
+            findUser(req.body.user_name, function(err, uId) {
 
-      getIdeaId (req.body.shortId, function(err, pId) {
-        if (pId[0] === undefined) { 
-          console.log('ShortId is not found.');
-          reply = 'ID not found. See a list of active ideas with /allideas'; 
-          res.end(reply);
-        } else {
-          req.body.parentId = pId[0]._id;
-          req.body.parentTitle = pId[0].title;
-          findUser(req.body.user_name, function(err, uId) {
+              var voteInfo = {
+                voterId       : uId._id,
+                parentId      : req.body.parentId,
+                parentTitle   : req.body.parentTitle,
+                shortId       : req.body.shortId,
+                user_name     : req.body.user_name,
+                voteType      : req.body.voteType,
+                voteRating    : -1,
+                userImage     : uId.image['24'],
+                slackReq      : true,
+                slackCommand  : '/downvote'
+              };
 
-            var voteInfo = {
-              voterId       : uId._id,
-              parentId      : req.body.parentId,
-              parentTitle   : req.body.parentTitle,
-              shortId       : req.body.shortId,
-              user_name     : req.body.user_name,
-              voteType      : req.body.voteType,
-              voteRating    : -1,
-              userImage     : uId.image['24'],
-              slackReq      : true,
-              slackCommand  : '/downvote'
-            };
+              console.log('voteInfo:', voteInfo);
+              VoteFuncs(voteInfo);
+            });
+          }
+        });
+      } else if (req.body.voteType === "idea") {
+        getCommId (req.body.shortId, function(err, pId) {
+          if (pId[0] === undefined) { 
+            console.log('ShortId is not found.');
+            reply = 'ID not found. See a list of active ideas with /allideas'; 
+            res.end(reply);
+          } else {
+            req.body.parentId = pId[0]._id;
+            req.body.parentTitle = pId[0].title;
+            findUser(req.body.user_name, function(err, uId) {
 
-            console.log('voteInfo:', voteInfo);
-            VoteFuncs(voteInfo);
-          });
-        }
-      });
+              var voteInfo = {
+                voterId       : uId._id,
+                parentId      : req.body.parentId,
+                parentTitle   : req.body.parentTitle,
+                shortId       : req.body.shortId,
+                user_name     : req.body.user_name,
+                voteType      : req.body.voteType,
+                voteRating    : -1,
+                userImage     : uId.image['24'],
+                slackReq      : true,
+                slackCommand  : '/downvote'
+              };
+
+              console.log('voteInfo:', voteInfo);
+              VoteFuncs(voteInfo);
+            });
+          }
+        });
+      }
       break;
     case '/allideas':
       var selectFields = 'createdAt updatedAt shortId userId slackId sUserName title body tags active voters upvotes downvotes rating';
