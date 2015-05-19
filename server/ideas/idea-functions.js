@@ -74,6 +74,7 @@ function getIdeas (req, res) {
 
 function createIdea (req, res) {
   var now = Date.now();
+
   var idea = new Idea({
     createdAt    : now,
     updatedAt    : now,
@@ -234,7 +235,7 @@ function createComment (req, res) {
           if (err) console.log('idea save error:', err);
 
           //debugging
-          console.log('newComment: ', newComment);
+          console.log('idea.shortId: ', idea.shortId, ' idea: ', idea);
 
           var reply = { 'text': 'Comment added to idea: ' + idea.shortId + ' / Text: ' + idea.body + ' / To comment on this comment, use commentId: `' + newComment.commShortId + '`'};
           slackPost.postSlack(reply);
