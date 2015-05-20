@@ -249,7 +249,7 @@ function createComment (req, res) {
       }); // end of findId
     }
 
-    // if a comment is commenting on a comment ... 
+    // if a comment is commenting on a comment ...
     if (req.body.parentType === 'comment') {
       findIdComment(req.body.parentId, function (err, comment) {
         if (err) { console.log('adding comment to comment ERROR:', err); }
