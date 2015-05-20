@@ -70,7 +70,6 @@ var Comment = React.createClass({
   render: function(){
     if (this.props.level>0){
       return (
-          &nbsp
             <div className="comment text-primary">
 
               <h3> + {this.props.element.body} </h3>
