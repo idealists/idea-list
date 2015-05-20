@@ -82,8 +82,6 @@ function addIdeaVote(req, res) {
       idea.voters.push(newVote);
       counter = counter + voteInfo.rate;
     }
-    
-    console.log("counter before idea.rating, counter : " , counter);
 
     idea.rating = counter;
 
