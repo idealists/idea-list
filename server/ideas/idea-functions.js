@@ -2,6 +2,7 @@ var Comment = require('../models/comments');
 var Idea = require('../models/ideas');
 var User = require('../models/users');
 var slackPost = require('./slackPost');
+var Status = require('./statusConstants');
 //var request = require('request');
 
 function getIdeas (req, res) {
@@ -14,18 +15,21 @@ function getIdeas (req, res) {
     case 'dateFirst':
       ideas = Idea.find()
                 .select(selectFields)
+                .where({status: Status.OPEN})
                 .sort('-updatedAt')
                 .limit(10);
       break;
     case 'dateLast':
       ideas = Idea.find()
                 .select(selectFields)
+                .where({status: Status.OPEN})
                 .sort('updatedAt')
                 .limit(10);
       break;
     case 'votes':
       ideas = Idea.find()
                 .select(selectFields)
+                .where({status: Status.OPEN})
                 .sort('-rating')
                 .limit(10);
       break;
@@ -33,6 +37,7 @@ function getIdeas (req, res) {
     //add username to tags array for easy find of people also.
       ideas = Idea.find({ tags: { $in:req.headers.tags } })
                 .select(selectFields)
+                .where({status: Status.OPEN})
                 .limit(10);
       break;
     case 'userId':
@@ -93,7 +98,7 @@ function createIdea (req, res) {
     body         : req.body.body,
     tags         : req.body.tags || null,
     rating       : 0,
-    active       : true
+    status       : Status.OPEN
   });
 
   idea.save(function (err) {
@@ -107,6 +112,27 @@ function createIdea (req, res) {
 
   res.end();
 } // end createIdea
+
+function updateIdea (req, res) {
+  var now = Date.now();
+  var ideaId = JSON.parse(req.headers);
+  var incoming = JSON.parse(req.body);
+
+  Idea.findByIdAndUpdate(ideaId,
+    {
+      $set: {
+        updatedAt: now,
+        body: incoming.body,
+        title: incoming.title,
+        status: incoming.status
+      }
+    },
+    function (err, idea) {
+      if (err) console.log(err);
+      res.status(201).send(idea);
+    }
+  );
+}
 
 // helper functions for mongodb search with async callbacks
 function setUserId (un,  callback){
@@ -214,7 +240,8 @@ function createComment (req, res) {
       body       : req.body.body,
       voters     : [],
       rating     : 0,
-      comments   : []
+      comments   : [],
+      status     : Status.OPEN
     });
 
     // if a comment is commenting on an idea ...
@@ -270,10 +297,32 @@ function createComment (req, res) {
   }); // end of setUserId
 } // end of createComment
 
+function updateComment (req, res) {
+  var now = Date.now();
+  var commentId = JSON.parse(req.headers);
+  var incoming = JSON.parse(req.body);
+
+  Comment.findByIdAndUpdate(commentId,
+    {
+      $set: {
+        updatedAt: now,
+        body: incoming.body,
+        status: incoming.status
+      }
+    },
+    function (err, comment) {
+      if (err) console.log(err);
+      res.status(201).send(comment);
+    }
+  );
+}
+
 // expose functions
 module.exports = {
   getIdeas: getIdeas,
-  getComments: getComments,
   createIdea: createIdea,
-  createComment: createComment
+  updateIdea: updateIdea,
+  getComments: getComments,
+  createComment: createComment,
+  updateComment: updateComment
 };

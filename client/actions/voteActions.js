@@ -4,7 +4,7 @@ var $ = require('jquery');
 var VoteActions = {
   sendVote : function(vote, cb){
     $.ajax({
-      url      : "ideas/vote",
+      url      : "ideas/votes",
       dataType : "json",
       method   : "POST",
       data     : vote
