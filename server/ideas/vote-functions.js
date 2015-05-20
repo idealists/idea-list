@@ -44,20 +44,17 @@ function addIdeaVote(req, res) {
         console.log('old voter',vote.value,voteInfo.rate)
         if ( vote.value !== voteInfo.rate ){ 
           vote.value = voteInfo.rate;
-          counter += vote.value; // <-- stuffing happening here 
+          //counter += vote.value; // <-- stuffing happening here 
           console.log('changing vote',vote.value,voteInfo.rate)
         } else {
           vote.value = 0;
-          counter += vote.value;
+          //counter += vote.value;
         }
-      } else {
+      } //else {
         counter += vote.value;
-      }
+     // }
       
       console.log("INSIDE IDEA MAP: counter: " , counter, ' vote.value: ', vote.value)
-  
-      // when the vote is the same as the value, value = 0
-      // when the vote is different, value += vote
 
       // also want to have a voteCount on idea, 
       // filters for non-zero votes and gets length on new array via filter
