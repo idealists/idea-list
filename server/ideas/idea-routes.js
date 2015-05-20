@@ -5,9 +5,14 @@ var Vote = require('./vote-functions');
 
 module.exports = function(ideas){
   ideas.get('/', isAuth, ideaFunctions.getIdeas);
-  ideas.get('/comment', isAuth, ideaFunctions.getComments);
-  ideas.post('/comment', isAuth, ideaFunctions.createComment);
   ideas.post('/', isAuth, ideaFunctions.createIdea);
+  ideas.put('/', isAuth, ideaFunctions.updateIdea);
+
+  ideas.get('/comments', isAuth, ideaFunctions.getComments);
+  ideas.post('/comments', isAuth, ideaFunctions.createComment);
+  ideas.put('/comments', isAuth, ideaFunctions.updateComment);
+
+  ideas.post('/votes', isAuth, Vote);
+  
   ideas.post('/api/idea', Slack.slackInt);
-  ideas.post('/vote',isAuth,Vote);
 };

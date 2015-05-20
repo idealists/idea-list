@@ -9,7 +9,7 @@ var commentActions = {
     data  = data  || null;
 
     $.ajax({
-      url       : "/ideas/comment",
+      url       : "/ideas/comments",
       dataType  : "json",
       method    : "GET",
       headers   : {
@@ -36,7 +36,7 @@ var commentActions = {
 
 
     $.ajax({
-      url      : "/ideas/comment",
+      url      : "/ideas/comments",
       dataType : "json",
       method   : "POST",
       data     : newComment
