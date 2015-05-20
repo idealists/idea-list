@@ -38,19 +38,44 @@ function addIdeaVote(req, res) {
 
     // if the voter has voted before, then adjust their vote accordingly
     idea.voters.map(function(vote, index){
-      if(vote.voter === voteInfo.voterId){
+
+      if(String(vote.voter) === voteInfo.voterId){
         exists = true;
-        if ( vote.value === voteInfo.rate && !voteInfo.slackReq ){ 
-          vote.value = 0; 
-        } else { vote.value = voteInfo.rate; }
-        counter = counter + vote.value;
+        console.log('old voter',vote.value,voteInfo.rate)
+        if ( vote.value !== voteInfo.rate ){ 
+          vote.value = voteInfo.rate;
+          counter += vote.value; // <-- stuffing happening here 
+          console.log('changing vote',vote.value,voteInfo.rate)
+        } else {
+          vote.value = 0;
+          counter += vote.value;
+        }
       } else {
-        counter = counter + vote.value;
+        counter += vote.value;
       }
+      
+      console.log("INSIDE IDEA MAP: counter: " , counter, ' vote.value: ', vote.value)
+  
+      // when the vote is the same as the value, value = 0
+      // when the vote is different, value += vote
+
+      // also want to have a voteCount on idea, 
+      // filters for non-zero votes and gets length on new array via filter
+
+      // if(vote.voter === voteInfo.voterId){
+      //   exists = true;
+      //   if ( vote.value === voteInfo.rate && !voteInfo.slackReq ){ 
+      //     vote.value = 0; 
+      //   } else { vote.value += voteInfo.rate; }
+      //   counter = counter + vote.value;
+      // } else {
+      //   counter = counter + vote.value;
+      // }
     });
 
     // if the user has not voted before, then create the vote object
     if(!exists){
+
       var now = Date.now();
       var newVote = new Vote({
           createdAt : now,
@@ -63,6 +88,8 @@ function addIdeaVote(req, res) {
     }
 
     idea.rating = counter;
+
+    console.log("COUNTER: ", counter, ' VOTE.VALUE: ', idea.rating );
 
     idea.save(function(err, ideaObj ){
       if (err) console.log(err);
@@ -115,6 +142,7 @@ function addCommVote(req, res) {
 
     // if the user has not voted before, then create the vote object
     if(!exists){
+      console.log('new vote')
       var now = Date.now();
       var newVote = new Vote({
           createdAt : now,
