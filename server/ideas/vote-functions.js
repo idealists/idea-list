@@ -72,12 +72,13 @@ function addIdeaVote(req, res) {
 
       idea.voters.push(newVote);
       total += voteInfo.rate;
+      console.log('\n total: ', total); 
     }
     
     idea.rating = total;
 
     idea.save(function(err, ideaObj ){
-      if (err) console.log(err);
+      if (err) console.log('In idea save: ', err);
       var voteObj = { 
           voteArray : ideaObj.voters, 
           rating    : ideaObj.rating
