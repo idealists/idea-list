@@ -35,13 +35,15 @@ function addIdeaVote(req, res) {
   var voteInfo = req.body || req;
 
   Idea.findById(voteInfo.parentId, function(err, idea){
+    if (err) console.log('\nError in addIdeaVote:', err);
+
     var total = 0;
     var alreadyVoted = false;
 
     // if the voter has voted before, then adjust their vote accordingly
     idea.voters.map(function(vote, index){
       if (String(vote.voter) === voteInfo.voterId) {
-        exists = true;
+        alreadyVoted = true;
         voteInfo.rate = Number(voteInfo.rate);
 
         if (vote.value !== voteInfo.rate) { 
@@ -158,4 +160,7 @@ function addCommVote(req, res) {
   });
 } // end of addCommVote
 
-module.exports = voteOptions;
+module.exports = {
+  voteOptions: voteOptions,
+  addIdeaVote: addIdeaVote
+};

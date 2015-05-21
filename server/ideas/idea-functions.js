@@ -4,6 +4,8 @@ var User = require('../models/users');
 var slackPost = require('./slackPost');
 var Status = require('./statusConstants');
 var ObjectId = require('mongoose').Types.ObjectId; 
+var voteFunctions = require('./vote-functions.js');
+//var request = require('request');
 
 function getIdeas (req, res) {
   req.headers.query = req.headers.query || "";
@@ -94,6 +96,7 @@ function createIdea (req, res) {
     body         : req.body.body,
     tags         : req.body.tags || null,
     rating       : 0,
+    voteCount    : 0,
     status       : Status.OPEN
   });
 
@@ -104,9 +107,23 @@ function createIdea (req, res) {
     var reply = { 'text': 'Idea Posted! Idea_id: `' + idea.shortId + '` | Idea: ' + idea.body + ' | tags: ' + idea.tags || '' };
     slackPost.postSlack(reply);
     console.log('New idea:', idea.title, 'SAVED');
+  })
+  .then(function () {
+    // automagically vote for your own idea
+    var voteOptions = {
+      voterId    : req.body.userId,
+      parentId   : idea._id,
+      user_name  : req.body.user_name,
+      voteType   : 'idea',
+      rate       : 1,
+      userImage  : req.body.img
+    };
+
+    voteFunctions.addIdeaVote(voteOptions, res);
   });
 
-  res.end();
+
+  // res.end();
 } // end createIdea
 
 function updateIdea (req, res) {
