@@ -52,7 +52,7 @@ function getIdeas (req, res) {
       users= [];
       result.users = users;
         ideas.exec(function(err,val){
-          if(err){console.log('searchbar err:',err)}
+          if(err) console.log('searchbar err:',err);
         }).then(function (idealist) {
           idealist = idealist || [];
           result.ideas= idealist;
