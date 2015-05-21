@@ -92,17 +92,18 @@ function addIdeaVote(req, res) {
       // if req is from Slack, send response to Slack channel
       if(voteInfo.slackReq){
         var reply;
+        var title = voteInfo.parentTitle || idea.title;
         if (!unvoted){
           if ( voteInfo.slackCommand === '/upvote' ) {
-            reply = { 'text': 'Upvote recorded for idea: ' + voteInfo.parentTitle + ' | Id: ' + voteInfo.shortId };
+            reply = { 'text': 'Upvote recorded for idea: ' + title + ' | Id: ' + voteInfo.shortId };
           } else if ( voteInfo.slackCommand === '/downvote' ) {
-            reply = { 'text': 'Downvote recorded for idea: ' + voteInfo.parentTitle + ' | Id: ' + voteInfo.shortId };
+            reply = { 'text': 'Downvote recorded for idea: ' + title + ' | Id: ' + voteInfo.shortId };
           }
         } else {
           if ( voteInfo.slackCommand === '/upvote' ) {
-            reply = { 'text': 'VOTE CHANGED to zero. \n You previously upvoted for idea: ' + voteInfo.parentTitle + ' | Id: ' + voteInfo.shortId };
+            reply = { 'text': 'VOTE CHANGED to zero. \n You previously upvoted for idea: ' + title + ' | Id: ' + voteInfo.shortId };
           } else if ( voteInfo.slackCommand === '/downvote' ) {
-            reply = { 'text': 'VOTE CHANGED to zero. \n You previously downvoted for idea: ' + voteInfo.parentTitle + ' | Id: ' + voteInfo.shortId };
+            reply = { 'text': 'VOTE CHANGED to zero. \n You previously downvoted for idea: ' + title + ' | Id: ' + voteInfo.shortId };
           }
         }
         slackPost.postSlack(reply);
@@ -169,18 +170,18 @@ function addCommVote(req, res) {
       // if req is from the app client, res.end();
       // if req is from Slack, send response to Slack channel
       if(voteInfo.slackReq){
-        var reply;
+        var reply; 
         if (!unvoted){
           if ( voteInfo.slackCommand === '/upvote' ) {
-            reply = { 'text': 'Upvote recorded for comment: ' + voteInfo.parentTitle + ' | Id: ' + voteInfo.shortId };
+            reply = { 'text': 'Upvote recorded for comment Id: ' + voteInfo.shortId };
           } else if ( voteInfo.slackCommand === '/downvote' ) {
-            reply = { 'text': 'Downvote recorded for comment: ' + voteInfo.parentTitle + ' | Id: ' + voteInfo.shortId };
+            reply = { 'text': 'Downvote recorded for comment Id: ' + voteInfo.shortId };
           }
         } else {
           if ( voteInfo.slackCommand === '/upvote' ) {
-            reply = { 'text': 'VOTE CHANGED to zero. \n You previously upvoted for comment: ' + voteInfo.parentTitle + ' | Id: ' + voteInfo.shortId };
+            reply = { 'text': 'VOTE CHANGED to zero. \n You previously upvoted for comment Id: ' + voteInfo.shortId };
           } else if ( voteInfo.slackCommand === '/downvote' ) {
-            reply = { 'text': 'VOTE CHANGED to zero. \n You previously downvoted for comment: ' + voteInfo.parentTitle + ' | Id: ' + voteInfo.shortId };
+            reply = { 'text': 'VOTE CHANGED to zero. \n You previously downvoted for comment Id: ' + voteInfo.shortId };
           }
         }
         slackPost.postSlack(reply);

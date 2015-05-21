@@ -258,7 +258,7 @@ function createComment (req, res) {
         });
 
         saveNewComment();
-        
+
       });
     }
 
