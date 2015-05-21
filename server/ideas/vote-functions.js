@@ -102,29 +102,29 @@ function addCommVote(req, res) {
   var voteInfo = req.body || req;
   
   Comment.findOne({ _id: voteInfo.parentId }, function(err, comment){
-    var counter = 0;
-    var exists = false;
+     if (err) console.log('\nError in addIdeaVote:', err);
+
+    var total = 0;
+    var alreadyVoted = false;
 
     // if the voter has voted before, then adjust their vote accordingly
     comment.voters.map(function(vote, index){
+      if (String(vote.voter) === voteInfo.voterId) {
+        alreadyVoted = true;
+        voteInfo.rate = Number(voteInfo.rate);
 
-      // debugging
-      console.log('vote: ', vote, ' voteInfo: ', voteInfo);
-
-      if(vote.voter === voteInfo.voterId){
-        exists = true; 
-        if ( vote.value === voteInfo.rate && !voteInfo.slackReq ){ 
-          vote.value = 0; 
-        } else { vote.value = voteInfo.rate; }
-        counter = counter + vote.value;
-      } else {
-        counter = counter + vote.value;
+        if (vote.value !== voteInfo.rate) { 
+          vote.value = voteInfo.rate;
+        } else {
+          vote.value = 0;
+        }
       }
+
+      total += vote.value;
     });
 
     // if the user has not voted before, then create the vote object
-    if(!exists){
-      console.log('new vote');
+    if (!alreadyVoted) {
       var now = Date.now();
       var newVote = new Vote({
           createdAt : now,
@@ -132,10 +132,12 @@ function addCommVote(req, res) {
           value     : voteInfo.rate,
           imgUrl    : voteInfo.userImage
       });
+
       comment.voters.push(newVote);
-      counter = counter + voteInfo.rate;
+      total += voteInfo.rate;
     }
-    comment.rating = counter;
+    
+    comment.rating = total;
       
     comment.save(function(err, commentObj ){
       if (err) console.log(err);
