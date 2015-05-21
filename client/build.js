@@ -687,6 +687,7 @@ var IdeaList = React.createClass({displayName: "IdeaList",
   render: function(){
     var list = this.props.ideas.map(function(idea, index){
       if(!idea.email){
+        if(idea.tags){var tags = idea.tags.join(', ');}else{var tags = "";}
         idea.type = 'idea';
         var time = new Date(idea.createdAt).toLocaleString();
 
@@ -707,7 +708,7 @@ var IdeaList = React.createClass({displayName: "IdeaList",
               React.createElement("div", {className: "text-primary"}, 
                 "tags:" + ' ' +
                 " ", 
-                idea.tags.join(', ')
+                tags
               ), 
               React.createElement("div", {className: "text-primary"}, 
                 "created by:" + ' ' +
