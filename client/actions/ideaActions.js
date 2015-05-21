@@ -42,7 +42,7 @@ var ideaActions = {
     });
   },
 
-  createIdea: function(newIdea){
+  createIdea: function(newIdea, cb){
     var ideaActions   = this;
     var userinfo      = cookie.load('userInfo');
     newIdea.user_name = userinfo.sUserName;
@@ -59,6 +59,7 @@ var ideaActions = {
     })
     .done(function (ideaList) {
       ideaActions.getIdeas('votes');
+      cb();
     });
   },
 
