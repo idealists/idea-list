@@ -50,7 +50,7 @@ function addIdeaVote(req, res) {
     // if the voter has voted before, then adjust their vote accordingly
     idea.voters.map(function(vote, index){
       if (String(vote.voter) === String(voteInfo.voterId)) {
-    console.log('INSIDE same voter: typeof vote.voter and voteInfo.voterId:', typeof(vote.voter), typeof(voterId));
+    console.log('INSIDE same voter: vote.voter === voteInfo.voterId:', String(vote.voter) === String(voteInfo.voterId) );
         alreadyVoted = true;
 
         if (vote.value !== voteInfo.rate) { 
@@ -118,21 +118,24 @@ function addIdeaVote(req, res) {
 function addCommVote(req, res) {
   var voteInfo = req.body || req;
   
+  voteInfo.rate = Number(voteInfo.rate);
+
   Comment.findOne({ _id: voteInfo.parentId }, function(err, comment){
-     if (err) console.log('\nError in addIdeaVote:', err);
+    if (err) console.log('\nError in addCommentVote:', err);
 
     var total = 0;
     var alreadyVoted = false;
+    var unvoted = false;
 
     // if the voter has voted before, then adjust their vote accordingly
     comment.voters.map(function(vote, index){
-      if (String(vote.voter) === voteInfo.voterId) {
+      if (String(vote.voter) === String(voteInfo.voterId)) {
         alreadyVoted = true;
-        voteInfo.rate = Number(voteInfo.rate);
 
         if (vote.value !== voteInfo.rate) { 
           vote.value = voteInfo.rate;
         } else {
+          unvoted = true;
           vote.value = 0;
         }
       }
@@ -155,21 +158,30 @@ function addCommVote(req, res) {
     }
     
     comment.rating = total;
-      
-    comment.save(function(err, commentObj ){
-      if (err) console.log(err);
+
+    
+    comment.save(function(err, commObj ){
+      if (err) console.log('In comment save: ', err);
       var voteObj = { 
-          voteArray : commentObj.voters, 
-          rating    : commentObj.rating
+          voteArray : commObj.voters, 
+          rating    : commObj.rating
       };
       // if req is from the app client, res.end();
       // if req is from Slack, send response to Slack channel
       if(voteInfo.slackReq){
         var reply;
-        if(voteInfo.voteRating < 0){
-          reply = { 'text': 'Downvote recorded for comment ' + voteInfo.parentTitle + ' | Id: ' + voteInfo.shortId };
+        if (!unvoted){
+          if ( voteInfo.slackCommand === '/upvote' ) {
+            reply = { 'text': 'Upvote recorded for comment: ' + voteInfo.parentTitle + ' | Id: ' + voteInfo.shortId };
+          } else if ( voteInfo.slackCommand === '/downvote' ) {
+            reply = { 'text': 'Downvote recorded for comment: ' + voteInfo.parentTitle + ' | Id: ' + voteInfo.shortId };
+          }
         } else {
-          reply = { 'text': 'Upvote recorded for comment ' + voteInfo.parentTitle + ' | Id: ' + voteInfo.shortId };
+          if ( voteInfo.slackCommand === '/upvote' ) {
+            reply = { 'text': 'VOTE CHANGED to zero. \n You previously upvoted for comment: ' + voteInfo.parentTitle + ' | Id: ' + voteInfo.shortId };
+          } else if ( voteInfo.slackCommand === '/downvote' ) {
+            reply = { 'text': 'VOTE CHANGED to zero. \n You previously downvoted for comment: ' + voteInfo.parentTitle + ' | Id: ' + voteInfo.shortId };
+          }
         }
         slackPost.postSlack(reply);
         //res.end();
