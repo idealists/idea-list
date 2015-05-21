@@ -9,16 +9,18 @@ var Schema = mongoose.Schema;
 var voteOptions = function(req,res){
   var voteInfo = req.body || req;
 
+  console.log('\n Request:', voteInfo);
+
   // calculate the voting rate
-  (function rating(){
-    if(voteInfo.voteRating > 0){
-      voteInfo.rate = 1;
-    } else if (voteInfo.voteRating < 0){
-      voteInfo.rate = -1;
-    } else {
-      voteInfo.rate = 0;
-    }
-  })();
+  // (function rating(){
+  //   if(voteInfo.voteRating > 0){
+  //     voteInfo.rate = 1;
+  //   } else if (voteInfo.voteRating < 0){
+  //     voteInfo.rate = -1;
+  //   } else {
+  //     voteInfo.rate = 0;
+  //   }
+  // })();
 
   // if the vote is for an idea, add the vote to the idea
   // else add the vote to the comment
@@ -32,46 +34,28 @@ var voteOptions = function(req,res){
 function addIdeaVote(req, res) {
   var voteInfo = req.body || req;
 
-  Idea.findOne({ _id: voteInfo.parentId }, function(err, idea){
-    var counter = 0;
-    var exists = false;
+  Idea.findById(voteInfo.parentId, function(err, idea){
+    var total = 0;
+    var alreadyVoted = false;
 
     // if the voter has voted before, then adjust their vote accordingly
     idea.voters.map(function(vote, index){
-
-      if(String(vote.voter) === voteInfo.voterId){
+      if (String(vote.voter) === voteInfo.voterId) {
         exists = true;
-        console.log('old voter',vote.value,voteInfo.rate)
-        if ( vote.value !== voteInfo.rate ){ 
+        voteInfo.rate = Number(voteInfo.rate);
+
+        if (vote.value !== voteInfo.rate) { 
           vote.value = voteInfo.rate;
-          //counter += vote.value; // <-- stuffing happening here 
-          console.log('changing vote',vote.value,voteInfo.rate)
         } else {
           vote.value = 0;
-          //counter += vote.value;
         }
-      } //else {
-        counter += vote.value;
-     // }
-      
+      }
 
-      // also want to have a voteCount on idea, 
-      // filters for non-zero votes and gets length on new array via filter
-
-      // if(vote.voter === voteInfo.voterId){
-      //   exists = true;
-      //   if ( vote.value === voteInfo.rate && !voteInfo.slackReq ){ 
-      //     vote.value = 0; 
-      //   } else { vote.value += voteInfo.rate; }
-      //   counter = counter + vote.value;
-      // } else {
-      //   counter = counter + vote.value;
-      // }
+      total += vote.value;
     });
 
     // if the user has not voted before, then create the vote object
-    if(!exists){
-
+    if (!alreadyVoted) {
       var now = Date.now();
       var newVote = new Vote({
           createdAt : now,
@@ -79,15 +63,12 @@ function addIdeaVote(req, res) {
           value     : voteInfo.rate,
           imgUrl    : voteInfo.userImage
       });
+
       idea.voters.push(newVote);
-      counter = counter + voteInfo.rate;
+      total += voteInfo.rate;
     }
     
-    console.log("counter before idea.rating, counter : " , counter);
-
-    idea.rating = counter;
-
-    console.log("COUNTER: ", counter, ' VOTE.VALUE: ', idea.rating );
+    idea.rating = total;
 
     idea.save(function(err, ideaObj ){
       if (err) console.log(err);

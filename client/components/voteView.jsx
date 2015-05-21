@@ -37,7 +37,7 @@ var VoteView = React.createClass({
         parentId   : votedata._id,
         user_name  : this.state.userInfo.sUserName,
         voteType   : votedata.type,
-        voteRating : rating,
+        rate       : rating,
         userImage  : this.state.userInfo.image['24']
     }
 
