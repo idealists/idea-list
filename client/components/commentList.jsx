@@ -58,7 +58,8 @@ var Comment = React.createClass({
     var uniq = this.props.element._id;
 
     return {
-      uniq: false
+      uniq: false,
+      time: new Date(this.props.element.createdAt).toLocaleString()
     }
   },
 
@@ -104,7 +105,7 @@ var Comment = React.createClass({
             &nbsp;
             <span className="text-primary"> @ </span>
             &nbsp;
-            <span className="text-white"> {this.props.element.createdAt} </span>
+            <span className="text-white"> {this.state.time} </span>
           </div>
         </div>
       )
@@ -124,9 +125,9 @@ var Comment = React.createClass({
             &nbsp;
             <span className="text-primary"> @ </span>
             &nbsp;
-            <span className="text-white"> {this.props.element.createdAt} </span>
+            <span className="text-white"> {this.state.time} </span>
             &nbsp;
-            <span className="text-primary" onClick={this.showTextarea}> Reply </span>
+            <span className="text-red" onClick={this.showTextarea}> Reply </span>
           </div>
 
           <br />

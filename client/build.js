@@ -306,7 +306,8 @@ var Comment = React.createClass({displayName: "Comment",
     var uniq = this.props.element._id;
 
     return {
-      uniq: false
+      uniq: false,
+      time: new Date(this.props.element.createdAt).toLocaleString()
     }
   },
 
@@ -352,7 +353,7 @@ var Comment = React.createClass({displayName: "Comment",
             " ", 
             React.createElement("span", {className: "text-primary"}, " @ "), 
             " ", 
-            React.createElement("span", {className: "text-white"}, " ", this.props.element.createdAt, " ")
+            React.createElement("span", {className: "text-white"}, " ", this.state.time, " ")
           )
         )
       )
@@ -372,9 +373,9 @@ var Comment = React.createClass({displayName: "Comment",
             " ", 
             React.createElement("span", {className: "text-primary"}, " @ "), 
             " ", 
-            React.createElement("span", {className: "text-white"}, " ", this.props.element.createdAt, " "), 
+            React.createElement("span", {className: "text-white"}, " ", this.state.time, " "), 
             " ", 
-            React.createElement("span", {className: "text-primary", onClick: this.showTextarea}, " Reply ")
+            React.createElement("span", {className: "text-red", onClick: this.showTextarea}, " Reply ")
           ), 
 
           React.createElement("br", null), 
