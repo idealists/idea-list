@@ -232,7 +232,7 @@ function createComment (req, res) {
       updatedAt  : now,
       parentId   : req.body.parentId,
       parentType : req.body.parentType,
-      commShortId: req.body.commShortId,
+      commShortId: req.body.commShortId || null,
       userId     : req.body.userId,
       slackId    : req.body.slackId,
       sUserName  : req.body.sUserName,
@@ -248,11 +248,11 @@ function createComment (req, res) {
     if (req.body.parentType === 'idea') {
       findId(req.body.parentId, function (err, idea) {
         if (err) console.log(err);
-
-        if ( !newComment.commShortId ) {
+        if ( newComment.commShortId === null ) {
           var count = idea.comments.length+1;
           newComment.commShortId = String(idea.shortId.split("_").slice(0,-1).join("_") + '_comm' + count).toLowerCase();
         }
+        console.log('INSIDE CREATECOMMENT/ newComment: ', newComment, ' / req: ', req);
 
         idea.comments.push(newComment);
 
