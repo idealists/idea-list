@@ -60,6 +60,14 @@ body {
 .nopacity {
   opacity: 1;
 }
+.nopadding {
+   padding: 0 !important;
+   margin: 0 !important;
+}
+.votePosition {
+  padding-top: 15%;
+  float: right;
+}
 article,
 aside,
 details,
@@ -219,6 +227,7 @@ legend {
 }
 textarea {
   overflow: auto;
+  background-color: transparent;
 }
 optgroup {
   font-weight: bold;
@@ -1784,6 +1793,10 @@ fieldset[disabled] .form-control {
 }
 textarea.form-control {
   height: auto;
+
+  /* CUSTOMSTYLES */
+  background-color: transparent;
+  color: white;
 }
 input[type="search"] {
   -webkit-appearance: none;
@@ -6453,6 +6466,25 @@ body {
   letter-spacing: 0.16em;
   line-height: 1.4em;
   padding: 12px 40px;
+  width: auto;
+  cursor: pointer;
+  border-radius: 0;
+  white-space: normal;
+}
+.btnNested,
+.btnNested:visited {
+  font-family: 'Montserrat', Helvetica, Arial, sans-serif;
+  border: 1px solid #aaaaaa;
+  background: transparent;
+  color: #aaaaaa;
+  text-transform: uppercase;
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  line-height: 1.4em;
+  padding: 7px 60px;
   width: auto;
   cursor: pointer;
   border-radius: 0;

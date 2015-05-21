@@ -302,7 +302,13 @@ var CommentList = React.createClass({displayName: "CommentList",
 
 
 var Comment = React.createClass({displayName: "Comment",
+  getInitialState: function(){
+    var uniq = this.props.element._id;
 
+    return {
+      uniq: false
+    }
+  },
 
   handleSubmit: function(e) {
     e.preventDefault();
@@ -323,44 +329,75 @@ var Comment = React.createClass({displayName: "Comment",
     this.refs.nestedComment.getDOMNode().value = '';
   },
 
+  showTextarea: function(){
+    this.setState({
+      uniq: !this.state.uniq
+    })
+  },
+
   render: function(){
     if (this.props.level > 0) {
       return (
         React.createElement("div", {className: "comment"}, 
-          React.createElement("div", {className: "large text-primary"}, " ", this.props.element.body, " "), 
+          React.createElement("div", {className: "xx-large text-primary"}, " ", this.props.element.body, " "), 
 
           React.createElement("br", null), 
 
           React.createElement("div", null, 
+            React.createElement("span", {className: "text-primary"}, " by: "), 
+            " ", 
             React.createElement("img", {src: this.props.element.img}), 
-            React.createElement("span", {className: "text-white"}, " ", this.props.element.sUserName, " ")
+            " ", 
+            React.createElement("span", {className: "text-white"}, " ", this.props.element.sUserName, " "), 
+            " ", 
+            React.createElement("span", {className: "text-primary"}, " @ "), 
+            " ", 
+            React.createElement("span", {className: "text-white"}, " ", this.props.element.createdAt, " ")
           )
         )
       )
     } else {
       return (
         React.createElement("div", {className: "comment"}, 
-          React.createElement("div", {className: "large text-primary"}, " ", this.props.element.body, " "), 
+          React.createElement("div", {className: "xx-large text-primary"}, " ", this.props.element.body, " "), 
 
           React.createElement("br", null), 
 
           React.createElement("div", null, 
+            React.createElement("span", {className: "text-primary"}, " by: "), 
+            " ", 
             React.createElement("img", {src: this.props.element.img}), 
-            React.createElement("span", {className: "text-white"}, " ", this.props.element.sUserName, " ")
+            " ", 
+            React.createElement("span", {className: "text-white"}, " ", this.props.element.sUserName, " "), 
+            " ", 
+            React.createElement("span", {className: "text-primary"}, " @ "), 
+            " ", 
+            React.createElement("span", {className: "text-white"}, " ", this.props.element.createdAt, " "), 
+            " ", 
+            React.createElement("span", {className: "text-primary", onClick: this.showTextarea}, " Reply ")
           ), 
 
+          React.createElement("br", null), 
 
-          React.createElement("div", {className: "row"}, 
-            React.createElement("div", {className: "col-md-6"}, 
-              React.createElement("input", {type: "text", className: "form-control", ref: "nestedComment", placeholder: "add a comment"})
-            ), 
-            React.createElement("div", {className: "col-md-6"}, 
-              React.createElement("button", {className: "btn btn-red btn-xs", onClick: this.handleSubmit}, 
-                "Add Comment"
+          this.state.uniq ?
+            React.createElement("div", {className: "container"}, 
+              React.createElement("div", {className: "row"}, 
+
+                React.createElement("div", {className: "col-md-3"}, 
+                  React.createElement("textarea", {type: "text", className: "form-control", ref: "nestedComment", placeholder: "add a comment", rows: "1"})
+                ), 
+
+                React.createElement("div", {className: "col-md-9"}, 
+                  React.createElement("button", {className: "btnNested btn-xs center", onClick: this.handleSubmit}, 
+                    "Add Comment"
+                  )
+                )
+
               )
             )
-          )
+          : null, 
 
+          React.createElement("br", null)
 
         )
       )
@@ -817,9 +854,9 @@ var IdeaView = React.createClass({displayName: "IdeaView",
 
         React.createElement("div", {className: "container"}, 
           React.createElement("div", {className: "row"}, 
-            React.createElement("div", {className: "col-md-1"}), 
+            React.createElement("div", {className: "col-md-2"}), 
 
-            React.createElement("div", {className: "col-md-5"}, 
+            React.createElement("div", {className: "col-md-4"}, 
               React.createElement("textarea", {type: "text", className: "form-control", ref: "parentComment", placeholder: "add a comment", rows: "2"})
             ), 
 
@@ -828,6 +865,7 @@ var IdeaView = React.createClass({displayName: "IdeaView",
                 "Add Comment"
               )
             )
+
           )
         ), 
 
@@ -979,7 +1017,7 @@ var VoteView = React.createClass({displayName: "VoteView",
   sendVote: function(rating){
     var votedata = this.state.voteData;
     var here = this;
-    var voteInfo = { 
+    var voteInfo = {
         voterId    : this.state.userInfo._id,
         parentId   : votedata._id,
         user_name  : this.state.userInfo.sUserName,
@@ -996,7 +1034,7 @@ var VoteView = React.createClass({displayName: "VoteView",
   },
   render: function(){
     return(
-      React.createElement("div", null, 
+      React.createElement("div", {className: "votePosition"}, 
         React.createElement("div", {className: "text-primary"}, 
           React.createElement("span", {className: "glyphicon glyphicon-chevron-up", ref: "upVote", onClick: (this.voteTypes.up).bind(this)})
         ), 

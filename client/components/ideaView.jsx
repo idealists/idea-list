@@ -100,9 +100,9 @@ var IdeaView = React.createClass({
 
         <div className="container">
           <div className="row">
-            <div className="col-md-1"></div>
+            <div className="col-md-2"></div>
 
-            <div className="col-md-5">
+            <div className="col-md-4">
               <textarea type='text' className="form-control" ref='parentComment' placeholder="add a comment" rows="2"></textarea>
             </div>
 
@@ -111,6 +111,7 @@ var IdeaView = React.createClass({
                 Add Comment
               </button>
             </div>
+
           </div>
         </div>
 

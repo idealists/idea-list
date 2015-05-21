@@ -54,7 +54,13 @@ var CommentList = React.createClass({
 
 
 var Comment = React.createClass({
+  getInitialState: function(){
+    var uniq = this.props.element._id;
 
+    return {
+      uniq: false
+    }
+  },
 
   handleSubmit: function(e) {
     e.preventDefault();
@@ -75,44 +81,75 @@ var Comment = React.createClass({
     this.refs.nestedComment.getDOMNode().value = '';
   },
 
+  showTextarea: function(){
+    this.setState({
+      uniq: !this.state.uniq
+    })
+  },
+
   render: function(){
     if (this.props.level > 0) {
       return (
         <div className="comment">
-          <div className="large text-primary"> {this.props.element.body} </div>
+          <div className="xx-large text-primary"> {this.props.element.body} </div>
 
           <br />
 
           <div>
+            <span className="text-primary"> by: </span>
+            &nbsp;
             <img src={this.props.element.img} />
+            &nbsp;
             <span className="text-white"> {this.props.element.sUserName} </span>
+            &nbsp;
+            <span className="text-primary"> @ </span>
+            &nbsp;
+            <span className="text-white"> {this.props.element.createdAt} </span>
           </div>
         </div>
       )
     } else {
       return (
         <div className="comment">
-          <div className="large text-primary"> {this.props.element.body} </div>
+          <div className="xx-large text-primary"> {this.props.element.body} </div>
 
           <br />
 
           <div>
+            <span className="text-primary"> by: </span>
+            &nbsp;
             <img src={this.props.element.img} />
+            &nbsp;
             <span className="text-white"> {this.props.element.sUserName} </span>
+            &nbsp;
+            <span className="text-primary"> @ </span>
+            &nbsp;
+            <span className="text-white"> {this.props.element.createdAt} </span>
+            &nbsp;
+            <span className="text-primary" onClick={this.showTextarea}> Reply </span>
           </div>
 
+          <br />
 
-          <div className="row">
-            <div className="col-md-6">
-              <input type="text" className="form-control" ref="nestedComment" placeholder="add a comment"></input>
-            </div>
-            <div className="col-md-6">
-              <button className="btn btn-red btn-xs" onClick={this.handleSubmit}>
-                Add Comment
-              </button>
-            </div>
-          </div>
+          {this.state.uniq ?
+            <div className="container">
+              <div className="row">
 
+                <div className="col-md-3">
+                  <textarea type='text' className="form-control" ref='nestedComment' placeholder="add a comment" rows="1"></textarea>
+                </div>
+
+                <div className="col-md-9">
+                  <button className="btnNested btn-xs center" onClick={this.handleSubmit}>
+                    Add Comment
+                  </button>
+                </div>
+
+              </div>
+            </div>
+          : null}
+
+          <br />
 
         </div>
       )
