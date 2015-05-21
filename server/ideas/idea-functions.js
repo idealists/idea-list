@@ -47,22 +47,19 @@ function getIdeas (req, res) {
       var text = req.headers.lookup.replace(/\s+/g,' ').trim();
       text = text.split(' ');
       var result={};
-      users = User.find({sUserName:{$in:text} });
-      ideas = Idea.find({ tags: { $in:text} })
+      ideas = Idea.find({ tags: { $in:text}, sUserName:{ $in:text} })
                 .select(selectFields).limit(40);
-      users.exec().then(function (users) {
-        users=users || [];
-        result.users = users;
-      }).then(
+      users= [];
+      result.users = users;
         ideas.exec().then(function (idealist) {
           idealist = idealist || [];
           result.ideas= idealist;
         }).then(function () {
           res.end(JSON.stringify(result));
-        }));
-
-      break;
+        });
+    break;
     default:
+    res.end('query is not valid');
     //custom query (to do when need arises)
   }
 
