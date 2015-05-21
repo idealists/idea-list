@@ -16,6 +16,7 @@ var IdeaList = React.createClass({
   },
 
   render: function(){
+    console.log('heres the ideas',this.props.ideas)
     var list = this.props.ideas.map(function(idea, index){
       if(!idea.email){
         idea.type = 'idea';
