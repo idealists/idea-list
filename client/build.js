@@ -855,9 +855,9 @@ var IdeaView = React.createClass({displayName: "IdeaView",
 
         React.createElement("div", {className: "container"}, 
           React.createElement("div", {className: "row"}, 
-            React.createElement("div", {className: "col-md-2"}), 
+            React.createElement("div", {className: "col-md-1"}), 
 
-            React.createElement("div", {className: "col-md-4"}, 
+            React.createElement("div", {className: "col-md-5"}, 
               React.createElement("textarea", {type: "text", className: "form-control", ref: "parentComment", placeholder: "add a comment", rows: "2"})
             ), 
 
