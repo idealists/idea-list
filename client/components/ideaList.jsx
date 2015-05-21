@@ -31,7 +31,7 @@ var IdeaList = React.createClass({
 
             <div className="col-md-11">
 
-              <Link to="ideaView" params={{id: idea._id, index: index}}>
+              <Link to="ideaView" params={{id: idea._id}}>
                 <div className="xx-large text-white">
                   {idea.title}
                 </div>
