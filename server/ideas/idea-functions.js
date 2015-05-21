@@ -167,7 +167,13 @@ function findId (pI, callback){
   });
 }
 function findIdComment (pI, callback){
-  Comment.findOne({ _id: pI },callback);
+  Comment.findOne({ _id: pI },function (err, comment){
+    if (err){
+      callback(err, null);
+    } else {
+      callback(null, comment);
+    }
+  });
 }
 
 function getComments (req, res) {
@@ -183,38 +189,6 @@ function getComments (req, res) {
             res.end(JSON.stringify( docs.comments));
       });
   });
-  // Idea.findById(ideaId)
-  //   .exec(function(err, idea) {
-  //     if (err) console.log('populate ERR', err);
-  //     else {
-
-  //       function commentarray (array){
-  //         return  array.map(function(singlecomment){
-  //             return fillcomments(singlecomment)
-  //         })
-  //       }
-  //       function fillcomments (fillthis){
-  //         if(fillthis.comments[0]){
-  //             console.log(fillthis)
-  //             fillthis.populate('comments',function(err, result){
-  //               result.comments = commentarray(result.comments)
-  //               // console.log('the resutl',result)
-  //               return result
-  //             })
-  //         }else{
-  //           return fillthis
-  //         };
-  //       }
-  //   };
-  //        var result = fillcomments(idea);
-  //        console.log('fianl out',result)
-  //        setTimeout(function(){res.end(JSON.stringify(result))},2000)
-  //      // res.end(JSON.stringify(idea.comments));
-  //   })
-    // .then(function(result){
-    //   console.log(result)
-    //   res.end(JSON.stringify(idea.comments));
-    // });
 } // end getComments
 
 
@@ -249,7 +223,7 @@ function createComment (req, res) {
     if (req.body.parentType === 'idea') {
       findId(req.body.parentId, function (err, idea) {
         if (err) console.log(err);
-        if ( newComment.commShortId === null ) {
+        if ( !newComment.commShortId ) {
           var count = idea.comments.length+1;
           newComment.commShortId = String(idea.shortId.split("_").slice(0,-1).join("_") + '_comm' + count).toLowerCase();
         }
@@ -271,7 +245,7 @@ function createComment (req, res) {
       findIdComment(req.body.parentId, function (err, comment) {
         if (err) { console.log('adding comment to comment ERROR:', err); }
 
-        if ( newComment.commShortId === undefined ) {
+        if ( !newComment.commShortId ) {
           var count1 = comment.comments.length+1;
           newComment.commShortId = comment.commShortId + count1;
         }
