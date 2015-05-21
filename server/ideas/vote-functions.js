@@ -54,7 +54,6 @@ function addIdeaVote(req, res) {
         counter += vote.value;
      // }
       
-      console.log("INSIDE IDEA MAP: counter: " , counter, ' vote.value: ', vote.value)
 
       // also want to have a voteCount on idea, 
       // filters for non-zero votes and gets length on new array via filter
@@ -83,6 +82,8 @@ function addIdeaVote(req, res) {
       idea.voters.push(newVote);
       counter = counter + voteInfo.rate;
     }
+    
+    console.log("counter before idea.rating, counter : " , counter);
 
     idea.rating = counter;
 
