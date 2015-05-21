@@ -237,11 +237,8 @@ function createComment (req, res) {
           var reply = { 'text': 'Comment added to idea: ' + idea.shortId + ' / Text: ' + idea.body + ' / To comment on this comment, use commentId: `' + newComment.commShortId + '`'};
           slackPost.postSlack(reply);
         });
-      }); // end of findId
-    }
-
-    // if a comment is commenting on a comment ...
-    if (req.body.parentType === 'comment') {
+      }).then( saveNewComment ); // end of findId
+    } else if (req.body.parentType === 'comment') { // if a comment is commenting on a comment ... 
       findIdComment(req.body.parentId, function (err, comment) {
         if (err) { console.log('adding comment to comment ERROR:', err); }
 
@@ -257,17 +254,19 @@ function createComment (req, res) {
           var reply = { 'text': 'Comment added to comment: ' + comment.commShortId + ' / Text: ' + comment.body + ' / To comment on this comment, use commentId: `' + newComment.commShortId + '`'};
           slackPost.postSlack(reply);
         });
-      });
+      }).then( saveNewComment );
     }
 
-    newComment.save(function(err, val){
-      if (err) console.log('comment save error:', err);
-    }).then(function(result){
-      console.log('SERVER CREATECOMMENT:', result);
-      if(!req.body.slackReq){
-        res.end(JSON.stringify(result));
-      } else { res.end(); }
-    });
+    function saveNewComment(){
+      newComment.save(function(err, val){
+        if (err) console.log('comment save error:', err);
+      }).then(function(result){
+        console.log('SERVER CREATECOMMENT:', result);
+        if(!req.body.slackReq){
+          res.end(JSON.stringify(result));
+        } else { res.end(); }
+      });
+    }
 
   }); // end of setUserId
 } // end of createComment
