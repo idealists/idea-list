@@ -72,8 +72,7 @@ function addIdeaVote(req, res) {
     
     idea.rating = total;
 
-    console.log("COUNTER: ", counter, ' VOTE.VALUE: ', idea.rating );
-
+    
     idea.save(function(err, ideaObj ){
       if (err) console.log(err);
       var voteObj = { 
@@ -125,7 +124,7 @@ function addCommVote(req, res) {
 
     // if the user has not voted before, then create the vote object
     if(!exists){
-      console.log('new vote')
+      console.log('new vote');
       var now = Date.now();
       var newVote = new Vote({
           createdAt : now,
