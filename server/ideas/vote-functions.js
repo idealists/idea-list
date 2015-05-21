@@ -123,7 +123,7 @@ function addCommVote(req, res) {
 
     // if the user has not voted before, then create the vote object
     if(!exists){
-      console.log('new vote')
+      console.log('new vote');
       var now = Date.now();
       var newVote = new Vote({
           createdAt : now,

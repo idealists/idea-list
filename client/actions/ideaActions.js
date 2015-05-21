@@ -4,7 +4,7 @@ var cookie     = require('react-cookie');
 var $          = require('jquery');
 
 var ideaActions = {
-  getIdeas: function(query, data){
+  getIdeas: function(query, data, cb){
     query = query || 'votes';
     data  = data  || null;
 
@@ -22,6 +22,7 @@ var ideaActions = {
         actionType : Constants.RELOAD_IDEALIST,
         data       : ideaList
       });
+      if(cb){ cb(); }
     });
   },
 
@@ -58,8 +59,8 @@ var ideaActions = {
       data     : newIdea
     })
     .done(function (ideaList) {
-      ideaActions.getIdeas('votes');
-      cb();
+      ideaActions.getIdeas('votes', null, cb);
+      //cb();
     });
   },
 
