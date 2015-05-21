@@ -34,8 +34,12 @@ var voteOptions = function(req,res){
 function addIdeaVote(req, res) {
   var voteInfo = req.body || req;
 
+  console.log('INSIDE ADDIDEAVOTE, voteInfo: ', voteInfo);
+
   Idea.findById(voteInfo.parentId, function(err, idea){
     if (err) console.log('\nError in addIdeaVote:', err);
+
+    console.log("INSIDE IDEA FINDBYID, idea:", idea );
 
     var total = 0;
     var alreadyVoted = false;
