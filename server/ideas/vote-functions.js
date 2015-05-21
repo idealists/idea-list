@@ -9,16 +9,18 @@ var Schema = mongoose.Schema;
 var voteOptions = function(req,res){
   var voteInfo = req.body || req;
 
+  console.log('\n Request:', voteInfo);
+
   // calculate the voting rate
-  (function rating(){
-    if(voteInfo.voteRating > 0){
-      voteInfo.rate = 1;
-    } else if (voteInfo.voteRating < 0){
-      voteInfo.rate = -1;
-    } else {
-      voteInfo.rate = 0;
-    }
-  })();
+  // (function rating(){
+  //   if(voteInfo.voteRating > 0){
+  //     voteInfo.rate = 1;
+  //   } else if (voteInfo.voteRating < 0){
+  //     voteInfo.rate = -1;
+  //   } else {
+  //     voteInfo.rate = 0;
+  //   }
+  // })();
 
   // if the vote is for an idea, add the vote to the idea
   // else add the vote to the comment
@@ -32,25 +34,38 @@ var voteOptions = function(req,res){
 function addIdeaVote(req, res) {
   var voteInfo = req.body || req;
 
-  Idea.findOne({ _id: voteInfo.parentId }, function(err, idea){
-    var counter = 0;
-    var exists = false;
+  voteInfo.rate = Number(voteInfo.rate);
+
+  console.log('INSIDE ADDIDEAVOTE, voteInfo: ', voteInfo);
+
+  Idea.findById(voteInfo.parentId, function(err, idea){
+    if (err) console.log('\nError in addIdeaVote:', err);
+
+    console.log("INSIDE IDEA FINDBYID, idea:", idea );
+
+    var total = 0;
+    var alreadyVoted = false;
+    var unvoted = false;
 
     // if the voter has voted before, then adjust their vote accordingly
     idea.voters.map(function(vote, index){
-      if(vote.voter === voteInfo.voterId){
-        exists = true;
-        if ( vote.value === voteInfo.rate && !voteInfo.slackReq ){ 
-          vote.value = 0; 
-        } else { vote.value = voteInfo.rate; }
-        counter = counter + vote.value;
-      } else {
-        counter = counter + vote.value;
+      if (String(vote.voter) === String(voteInfo.voterId)) {
+    console.log('INSIDE same voter: vote.voter === voteInfo.voterId:', String(vote.voter) === String(voteInfo.voterId) );
+        alreadyVoted = true;
+
+        if (vote.value !== voteInfo.rate) { 
+          vote.value = voteInfo.rate;
+        } else {
+          unvoted = true;
+          vote.value = 0;
+        }
       }
+
+      total += vote.value;
     });
 
     // if the user has not voted before, then create the vote object
-    if(!exists){
+    if (!alreadyVoted) {
       var now = Date.now();
       var newVote = new Vote({
           createdAt : now,
@@ -58,14 +73,16 @@ function addIdeaVote(req, res) {
           value     : voteInfo.rate,
           imgUrl    : voteInfo.userImage
       });
-      idea.voters.push(newVote);
-      counter = counter + voteInfo.rate;
-    }
 
-    idea.rating = counter;
+      idea.voters.push(newVote);
+      total += voteInfo.rate;
+      console.log('\n total: ', total); 
+    }
+    
+    idea.rating = total;
 
     idea.save(function(err, ideaObj ){
-      if (err) console.log(err);
+      if (err) console.log('In idea save: ', err);
       var voteObj = { 
           voteArray : ideaObj.voters, 
           rating    : ideaObj.rating
@@ -74,10 +91,19 @@ function addIdeaVote(req, res) {
       // if req is from Slack, send response to Slack channel
       if(voteInfo.slackReq){
         var reply;
-        if ( voteInfo.slackCommand === '/upvote' ) {
-          reply = { 'text': 'Upvote recorded for idea: ' + voteInfo.parentTitle + ' | Id: ' + voteInfo.shortId };
-        } else if ( voteInfo.slackCommand === '/downvote' ) {
-          reply = { 'text': 'Downvote recorded for idea: ' + voteInfo.parentTitle + ' | Id: ' + voteInfo.shortId };
+        var title = voteInfo.parentTitle || idea.title;
+        if (!unvoted){
+          if ( voteInfo.slackCommand === '/upvote' ) {
+            reply = { 'text': 'Upvote recorded for idea: ' + title + ' | Id: ' + voteInfo.shortId };
+          } else if ( voteInfo.slackCommand === '/downvote' ) {
+            reply = { 'text': 'Downvote recorded for idea: ' + title + ' | Id: ' + voteInfo.shortId };
+          }
+        } else {
+          if ( voteInfo.slackCommand === '/upvote' ) {
+            reply = { 'text': 'VOTE CHANGED to zero. \n You previously upvoted for idea: ' + title + ' | Id: ' + voteInfo.shortId };
+          } else if ( voteInfo.slackCommand === '/downvote' ) {
+            reply = { 'text': 'VOTE CHANGED to zero. \n You previously downvoted for idea: ' + title + ' | Id: ' + voteInfo.shortId };
+          }
         }
         slackPost.postSlack(reply);
         //res.end();
@@ -92,29 +118,33 @@ function addIdeaVote(req, res) {
 function addCommVote(req, res) {
   var voteInfo = req.body || req;
   
+  voteInfo.rate = Number(voteInfo.rate);
+
   Comment.findOne({ _id: voteInfo.parentId }, function(err, comment){
-    var counter = 0;
-    var exists = false;
+    if (err) console.log('\nError in addCommentVote:', err);
+
+    var total = 0;
+    var alreadyVoted = false;
+    var unvoted = false;
 
     // if the voter has voted before, then adjust their vote accordingly
     comment.voters.map(function(vote, index){
+      if (String(vote.voter) === String(voteInfo.voterId)) {
+        alreadyVoted = true;
 
-      // debugging
-      console.log('vote: ', vote, ' voteInfo: ', voteInfo);
-
-      if(vote.voter === voteInfo.voterId){
-        exists = true; 
-        if ( vote.value === voteInfo.rate && !voteInfo.slackReq ){ 
-          vote.value = 0; 
-        } else { vote.value = voteInfo.rate; }
-        counter = counter + vote.value;
-      } else {
-        counter = counter + vote.value;
+        if (vote.value !== voteInfo.rate) { 
+          vote.value = voteInfo.rate;
+        } else {
+          unvoted = true;
+          vote.value = 0;
+        }
       }
+
+      total += vote.value;
     });
 
     // if the user has not voted before, then create the vote object
-    if(!exists){
+    if (!alreadyVoted) {
       var now = Date.now();
       var newVote = new Vote({
           createdAt : now,
@@ -122,25 +152,36 @@ function addCommVote(req, res) {
           value     : voteInfo.rate,
           imgUrl    : voteInfo.userImage
       });
+
       comment.voters.push(newVote);
-      counter = counter + voteInfo.rate;
+      total += voteInfo.rate;
     }
-    comment.rating = counter;
-      
-    comment.save(function(err, commentObj ){
-      if (err) console.log(err);
+    
+    comment.rating = total;
+
+    
+    comment.save(function(err, commObj ){
+      if (err) console.log('In comment save: ', err);
       var voteObj = { 
-          voteArray : commentObj.voters, 
-          rating    : commentObj.rating
+          voteArray : commObj.voters, 
+          rating    : commObj.rating
       };
       // if req is from the app client, res.end();
       // if req is from Slack, send response to Slack channel
       if(voteInfo.slackReq){
-        var reply;
-        if(voteInfo.voteRating < 0){
-          reply = { 'text': 'Downvote recorded for comment ' + voteInfo.parentTitle + ' | Id: ' + voteInfo.shortId };
+        var reply; 
+        if (!unvoted){
+          if ( voteInfo.slackCommand === '/upvote' ) {
+            reply = { 'text': 'Upvote recorded for comment Id: ' + voteInfo.shortId };
+          } else if ( voteInfo.slackCommand === '/downvote' ) {
+            reply = { 'text': 'Downvote recorded for comment Id: ' + voteInfo.shortId };
+          }
         } else {
-          reply = { 'text': 'Upvote recorded for comment ' + voteInfo.parentTitle + ' | Id: ' + voteInfo.shortId };
+          if ( voteInfo.slackCommand === '/upvote' ) {
+            reply = { 'text': 'VOTE CHANGED to zero. \n You previously upvoted for comment Id: ' + voteInfo.shortId };
+          } else if ( voteInfo.slackCommand === '/downvote' ) {
+            reply = { 'text': 'VOTE CHANGED to zero. \n You previously downvoted for comment Id: ' + voteInfo.shortId };
+          }
         }
         slackPost.postSlack(reply);
         //res.end();
@@ -151,4 +192,7 @@ function addCommVote(req, res) {
   });
 } // end of addCommVote
 
-module.exports = voteOptions;
+module.exports = {
+  voteOptions: voteOptions,
+  addIdeaVote: addIdeaVote
+};

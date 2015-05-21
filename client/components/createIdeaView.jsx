@@ -18,12 +18,13 @@ var CreateIdeaView = React.createClass({
     };
 
     // alert if no title or body
-    ideaActions.createIdea(newIdea);
+    var self = this;
+    ideaActions.createIdea(newIdea, self.goBack);
 
     this.refs.newIdeaTitle.getDOMNode().value = '';
     this.refs.newIdeaBody.getDOMNode().value = '';
     this.refs.newIdeaTags.getDOMNode().value = '';
-    this.goBack()
+    // this.goBack()
 
   },
 

@@ -4,6 +4,8 @@ var User = require('../models/users');
 var slackPost = require('./slackPost');
 var Status = require('./statusConstants');
 var ObjectId = require('mongoose').Types.ObjectId; 
+var voteFunctions = require('./vote-functions.js');
+//var request = require('request');
 
 function getIdeas (req, res) {
   req.headers.query = req.headers.query || "";
@@ -94,6 +96,7 @@ function createIdea (req, res) {
     body         : req.body.body,
     tags         : req.body.tags || null,
     rating       : 0,
+    voteCount    : 0,
     status       : Status.OPEN
   });
 
@@ -104,9 +107,23 @@ function createIdea (req, res) {
     var reply = { 'text': 'Idea Posted! Idea_id: `' + idea.shortId + '` | Idea: ' + idea.body + ' | tags: ' + idea.tags || '' };
     slackPost.postSlack(reply);
     console.log('New idea:', idea.title, 'SAVED');
+  })
+  .then(function () {
+    // automagically vote for your own idea
+    var voteOptions = {
+      voterId    : req.body.userId,
+      parentId   : idea._id,
+      user_name  : req.body.user_name,
+      voteType   : 'idea',
+      rate       : 1,
+      userImage  : req.body.img
+    };
+
+    voteFunctions.addIdeaVote(voteOptions, res);
   });
 
-  res.end();
+
+  // res.end();
 } // end createIdea
 
 function updateIdea (req, res) {
@@ -150,7 +167,13 @@ function findId (pI, callback){
   });
 }
 function findIdComment (pI, callback){
-  Comment.findOne({ _id: pI },callback);
+  Comment.findOne({ _id: pI },function (err, comment){
+    if (err){
+      callback(err, null);
+    } else {
+      callback(null, comment);
+    }
+  });
 }
 
 function getComments (req, res) {
@@ -166,38 +189,6 @@ function getComments (req, res) {
             res.end(JSON.stringify( docs.comments));
       });
   });
-  // Idea.findById(ideaId)
-  //   .exec(function(err, idea) {
-  //     if (err) console.log('populate ERR', err);
-  //     else {
-
-  //       function commentarray (array){
-  //         return  array.map(function(singlecomment){
-  //             return fillcomments(singlecomment)
-  //         })
-  //       }
-  //       function fillcomments (fillthis){
-  //         if(fillthis.comments[0]){
-  //             console.log(fillthis)
-  //             fillthis.populate('comments',function(err, result){
-  //               result.comments = commentarray(result.comments)
-  //               // console.log('the resutl',result)
-  //               return result
-  //             })
-  //         }else{
-  //           return fillthis
-  //         };
-  //       }
-  //   };
-  //        var result = fillcomments(idea);
-  //        console.log('fianl out',result)
-  //        setTimeout(function(){res.end(JSON.stringify(result))},2000)
-  //      // res.end(JSON.stringify(idea.comments));
-  //   })
-    // .then(function(result){
-    //   console.log(result)
-    //   res.end(JSON.stringify(idea.comments));
-    // });
 } // end getComments
 
 
@@ -216,7 +207,7 @@ function createComment (req, res) {
       updatedAt  : now,
       parentId   : req.body.parentId,
       parentType : req.body.parentType,
-      commShortId: req.body.commShortId,
+      commShortId: req.body.commShortId || null,
       userId     : req.body.userId,
       slackId    : req.body.slackId,
       sUserName  : req.body.sUserName,
@@ -232,11 +223,11 @@ function createComment (req, res) {
     if (req.body.parentType === 'idea') {
       findId(req.body.parentId, function (err, idea) {
         if (err) console.log(err);
-
         if ( !newComment.commShortId ) {
           var count = idea.comments.length+1;
           newComment.commShortId = String(idea.shortId.split("_").slice(0,-1).join("_") + '_comm' + count).toLowerCase();
         }
+        console.log('INSIDE CREATECOMMENT/ newComment: ', newComment, ' / req: ', req);
 
         idea.comments.push(newComment);
 
@@ -246,15 +237,15 @@ function createComment (req, res) {
           var reply = { 'text': 'Comment added to idea: ' + idea.shortId + ' / Text: ' + idea.body + ' / To comment on this comment, use commentId: `' + newComment.commShortId + '`'};
           slackPost.postSlack(reply);
         });
-      }); // end of findId
-    }
 
-    // if a comment is commenting on a comment ...
-    if (req.body.parentType === 'comment') {
+        saveNewComment();
+
+      }); // end of findId
+    } else if (req.body.parentType === 'comment') { // if a comment is commenting on a comment ... 
       findIdComment(req.body.parentId, function (err, comment) {
         if (err) { console.log('adding comment to comment ERROR:', err); }
 
-        if ( newComment.commShortId === undefined ) {
+        if ( !newComment.commShortId ) {
           var count1 = comment.comments.length+1;
           newComment.commShortId = comment.commShortId + count1;
         }
@@ -266,17 +257,22 @@ function createComment (req, res) {
           var reply = { 'text': 'Comment added to comment: ' + comment.commShortId + ' / Text: ' + comment.body + ' / To comment on this comment, use commentId: `' + newComment.commShortId + '`'};
           slackPost.postSlack(reply);
         });
+
+        saveNewComment();
+
       });
     }
 
-    newComment.save(function(err, val){
-      if (err) console.log('comment save error:', err);
-    }).then(function(result){
-      console.log('SERVER CREATECOMMENT:', result);
-      if(!req.body.slackReq){
-        res.end(JSON.stringify(result));
-      } else { res.end(); }
-    });
+    function saveNewComment(){
+      newComment.save(function(err, val){
+        if (err) console.log('comment save error:', err);
+      }).then(function(result){
+        console.log('SERVER CREATECOMMENT:', result);
+        if(!req.body.slackReq){
+          res.end(JSON.stringify(result));
+        } else { res.end(); }
+      });
+    }
 
   }); // end of setUserId
 } // end of createComment

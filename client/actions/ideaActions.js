@@ -4,7 +4,7 @@ var cookie     = require('react-cookie');
 var $          = require('jquery');
 
 var ideaActions = {
-  getIdeas: function(query, data){
+  getIdeas: function(query, data, cb){
     query = query || 'votes';
     data  = data  || null;
 
@@ -22,6 +22,7 @@ var ideaActions = {
         actionType : Constants.RELOAD_IDEALIST,
         data       : ideaList
       });
+      if(cb){ cb(); }
     });
   },
 
@@ -42,7 +43,7 @@ var ideaActions = {
     });
   },
 
-  createIdea: function(newIdea){
+  createIdea: function(newIdea, cb){
     var ideaActions   = this;
     var userinfo      = cookie.load('userInfo');
     newIdea.user_name = userinfo.sUserName;
@@ -58,7 +59,8 @@ var ideaActions = {
       data     : newIdea
     })
     .done(function (ideaList) {
-      ideaActions.getIdeas('votes');
+      ideaActions.getIdeas('votes', null, cb);
+      //cb();
     });
   },
 

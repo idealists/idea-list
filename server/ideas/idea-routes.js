@@ -1,7 +1,7 @@
 var ideaFunctions = require('./idea-functions');
 var isAuth = require('../auth').isAuthenticated;
 var Slack = require('./slackInt');
-var Vote = require('./vote-functions');
+var Vote = require('./vote-functions').voteOptions;
 
 module.exports = function(ideas){
   ideas.get('/', isAuth, ideaFunctions.getIdeas);

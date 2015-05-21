@@ -27,6 +27,7 @@ var Idea = new Schema({
   tags         : [String],
   status       : String,
   voters       : [Vote],
+  voteCount    : Number,
   comments     : [{type: Schema.Types.ObjectId, ref: 'Comment'}],
   rating       : Number,
 });

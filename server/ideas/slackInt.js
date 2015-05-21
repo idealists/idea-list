@@ -4,6 +4,7 @@ var User = require('../models/users');
 var Vote = require('../models/votes');
 var IFuncs = require('./idea-functions');
 var VoteFuncs = require('./vote-functions');
+var Status = require('./statusConstants');
 //var slackPost = require('./slackPost');
 //var request = require('request');
 
@@ -163,14 +164,14 @@ function slackInt (req, res){
                 shortId    : req.body.shortId,
                 user_name  : req.body.user_name,
                 voteType   : req.body.voteType,
-                voteRating : 1,
+                rate       : 1,
                 userImage  : uId.image['24'],
                 slackReq   : true,
                 slackCommand  : '/upvote'
               };
 
               console.log('voteInfo:', voteInfo);
-              VoteFuncs(voteInfo);
+              VoteFuncs.voteOptions(voteInfo);
             });
           }
         });
@@ -192,14 +193,14 @@ function slackInt (req, res){
                 shortId       : req.body.shortId,
                 user_name     : req.body.user_name,
                 voteType      : req.body.voteType,
-                voteRating    : 1,
+                rate          : 1,
                 userImage     : uId.image['24'],
                 slackReq      : true,
                 slackCommand  : '/upvote'
               };
 
               console.log('voteInfo:', voteInfo);
-              VoteFuncs(voteInfo);
+              VoteFuncs.voteOptions(voteInfo);
             });
           }
         });
@@ -238,14 +239,14 @@ function slackInt (req, res){
                 shortId       : req.body.shortId,
                 user_name     : req.body.user_name,
                 voteType      : req.body.voteType,
-                voteRating    : -1,
+                rate          : -1,
                 userImage     : uId.image['24'],
                 slackReq      : true,
                 slackCommand  : '/downvote'
               };
 
               console.log('voteInfo:', voteInfo);
-              VoteFuncs(voteInfo);
+              VoteFuncs.voteOptions(voteInfo);
             });
           }
         });
@@ -267,14 +268,14 @@ function slackInt (req, res){
                 shortId       : req.body.shortId,
                 user_name     : req.body.user_name,
                 voteType      : req.body.voteType,
-                voteRating    : -1,
+                rate          : -1,
                 userImage     : uId.image['24'],
                 slackReq      : true,
                 slackCommand  : '/downvote'
               };
 
               console.log('voteInfo:', voteInfo);
-              VoteFuncs(voteInfo);
+              VoteFuncs.voteOptions(voteInfo);
             });
           }
         });
@@ -285,7 +286,7 @@ function slackInt (req, res){
       
       var rawIdeas = Idea.find()
                       .select(selectFields)
-                      .where({ active: true })
+                      .where({ status: Status.OPEN })
                       .sort('-updatedAt')
                       .limit(10);
       rawIdeas.exec().then(function(value){
