@@ -1,8 +1,8 @@
 var React       = require('react');
 var NavBar      = require('./navBar.jsx');
 var CommentList = require('./commentList.jsx');
-var ideaActions = require('../actions/ideaActions');
-var ideaStore   = require('../stores/ideaStore');
+var ideaViewActions = require('../actions/ideaViewActions');
+var ideaViewStore   = require('../stores/ideaViewStore');
 var commentStore   = require('../stores/commentStore');
 var commentActions = require('../actions/commentActions');
 
@@ -10,27 +10,30 @@ var IdeaView = React.createClass({
 
 
   getInitialState: function () {
+    ideaViewActions.getIdea('id',this.props.params.id);
     commentActions.getComments('votes', this.props.params.id);
 
     return {
-      idea     : ideaStore.fetchIdeas()[this.props.params.index],
+      idea     : ideaViewStore.fetchIdeas(),
+      dedit     : ideaViewStore.ideaEditState(),
       comments : commentStore.fetchComments()
     }
   },
 
   componentDidMount : function(){
-    // ideaStore.addChangeListener(this._onChange);
+     ideaViewActions.getIdea('id',this.props.params.id);
+    commentActions.getComments('votes', this.props.params.id);
     commentStore.addChangeListener(this._onChange);
   },
 
   componentWillUnmount : function(){
-    // ideaStore.removeChangeListener(this._onChange);
     commentStore.removeChangeListener(this._onChange);
   },
 
   _onChange : function(){
     this.setState({
-      // idea     : ideaStore.fetchIdeas()[this.props.params.index],
+      idea     : ideaViewStore.fetchIdeas(),
+      edit     : ideaViewStore.ideaEditState(),
       comments : commentStore.fetchComments()
     });
   },

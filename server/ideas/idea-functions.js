@@ -3,7 +3,7 @@ var Idea = require('../models/ideas');
 var User = require('../models/users');
 var slackPost = require('./slackPost');
 var Status = require('./statusConstants');
-//var request = require('request');
+var ObjectId = require('mongoose').Types.ObjectId; 
 
 function getIdeas (req, res) {
   req.headers.query = req.headers.query || "";
@@ -41,7 +41,8 @@ function getIdeas (req, res) {
                 .select(selectFields);
       break;
     case 'id':
-      ideas = Idea.find({ _id: ObjectId.fromString(req.headers.id)});
+      console.log('req.headers',req.headers.data);
+      ideas = Idea.find({ _id:ObjectId(req.headers.data) });
       break;
     case 'searchbar':
       var text = req.headers.lookup.replace(/\s+/g,' ').trim();
