@@ -164,7 +164,7 @@ function slackInt (req, res){
                 shortId    : req.body.shortId,
                 user_name  : req.body.user_name,
                 voteType   : req.body.voteType,
-                voteRating : 1,
+                rate       : 1,
                 userImage  : uId.image['24'],
                 slackReq   : true,
                 slackCommand  : '/upvote'
@@ -193,7 +193,7 @@ function slackInt (req, res){
                 shortId       : req.body.shortId,
                 user_name     : req.body.user_name,
                 voteType      : req.body.voteType,
-                voteRating    : 1,
+                rate          : 1,
                 userImage     : uId.image['24'],
                 slackReq      : true,
                 slackCommand  : '/upvote'
