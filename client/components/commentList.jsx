@@ -79,7 +79,9 @@ var Comment = React.createClass({
     if (this.props.level > 0) {
       return (
         <div className="comment">
-          <div className="text-primary"> {this.props.element.body} </div>
+          <div className="large text-primary"> {this.props.element.body} </div>
+
+          <br />
 
           <div>
             <img src={this.props.element.img} />
@@ -91,6 +93,8 @@ var Comment = React.createClass({
       return (
         <div className="comment">
           <div className="large text-primary"> {this.props.element.body} </div>
+
+          <br />
 
           <div>
             <img src={this.props.element.img} />
