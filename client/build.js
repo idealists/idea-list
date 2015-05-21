@@ -375,7 +375,7 @@ var Comment = React.createClass({displayName: "Comment",
             " ", 
             React.createElement("span", {className: "text-white"}, " ", this.state.time, " "), 
             " ", 
-            React.createElement("span", {className: "text-red", onClick: this.showTextarea}, " Reply ")
+            React.createElement("span", {className: "text-red", onClick: this.showTextarea}, " REPLY ")
           ), 
 
           React.createElement("br", null), 
@@ -650,7 +650,7 @@ var IdeaList = React.createClass({displayName: "IdeaList",
             React.createElement("div", {className: "col-md-11"}, 
 
               React.createElement(Link, {to: "ideaView", params: {id: idea._id, index: index}}, 
-                React.createElement("div", {className: "xx-large text-white"}, 
+                React.createElement("div", {className: "xx-large text-white ideaTitle"}, 
                   idea.title
                 )
               ), 

@@ -30,10 +30,6 @@ body {
   padding: 9px;
   opacity: 1;
 }
-.idea > a,
-.idea > a:hover {
-  text-decoration: none;
-}
 #searchBar {
   background-color: transparent;
   /*border: none;*/
@@ -56,9 +52,6 @@ body {
 }
 .filter {
   font-size: 18px;
-}
-.nopacity {
-  opacity: 1;
 }
 .nopadding {
    padding: 0 !important;

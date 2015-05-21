@@ -16,7 +16,6 @@ var IdeaList = React.createClass({
   },
 
   render: function(){
-    console.log('heres the ideas',this.props.ideas)
     var list = this.props.ideas.map(function(idea, index){
       if(!idea.email){
         idea.type = 'idea';
@@ -32,7 +31,7 @@ var IdeaList = React.createClass({
             <div className="col-md-11">
 
               <Link to="ideaView" params={{id: idea._id}}>
-                <div className="xx-large text-white">
+              <div className="xx-large text-white ideaTitle">
                   {idea.title}
                 </div>
               </Link>

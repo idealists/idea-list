@@ -127,7 +127,7 @@ var Comment = React.createClass({
             &nbsp;
             <span className="text-white"> {this.state.time} </span>
             &nbsp;
-            <span className="text-red" onClick={this.showTextarea}> Reply </span>
+            <span className="text-red" onClick={this.showTextarea}> REPLY </span>
           </div>
 
           <br />
