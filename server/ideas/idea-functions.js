@@ -16,29 +16,25 @@ function getIdeas (req, res) {
       ideas = Idea.find()
                 .select(selectFields)
                 .where({status: Status.OPEN})
-                .sort('-updatedAt')
-                .limit(10);
+                .sort('-updatedAt');
       break;
     case 'dateLast':
       ideas = Idea.find()
                 .select(selectFields)
                 .where({status: Status.OPEN})
-                .sort('updatedAt')
-                .limit(10);
+                .sort('updatedAt');
       break;
     case 'votes':
       ideas = Idea.find()
                 .select(selectFields)
                 .where({status: Status.OPEN})
-                .sort('-rating')
-                .limit(10);
+                .sort('-rating');
       break;
     case 'tags':
     //add username to tags array for easy find of people also.
       ideas = Idea.find({ tags: { $in:req.headers.tags } })
                 .select(selectFields)
-                .where({status: Status.OPEN})
-                .limit(10);
+                .where({status: Status.OPEN});
       break;
     case 'userId':
       ideas = Idea.find({ userId:req.headers.userId })
@@ -167,19 +163,7 @@ function getComments (req, res) {
           path: 'comments.comments'
       };
       Comment.populate(idea, opts, function(err, docs) {
-      var opts = {
-          path: 'comments.comments.comments'
-      };
-        Comment.populate(idea, opts, function(err, docs) {
-          var opts = {
-            path: 'comments.comments.comments.comments'
-          };
-          Comment.populate(idea, opts, function(err, docs) {
-            result =
             res.end(JSON.stringify( docs.comments));
-          });
-
-        });
       });
   });
   // Idea.findById(ideaId)

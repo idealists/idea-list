@@ -68,26 +68,40 @@ var Comment = React.createClass({
   },
 
   render: function(){
+    if (this.props.level>0){
+      return (
+            <div className="comment text-primary">
 
-    return (
-      <div className="comment text-primary">
+              <h3> + {this.props.element.body} </h3>
 
-        <h3> + {this.props.element.body} </h3>
+              <div>
+                <img src={this.props.element.img}/>
+                {this.props.element.sUserName}
+              </div>
+            </div>
+          )
+    }else{
+      return (
+        <div className="comment text-primary">
 
-        <div>
-          <img src={this.props.element.img}/>
-          {this.props.element.sUserName}
-        </div>
-        <form className="form-inline" onSubmit={this.handleSubmit}>
-          <div className="form-group">
-            <input className="form-control" type='text' ref='nestedComment' placeholder='add comment'> </input>
-            <input className="btn btn-red btn-xs" type="submit" value="Post"> </input>
+          <h3> + {this.props.element.body} </h3>
+
+          <div>
+            <img src={this.props.element.img}/>
+            {this.props.element.sUserName}
           </div>
-        </form>
-      </div>
-    )
+          <form className="form-inline" onSubmit={this.handleSubmit}>
+            <div className="form-group">
+              <input className="form-control" type='text' ref='nestedComment' placeholder='add comment'> </input>
+              <input className="btn btn-red btn-xs" type="submit" value="Post"> </input>
+            </div>
+          </form>
+        </div>
+      )  
+    }
   }
 });
+
 // 
 module.exports = CommentList;
 
