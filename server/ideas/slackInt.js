@@ -4,6 +4,7 @@ var User = require('../models/users');
 var Vote = require('../models/votes');
 var IFuncs = require('./idea-functions');
 var VoteFuncs = require('./vote-functions');
+var Status = require('./statusConstants');
 //var slackPost = require('./slackPost');
 //var request = require('request');
 
@@ -285,7 +286,7 @@ function slackInt (req, res){
       
       var rawIdeas = Idea.find()
                       .select(selectFields)
-                      .where({ active: true })
+                      .where({ status: Status.OPEN })
                       .sort('-updatedAt')
                       .limit(10);
       rawIdeas.exec().then(function(value){
