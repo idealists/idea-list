@@ -72,6 +72,8 @@ function addIdeaVote(req, res) {
     
     idea.rating = total;
 
+    console.log("COUNTER: ", counter, ' VOTE.VALUE: ', idea.rating );
+
     idea.save(function(err, ideaObj ){
       if (err) console.log(err);
       var voteObj = { 
