@@ -47,11 +47,13 @@ function getIdeas (req, res) {
       var text = req.headers.lookup.replace(/\s+/g,' ').trim();
       text = text.split(' ');
       var result={};
-      ideas = Idea.find({ tags: { $in:text}, sUserName:{ $in:text} })
+      ideas = Idea.find({$or:[{ tags: { $in:text}}, {sUserName:{ $in:text} }]})
                 .select(selectFields).limit(40);
       users= [];
       result.users = users;
-        ideas.exec().then(function (idealist) {
+        ideas.exec(function(err,val){
+          if(err){console.log('searchbar err:',err)}
+        }).then(function (idealist) {
           idealist = idealist || [];
           result.ideas= idealist;
         }).then(function () {
