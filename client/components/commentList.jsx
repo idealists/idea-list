@@ -13,7 +13,7 @@ var Link  = Router.Link;
 var CommentList = React.createClass({
   render: function(){
     console.log('the commetst to reder',this.props.comments)
-    var here = this           
+    var here = this
     var childcomments = function(com,parentId,level) {
       if(com.length>0){
         var result= com.map(function(comdata,index){
@@ -22,17 +22,25 @@ var CommentList = React.createClass({
           if(level===0){ ptype === 'idea'}
             // console.oog
           return (
-            <div > 
-              <VoteView  object = {comdata}/>            
-              <Comment element = {comdata} root= {parentId} level={level} ptype={ptype}/>
-                {childcomments(comdata.comments,parentId,level+1)}
+            <div className="container">
+              <div className="row">
+                <div className="col-md-1">
+                  <VoteView object={comdata}/>
+                </div>
+
+                <div className="col-md-11">
+                  <Comment element={comdata} root={parentId} level={level} ptype={ptype} />
+                  {childcomments(comdata.comments, parentId, level+1)}
+                </div>
+              </div>
+              <br />
             </div>
           )
         });
         return result
       }
     };
-    var list = childcomments(this.props.comments,this.props.idea,0) 
+    var list = childcomments(this.props.comments,this.props.idea,0)
     return (
       <div>
         {list}
@@ -68,40 +76,46 @@ var Comment = React.createClass({
   },
 
   render: function(){
-    if (this.props.level>0){
+    if (this.props.level > 0) {
       return (
-            <div className="comment text-primary">
-
-              <h3> + {this.props.element.body} </h3>
-
-              <div>
-                <img src={this.props.element.img}/>
-                {this.props.element.sUserName}
-              </div>
-            </div>
-          )
-    }else{
-      return (
-        <div className="comment text-primary">
-
-          <h3> + {this.props.element.body} </h3>
+        <div className="comment">
+          <div className="text-primary"> {this.props.element.body} </div>
 
           <div>
-            <img src={this.props.element.img}/>
-            {this.props.element.sUserName}
+            <img src={this.props.element.img} />
+            <span className="text-white"> {this.props.element.sUserName} </span>
           </div>
-          <form className="form-inline" onSubmit={this.handleSubmit}>
-            <div className="form-group">
-              <input className="form-control" type='text' ref='nestedComment' placeholder='add comment'> </input>
-              <input className="btn btn-red btn-xs" type="submit" value="Post"> </input>
-            </div>
-          </form>
         </div>
-      )  
+      )
+    } else {
+      return (
+        <div className="comment">
+          <div className="large text-primary"> {this.props.element.body} </div>
+
+          <div>
+            <img src={this.props.element.img} />
+            <span className="text-white"> {this.props.element.sUserName} </span>
+          </div>
+
+
+          <div className="row">
+            <div className="col-md-6">
+              <input type="text" className="form-control" ref="nestedComment" placeholder="add a comment"></input>
+            </div>
+            <div className="col-md-6">
+              <button className="btn btn-red btn-xs" onClick={this.handleSubmit}>
+                Add Comment
+              </button>
+            </div>
+          </div>
+
+
+        </div>
+      )
     }
   }
 });
 
-// 
+//
 module.exports = CommentList;
 

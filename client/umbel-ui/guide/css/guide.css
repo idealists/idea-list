@@ -57,6 +57,9 @@ body {
 .filter {
   font-size: 18px;
 }
+.nopacity {
+  opacity: 1;
+}
 article,
 aside,
 details,
@@ -4418,7 +4421,8 @@ a.list-group-item.active > .badge,
   padding: 30px;
   margin-bottom: 30px;
   color: inherit;
-  background-color: #eeeeee;
+  background-color: #45aeb1;
+  opacity: 0.5;
 }
 .jumbotron h1,
 .jumbotron .h1 {

@@ -4,11 +4,13 @@ var Comment = React.createClass({
   render: function(){
 
     return (
-      <div className="text-primary">
-        <h3> + {comment.body} </h3>
+      <div>
+        <div className="text-primary"> {comment.body} </div>
         <div>
-          <img src={comment.img}/>
-          {comment.sUserName}
+          <img src={comment.img} />
+          <span className="text-white">
+            {comment.sUserName}
+          </span>
         </div>
       </div>
     )
