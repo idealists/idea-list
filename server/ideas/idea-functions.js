@@ -237,7 +237,10 @@ function createComment (req, res) {
           var reply = { 'text': 'Comment added to idea: ' + idea.shortId + ' / Text: ' + idea.body + ' / To comment on this comment, use commentId: `' + newComment.commShortId + '`'};
           slackPost.postSlack(reply);
         });
-      }).then( saveNewComment ); // end of findId
+
+        saveNewComment();
+
+      }); // end of findId
     } else if (req.body.parentType === 'comment') { // if a comment is commenting on a comment ... 
       findIdComment(req.body.parentId, function (err, comment) {
         if (err) { console.log('adding comment to comment ERROR:', err); }
@@ -254,7 +257,10 @@ function createComment (req, res) {
           var reply = { 'text': 'Comment added to comment: ' + comment.commShortId + ' / Text: ' + comment.body + ' / To comment on this comment, use commentId: `' + newComment.commShortId + '`'};
           slackPost.postSlack(reply);
         });
-      }).then( saveNewComment );
+
+        saveNewComment();
+        
+      });
     }
 
     function saveNewComment(){
