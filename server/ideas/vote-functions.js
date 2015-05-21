@@ -34,6 +34,8 @@ var voteOptions = function(req,res){
 function addIdeaVote(req, res) {
   var voteInfo = req.body || req;
 
+  voteInfo.rate = Number(voteInfo.rate);
+
   console.log('INSIDE ADDIDEAVOTE, voteInfo: ', voteInfo);
 
   Idea.findById(voteInfo.parentId, function(err, idea){
@@ -44,11 +46,11 @@ function addIdeaVote(req, res) {
     var total = 0;
     var alreadyVoted = false;
 
+    console.log('INSIDE same voter: typeof vote.voter and voteInfo.voterId:', typeof(vote.voter), typeof(voterId));
     // if the voter has voted before, then adjust their vote accordingly
     idea.voters.map(function(vote, index){
       if (String(vote.voter) === voteInfo.voterId) {
         alreadyVoted = true;
-        voteInfo.rate = Number(voteInfo.rate);
 
         if (vote.value !== voteInfo.rate) { 
           vote.value = voteInfo.rate;
