@@ -170,7 +170,7 @@ function slackInt (req, res){
               };
 
               console.log('voteInfo:', voteInfo);
-              VoteFuncs(voteInfo);
+              VoteFuncs.voteOptions(voteInfo);
             });
           }
         });
@@ -199,7 +199,7 @@ function slackInt (req, res){
               };
 
               console.log('voteInfo:', voteInfo);
-              VoteFuncs(voteInfo);
+              VoteFuncs.voteOptions(voteInfo);
             });
           }
         });
@@ -245,7 +245,7 @@ function slackInt (req, res){
               };
 
               console.log('voteInfo:', voteInfo);
-              VoteFuncs(voteInfo);
+              VoteFuncs.voteOptions(voteInfo);
             });
           }
         });
@@ -274,7 +274,7 @@ function slackInt (req, res){
               };
 
               console.log('voteInfo:', voteInfo);
-              VoteFuncs(voteInfo);
+              VoteFuncs.voteOptions(voteInfo);
             });
           }
         });
