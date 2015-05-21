@@ -13,7 +13,7 @@ var Link  = Router.Link;
 var CommentList = React.createClass({
   render: function(){
     console.log('the commetst to reder',this.props.comments)
-    var here = this           
+    var here = this
     var childcomments = function(com,parentId,level) {
       if(com.length>0){
         var result= com.map(function(comdata,index){
@@ -22,17 +22,25 @@ var CommentList = React.createClass({
           if(level===0){ ptype === 'idea'}
             // console.oog
           return (
-            <div > 
-              <VoteView  object = {comdata}/>            
-              <Comment element = {comdata} root= {parentId} level={level} ptype={ptype}/>
-                {childcomments(comdata.comments,parentId,level+1)}
+            <div className="container">
+              <div className="row">
+                <div className="col-md-1">
+                  <VoteView object={comdata}/>
+                </div>
+
+                <div className="col-md-11">
+                  <Comment element={comdata} root={parentId} level={level} ptype={ptype} />
+                  {childcomments(comdata.comments, parentId, level+1)}
+                </div>
+              </div>
+              <br />
             </div>
           )
         });
         return result
       }
     };
-    var list = childcomments(this.props.comments,this.props.idea,0) 
+    var list = childcomments(this.props.comments,this.props.idea,0)
     return (
       <div>
         {list}
@@ -46,7 +54,14 @@ var CommentList = React.createClass({
 
 
 var Comment = React.createClass({
+  getInitialState: function(){
+    var uniq = this.props.element._id;
 
+    return {
+      uniq: false,
+      time: new Date(this.props.element.createdAt).toLocaleString()
+    }
+  },
 
   handleSubmit: function(e) {
     e.preventDefault();
@@ -67,41 +82,82 @@ var Comment = React.createClass({
     this.refs.nestedComment.getDOMNode().value = '';
   },
 
+  showTextarea: function(){
+    this.setState({
+      uniq: !this.state.uniq
+    })
+  },
+
   render: function(){
-    if (this.props.level>0){
+    if (this.props.level > 0) {
       return (
-            <div className="comment text-primary">
+        <div className="comment">
+          <div className="xx-large text-primary"> {this.props.element.body} </div>
 
-              <h3> + {this.props.element.body} </h3>
-
-              <div>
-                <img src={this.props.element.img}/>
-                {this.props.element.sUserName}
-              </div>
-            </div>
-          )
-    }else{
-      return (
-        <div className="comment text-primary">
-
-          <h3> + {this.props.element.body} </h3>
+          <br />
 
           <div>
-            <img src={this.props.element.img}/>
-            {this.props.element.sUserName}
+            <span className="text-primary"> by: </span>
+            &nbsp;
+            <img src={this.props.element.img} />
+            &nbsp;
+            <span className="text-white"> {this.props.element.sUserName} </span>
+            &nbsp;
+            <span className="text-primary"> @ </span>
+            &nbsp;
+            <span className="text-white"> {this.state.time} </span>
           </div>
-          <form className="form-inline" onSubmit={this.handleSubmit}>
-            <div className="form-group">
-              <input className="form-control" type='text' ref='nestedComment' placeholder='add comment'> </input>
-              <input className="btn btn-red btn-xs" type="submit" value="Post"> </input>
-            </div>
-          </form>
         </div>
-      )  
+      )
+    } else {
+      return (
+        <div className="comment">
+          <div className="xx-large text-primary"> {this.props.element.body} </div>
+
+          <br />
+
+          <div>
+            <span className="text-primary"> by: </span>
+            &nbsp;
+            <img src={this.props.element.img} />
+            &nbsp;
+            <span className="text-white"> {this.props.element.sUserName} </span>
+            &nbsp;
+            <span className="text-primary"> @ </span>
+            &nbsp;
+            <span className="text-white"> {this.state.time} </span>
+            &nbsp;
+            <span className="text-red" onClick={this.showTextarea}> REPLY </span>
+          </div>
+
+          <br />
+
+          {this.state.uniq ?
+            <div className="container">
+              <div className="row">
+
+                <div className="col-md-3">
+                  <textarea type='text' className="form-control" ref='nestedComment' placeholder="add a comment" rows="1"></textarea>
+                </div>
+
+                <div className="col-md-9">
+                  <button className="btnNested btn-xs center" onClick={this.handleSubmit}>
+                    Add Comment
+                  </button>
+                </div>
+
+              </div>
+            </div>
+          : null}
+
+          <br />
+
+        </div>
+      )
     }
   }
 });
 
-// 
+//
 module.exports = CommentList;
 

@@ -15,13 +15,13 @@ var IdeaView = React.createClass({
 
     return {
       idea     : ideaViewStore.fetchIdeas(),
-      dedit     : ideaViewStore.ideaEditState(),
+      edit     : ideaViewStore.ideaEditState(),
       comments : commentStore.fetchComments()
     }
   },
 
   componentDidMount : function(){
-     ideaViewActions.getIdea('id',this.props.params.id);
+    ideaViewActions.getIdea('id',this.props.params.id);
     commentActions.getComments('votes', this.props.params.id);
     commentStore.addChangeListener(this._onChange);
   },
@@ -56,32 +56,70 @@ var IdeaView = React.createClass({
 
   render: function(){
 
+    if(this.state.idea.tags){
+      if(this.state.idea.tags.length>1){
+          var tags = this.state.idea.tags.join(", ");
+        }else{
+          var tags = this.state.idea.tags;
+        }
+    }
+      
+    var time = new Date(this.state.idea.createdAt).toLocaleString();
+    console.log('this.state.idea', this.state.idea);
+
     return(
       <div>
         <NavBar />
 
         <div className="page-header container">
-          <div className="x-huge text-primary"> {this.state.idea.title} </div>
+          <div className="xx-huge text-primary"> {this.state.idea.title} </div>
+
+          <br />
+
+          <div className="text-primary">
+            created by:
+            &nbsp;
+            <img src={this.state.idea.img}/>
+            &nbsp;
+            <span className="text-white">{this.state.idea.sUserName}</span>
+            &nbsp;
+            @
+            &nbsp;
+            {time}
+          </div>
+
+          <div className="text-primary"> tags:
+            <span className="text-white"> {tags} </span>
+          </div>
+
+          <div className="text-primary"> ID for Slack use:
+            <span className="text-white"> {this.state.idea.shortId} </span>
+          </div>
         </div>
 
         <div className="container">
           <br />
-          <div className="large text-primary"> {this.state.idea.body} </div>
+          <div className="huge text-white"> {this.state.idea.body} </div>
           <br />
-          <br />
-          <br />
-        </div>
-
-        <div className="input-group container">
-          <textarea className="form-control" type='text' ref='parentComment' placeholder='add comment' rows="4"></textarea>
         </div>
 
         <br />
 
-        <div className="text-center">
-          <button className="btn btn-red btn-wide center" onClick={this.handleSubmit}>
-            Add Comment
-          </button>
+        <div className="container">
+          <div className="row">
+            <div className="col-md-1"></div>
+
+            <div className="col-md-5">
+              <textarea type='text' className="form-control" ref='parentComment' placeholder="add a comment" rows="2"></textarea>
+            </div>
+
+            <div className="col-md-6">
+              <button className="btn btn-red btn-wide center" onClick={this.handleSubmit}>
+                Add Comment
+              </button>
+            </div>
+
+          </div>
         </div>
 
         <br />

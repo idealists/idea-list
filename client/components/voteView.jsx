@@ -32,7 +32,7 @@ var VoteView = React.createClass({
   sendVote: function(rating){
     var votedata = this.state.voteData;
     var here = this;
-    var voteInfo = { 
+    var voteInfo = {
         voterId    : this.state.userInfo._id,
         parentId   : votedata._id,
         user_name  : this.state.userInfo.sUserName,
@@ -49,7 +49,7 @@ var VoteView = React.createClass({
   },
   render: function(){
     return(
-      <div>
+      <div className="votePosition">
         <div className="text-primary">
           <span className="glyphicon glyphicon-chevron-up" ref="upVote" onClick={(this.voteTypes.up).bind(this)}></span>
         </div>

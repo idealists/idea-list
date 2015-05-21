@@ -28,7 +28,7 @@ var commentActions = {
   createComment : function(newComment){
     var commentActions = this;
     var userinfo       = cookie.load('userInfo');
-    
+
     newComment.userId    = userinfo._id;
     newComment.slackId   = userinfo.slackId;
     newComment.sUserName = userinfo.sUserName;
@@ -41,9 +41,9 @@ var commentActions = {
       method   : "POST",
       data     : newComment
     }).done(function(commentList){
-      commentActions.getComments('votes', newComment.ideaId);
+      commentActions.getComments(null, newComment.ideaId);
     });
   }
 };
 
-module.exports= commentActions;
+module.exports = commentActions;
