@@ -15,13 +15,13 @@ var IdeaView = React.createClass({
 
     return {
       idea     : ideaViewStore.fetchIdeas(),
-      dedit     : ideaViewStore.ideaEditState(),
+      edit     : ideaViewStore.ideaEditState(),
       comments : commentStore.fetchComments()
     }
   },
 
   componentDidMount : function(){
-     ideaViewActions.getIdea('id',this.props.params.id);
+    ideaViewActions.getIdea('id',this.props.params.id);
     commentActions.getComments('votes', this.props.params.id);
     commentStore.addChangeListener(this._onChange);
   },
@@ -56,7 +56,14 @@ var IdeaView = React.createClass({
 
   render: function(){
 
-    var tags = this.state.idea.tags.join(", ");
+    if(this.state.idea.tags){
+      if(this.state.idea.tags.length>1){
+          var tags = this.state.idea.tags.join(", ");
+        }else{
+          var tags = this.state.idea.tags;
+        }
+    }
+      
     var time = new Date(this.state.idea.createdAt).toLocaleString();
     console.log('this.state.idea', this.state.idea);
 
