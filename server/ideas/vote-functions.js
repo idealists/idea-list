@@ -46,9 +46,9 @@ function addIdeaVote(req, res) {
     var total = 0;
     var alreadyVoted = false;
 
-    console.log('INSIDE same voter: typeof vote.voter and voteInfo.voterId:', typeof(vote.voter), typeof(voterId));
     // if the voter has voted before, then adjust their vote accordingly
     idea.voters.map(function(vote, index){
+    console.log('INSIDE same voter: typeof vote.voter and voteInfo.voterId:', typeof(vote.voter), typeof(voterId));
       if (String(vote.voter) === voteInfo.voterId) {
         alreadyVoted = true;
 
