@@ -19,7 +19,7 @@ var ideaViewStore = ObjectAssign({}, EventEmitter.prototype, {
 },
  ideaEditToggle : function(){
   editmode = !editmode;
-  ideaViewStore.emit(CHANGE_EVENT);
+  this.emit(CHANGE_EVENT);
 },
 addChangeListener : function (cb) {
     this.on(CHANGE_EVENT, cb);
