@@ -11,7 +11,7 @@ function getIdeas (req, res) {
   req.headers.query = req.headers.query || "";
   var ideas;
 
-  var selectFields = 'createdAt updatedAt shortId userId slackId sUserName title body tags active voters upvotes downvotes rating img commentCount';
+  var selectFields = 'createdAt updatedAt shortId userId slackId sUserName title body tags active voters upvotes downvotes rating img commentCount voteCount';
 
   switch (req.headers.query) {
     case 'dateFirst':
@@ -31,6 +31,12 @@ function getIdeas (req, res) {
                 .select(selectFields)
                 .where({status: Status.OPEN})
                 .sort('-rating');
+      break;
+    case 'voteCount':
+      ideas = Idea.find()
+                .select(selectFields)
+                .where({status: Status.OPEN})
+                .sort('voteCount');
       break;
     case 'tags':
     //add username to tags array for easy find of people also.

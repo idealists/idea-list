@@ -57,7 +57,7 @@ var $          = require('jquery');
 
 var ideaActions = {
   getIdeas: function(query, data, cb){
-    query = query || 'votes';
+    query = query || 'voteCount';
     data  = data  || null;
 
     $.ajax({
@@ -111,7 +111,7 @@ var ideaActions = {
       data     : newIdea
     })
     .done(function (ideaList) {
-      ideaActions.getIdeas('votes', null, cb);
+      ideaActions.getIdeas(null, null, cb);
       //cb();
     });
   },
