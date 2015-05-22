@@ -89,7 +89,8 @@ function addIdeaVote(req, res) {
             reply = { 'text': 'VOTE CHANGED to zero. \n You previously downvoted for idea: ' + title + ' | Id: ' + voteInfo.shortId };
           }
         }
-        slackPost.postSlack(reply);
+        //slackPost.postSlack(reply);
+        res.end(reply);
       } else {
         res.end(JSON.stringify(voteObj));
       }
@@ -165,7 +166,8 @@ function addCommVote(req, res) {
             reply = { 'text': 'VOTE CHANGED to zero. \n You have reversed your downvote for comment Id: `' + voteInfo.shortId + '`'};
           }
         }
-        slackPost.postSlack(reply);
+        //slackPost.postSlack(reply);
+        res.end(reply);
       } else {
         res.end(JSON.stringify(voteObj));
       }
