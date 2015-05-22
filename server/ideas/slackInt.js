@@ -44,9 +44,9 @@ function slackInt (req, res){
   var text = req.body.text;
 
   console.log('INSIDE SLACKINT, text: ', text, ' req.body: ', req.body);
-  
+
   if (req.body.command === '/idea' || req.body.command === '/comment'){
-    if (text.indexOf('|') === -1 || text === ''){
+    if (text.indexOf('|') === -1){
       error = true;
       var reply = 'Please use the correct format for your request: \n\n \
 For ideas: /idea [ title | text | tags ] \n\n \
