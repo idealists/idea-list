@@ -9,19 +9,6 @@ var Schema = mongoose.Schema;
 var voteOptions = function(req,res){
   var voteInfo = req.body || req;
 
-  console.log('\n Request:', voteInfo);
-
-  // calculate the voting rate
-  // (function rating(){
-  //   if(voteInfo.voteRating > 0){
-  //     voteInfo.rate = 1;
-  //   } else if (voteInfo.voteRating < 0){
-  //     voteInfo.rate = -1;
-  //   } else {
-  //     voteInfo.rate = 0;
-  //   }
-  // })();
-
   // if the vote is for an idea, add the vote to the idea
   // else add the vote to the comment
   if (voteInfo.voteType === "idea") {
@@ -36,12 +23,8 @@ function addIdeaVote(req, res) {
 
   voteInfo.rate = Number(voteInfo.rate);
 
-  console.log('INSIDE ADDIDEAVOTE, voteInfo: ', voteInfo);
-
   Idea.findById(voteInfo.parentId, function(err, idea){
     if (err) console.log('\nError in addIdeaVote:', err);
-
-    console.log("INSIDE IDEA FINDBYID, idea:", idea );
 
     var total = 0;
     var alreadyVoted = false;
@@ -50,7 +33,6 @@ function addIdeaVote(req, res) {
     // if the voter has voted before, then adjust their vote accordingly
     idea.voters.map(function(vote, index){
       if (String(vote.voter) === String(voteInfo.voterId)) {
-    console.log('INSIDE same voter: vote.voter === voteInfo.voterId:', String(vote.voter) === String(voteInfo.voterId) );
         alreadyVoted = true;
 
         if (vote.value !== voteInfo.rate) { 
@@ -76,10 +58,12 @@ function addIdeaVote(req, res) {
 
       idea.voters.push(newVote);
       total += voteInfo.rate;
-      console.log('\n total: ', total); 
     }
     
     idea.rating = total;
+
+    idea.voteCount = idea.voters.filter(function(vote){ 
+      if (vote.value !== 0){ return vote; } }).length; 
 
     idea.save(function(err, ideaObj ){
       if (err) console.log('In idea save: ', err);
@@ -158,7 +142,6 @@ function addCommVote(req, res) {
     }
     
     comment.rating = total;
-
     
     comment.save(function(err, commObj ){
       if (err) console.log('In comment save: ', err);

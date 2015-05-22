@@ -487,8 +487,8 @@ var CreateIdeaView = React.createClass({displayName: "CreateIdeaView",
 
     // alert if no title or body
     var self = this;
-    ideaActions.createIdea(newIdea, self.goBack);
-
+    var redir = function(){self.transitionTo('Home')} ;
+    ideaActions.createIdea(newIdea,redir);
     this.refs.newIdeaTitle.getDOMNode().value = '';
     this.refs.newIdeaBody.getDOMNode().value = '';
     this.refs.newIdeaTags.getDOMNode().value = '';
@@ -996,6 +996,7 @@ var Link   = Router.Link;
 var $      = require('jquery');
 var cookie = require('react-cookie');
 var authenticated = require('../stores/authStore');
+var ideaActions    = require('../actions/ideaActions')
 
 var NavBar = React.createClass({displayName: "NavBar",
 
@@ -1008,7 +1009,9 @@ var NavBar = React.createClass({displayName: "NavBar",
       cookie.remove('userInfo');
     });
   },
-
+  changestore:function(){
+    ideaActions.getIdeas();
+  },
   render : function(){
     return(
       React.createElement("nav", {className: "navbar navbar-inverse transparent navbar-fixed-top"}, 
@@ -1020,13 +1023,13 @@ var NavBar = React.createClass({displayName: "NavBar",
 
           React.createElement("ul", {className: "nav navbar-nav navbar-right"}, 
             React.createElement("li", null, 
-              React.createElement(Link, {to: "app"}, 
+              React.createElement(Link, {to: "app", onClick: this.changestore}, 
                 "IDEA LIST  ", 
                 React.createElement("span", {className: "glyphicon glyphicon-home"})
               )
             ), 
             React.createElement("li", null, 
-              React.createElement(Link, {to: "app"}, 
+              React.createElement(Link, {to: "app", onClick: this.changestore}, 
                 "ARCHIVES  ", 
                 React.createElement("span", {className: "glyphicon glyphicon-time"})
               )
@@ -1052,7 +1055,7 @@ var NavBar = React.createClass({displayName: "NavBar",
 
 module.exports = NavBar;
 
-},{"../stores/authStore":20,"jquery":29,"react":225,"react-cookie":30,"react-router":56}],17:[function(require,module,exports){
+},{"../actions/ideaActions":2,"../stores/authStore":20,"jquery":29,"react":225,"react-cookie":30,"react-router":56}],17:[function(require,module,exports){
 var React = require('react');
 var VoteActions = require('../actions/voteActions');
 var cookie = require('react-cookie');
