@@ -5,8 +5,7 @@ var Vote = require('../models/votes');
 var IFuncs = require('./idea-functions');
 var VoteFuncs = require('./vote-functions');
 var Status = require('./statusConstants');
-//var slackPost = require('./slackPost');
-//var request = require('request');
+var slackPost = require('./slackPost');
 
 
 // helper functions for querying data by userId and parentId with async callbacks
@@ -76,6 +75,7 @@ For voting: /upvote OR /downvote [ Id ] \n\n\
   // Set slackId to the user_id
   req.body.slackId = req.body.user_id;
 
+
   if(!error){
     // Parsing data and directing idea / comment / vote to db insert functions
     switch(req.body.command){
@@ -106,9 +106,6 @@ For voting: /upvote OR /downvote [ Id ] \n\n\
         break;
       case '/comment':
         // TODO: create hyperlink for comment id 
-        // TODO: *shortId* for comments will be different than shortIds for ideas
-        // TODO: need logic for commenting on a comment
-
         req.body.shortId    = parsed[0].toLowerCase();
         req.body.body       = parsed[1];
         req.body.sUserName  = req.body.user_name;
@@ -178,8 +175,8 @@ For voting: /upvote OR /downvote [ Id ] \n\n\
         if (req.body.voteType === "idea") {
           getIdeaId (req.body.shortId, function(err, pId) {
             if (err || pId[0] === undefined) { 
+              console.log('ShortId is not found. Error: ' + err);
               reply = 'ID:' + req.body.shortId + ' not found. See a list of active ideas with /allideas'; 
-              console.log('ShortId is not found.' + reply);
               res.end(reply);
             } else {
               req.body.parentId = pId[0]._id;
@@ -206,7 +203,7 @@ For voting: /upvote OR /downvote [ Id ] \n\n\
           });
         } else if (req.body.voteType === "comment") {
           getCommId (req.body.shortId, function(err, pId) {
-            if (pId[0] === undefined) { 
+            if (err || pId[0] === undefined) { 
               console.log('ShortId is not found.');
               reply = 'ID not found. See a list of active ideas with /allideas'; 
               res.end(reply);
