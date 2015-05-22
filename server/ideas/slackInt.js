@@ -180,8 +180,7 @@ For voting: /upvote OR /downvote [ Id ] \n\n\
             if (err || pId[0] === undefined) { 
               reply = 'ID:' + req.body.shortId + ' not found. See a list of active ideas with /allideas'; 
               console.log('ShortId is not found.' + reply);
-              res.send(reply);
-              res.end();
+              res.end(reply);
             } else {
               req.body.parentId = pId[0]._id;
               req.body.parentTitle = pId[0].title;
