@@ -63,9 +63,10 @@ function slackInt (req, res){
       findUser(req.body.user_name, function(err, uId) {
         if (err) console.log(err);
         req.body.userId = uId._id;
+        req.body.img = uId.image['24'];
         getIdeaId(req.body.shortId, function(err, pId) {
           // if shortId already exists, send user req information back and have them choose a different title
-          console.log('pId: ', pId);
+          if (err) console.log('In /idea, err: ', err);
           if (pId.length === 0) {
             IFuncs.createIdea(req, res);
           } else {
