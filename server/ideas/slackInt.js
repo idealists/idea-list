@@ -44,8 +44,13 @@ function slackInt (req, res){
   // For ideas    : req.body.text = [ title | text | tags ];
   // For comments : req.body.text = [ shortId | text ];
   // For votes    : req.body.text = [ shortId ];
-
   var parsed = req.body.text.split("|").map(function(y){ return y.trim(); });
+
+  /*Error handling for incorrect format: */
+  if (parsed.indexOf('|') === -1){
+    var reply = 'Please use the correct format for your request: \n\n For ideas: /idea [ title | text | tags ] \n\n For comments: /comment [ shortId | text ] \n\n For voting: /upvote OR /downvote [ shortId ]';
+    res.end(reply);
+  }
   
   // Set slackId to the user_id
   req.body.slackId = req.body.user_id;
