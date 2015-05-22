@@ -58,6 +58,7 @@ var Comment = React.createClass({
     var uniq = this.props.element._id;
 
     return {
+      id  : this.props.element._id,
       uniq: false,
       time: new Date(this.props.element.createdAt).toLocaleString()
     }
@@ -92,7 +93,7 @@ var Comment = React.createClass({
   render: function(){
     if (this.props.level > 0) {
       return (
-        <div className="comment">
+        <div className="comment" key={this.state.id}>
           <div className="xx-large text-primary"> {this.props.element.body} </div>
 
           <br />
@@ -113,7 +114,7 @@ var Comment = React.createClass({
     } else {
 
       return (
-        <div className="comment">
+        <div className="comment" key={this.state.id}>
           <div className="xx-large text-primary"> {this.props.element.body} </div>
 
           <br />
