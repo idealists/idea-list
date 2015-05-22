@@ -408,6 +408,7 @@ var Comment = React.createClass({displayName: "Comment",
         )
       )
     } else {
+
       return (
         React.createElement("div", {className: "comment"}, 
           React.createElement("div", {className: "xx-large text-primary"}, " ", this.props.element.body, " "), 
@@ -426,6 +427,10 @@ var Comment = React.createClass({displayName: "Comment",
             React.createElement("span", {className: "text-white"}, " ", this.state.time, " "), 
             " ", 
             React.createElement("span", {className: "text-red", onClick: this.showTextarea}, " REPLY ")
+          ), 
+
+          React.createElement("div", {className: "text-primary"}, " ID for Slack use:", 
+            React.createElement("span", {className: "text-white"}, " ", this.props.element.commShortId, " ")
           ), 
 
           React.createElement("br", null), 

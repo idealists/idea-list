@@ -111,6 +111,7 @@ var Comment = React.createClass({
         </div>
       )
     } else {
+
       return (
         <div className="comment">
           <div className="xx-large text-primary"> {this.props.element.body} </div>
@@ -129,6 +130,10 @@ var Comment = React.createClass({
             <span className="text-white"> {this.state.time} </span>
             &nbsp;
             <span className="text-red" onClick={this.showTextarea}> REPLY </span>
+          </div>
+
+          <div className="text-primary"> ID for Slack use:
+            <span className="text-white"> {this.props.element.commShortId} </span>
           </div>
 
           <br />
