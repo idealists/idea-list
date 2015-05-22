@@ -84,9 +84,9 @@ function addIdeaVote(req, res) {
           }
         } else {
           if ( voteInfo.slackCommand === '/upvote' ) {
-            reply = { 'text': 'VOTE CHANGED to zero. \n You previously upvoted for idea: ' + title + ' | Id: ' + voteInfo.shortId };
+            reply = 'VOTE CHANGED to zero. \n You previously upvoted for idea: ' + title + ' | Id: ' + voteInfo.shortId;
           } else if ( voteInfo.slackCommand === '/downvote' ) {
-            reply = { 'text': 'VOTE CHANGED to zero. \n You previously downvoted for idea: ' + title + ' | Id: ' + voteInfo.shortId };
+            reply = 'VOTE CHANGED to zero. \n You previously downvoted for idea: ' + title + ' | Id: ' + voteInfo.shortId;
           }
         }
         //slackPost.postSlack(reply);
