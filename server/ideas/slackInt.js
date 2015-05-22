@@ -176,7 +176,7 @@ For voting: /upvote OR /downvote [ Id ] \n\n\
           getIdeaId (req.body.shortId, function(err, pId) {
             if (err || pId[0] === undefined) { 
               console.log('ShortId is not found. Error: ' + err);
-              reply = 'ID:' + req.body.shortId + ' not found. See a list of active ideas with /allideas'; 
+              reply = 'ID: ' + req.body.shortId + ' not found. To see a list of active ideas, use  /allideas '; 
               res.end(reply);
             } else {
               req.body.parentId = pId[0]._id;
@@ -197,7 +197,7 @@ For voting: /upvote OR /downvote [ Id ] \n\n\
                 };
 
                 console.log('voteInfo:', voteInfo);
-                VoteFuncs.voteOptions(voteInfo);
+                VoteFuncs.voteOptions(voteInfo, res);
               });
             }
           });
@@ -205,7 +205,7 @@ For voting: /upvote OR /downvote [ Id ] \n\n\
           getCommId (req.body.shortId, function(err, pId) {
             if (err || pId[0] === undefined) { 
               console.log('ShortId is not found.');
-              reply = 'ID:' + req.body.shortId + ' not found. See a list of active ideas with /allideas'; 
+              reply = 'ID: ' + req.body.shortId + ' not found. To see a list of active ideas, use  /allideas '; 
               res.end(reply);
             } else {
               req.body.parentId = pId[0]._id;
@@ -226,7 +226,7 @@ For voting: /upvote OR /downvote [ Id ] \n\n\
                 };
 
                 console.log('voteInfo:', voteInfo);
-                VoteFuncs.voteOptions(voteInfo);
+                VoteFuncs.voteOptions(voteInfo, res);
               });
             }
           });
@@ -250,7 +250,7 @@ For voting: /upvote OR /downvote [ Id ] \n\n\
           getIdeaId (req.body.shortId, function(err, pId) {
             if (pId[0] === undefined) { 
               console.log('ShortId is not found.');
-              reply = 'ID not found. See a list of active ideas with /allideas'; 
+              reply = 'ID: ' + req.body.shortId + ' not found. To see a list of active ideas, use  /allideas '; 
               res.end(reply);
             } else {
               req.body.parentId = pId[0]._id;
@@ -279,7 +279,7 @@ For voting: /upvote OR /downvote [ Id ] \n\n\
           getCommId (req.body.shortId, function(err, pId) {
             if (pId[0] === undefined) { 
               console.log('ShortId is not found.');
-              reply = 'ID not found. See a list of active ideas with /allideas'; 
+              reply = 'ID: ' + req.body.shortId + ' not found. To see a list of active ideas, use  /allideas '; 
               res.end(reply);
             } else {
               req.body.parentId = pId[0]._id;

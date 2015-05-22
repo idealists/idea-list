@@ -11,17 +11,6 @@ var voteOptions = function(req,res){
 
   console.log('\n Request:', voteInfo);
 
-  // calculate the voting rate
-  // (function rating(){
-  //   if(voteInfo.voteRating > 0){
-  //     voteInfo.rate = 1;
-  //   } else if (voteInfo.voteRating < 0){
-  //     voteInfo.rate = -1;
-  //   } else {
-  //     voteInfo.rate = 0;
-  //   }
-  // })();
-
   // if the vote is for an idea, add the vote to the idea
   // else add the vote to the comment
   if (voteInfo.voteType === "idea") {
@@ -99,7 +88,8 @@ function addIdeaVote(req, res) {
             reply = { 'text': 'VOTE CHANGED to zero. \n You previously downvoted for idea: ' + title + ' | Id: ' + voteInfo.shortId };
           }
         }
-        slackPost.postSlack(reply);
+        //slackPost.postSlack(reply);
+        res.end(reply);
       } else {
         res.end(JSON.stringify(voteObj));
       }
@@ -175,7 +165,8 @@ function addCommVote(req, res) {
             reply = { 'text': 'VOTE CHANGED to zero. \n You have reversed your downvote for comment Id: `' + voteInfo.shortId + '`'};
           }
         }
-        slackPost.postSlack(reply);
+        //slackPost.postSlack(reply);
+        res.end(reply);
       } else {
         res.end(JSON.stringify(voteObj));
       }
