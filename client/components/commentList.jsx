@@ -77,6 +77,7 @@ var Comment = React.createClass({
       ideaId     : ideaId
     };
 
+    console.log('SUBMIT COMMENT IDEA ID', newComment);
     commentActions.createComment(newComment);
 
     this.refs.nestedComment.getDOMNode().value = '';

@@ -63,7 +63,7 @@ var IdeaView = React.createClass({
           var tags = this.state.idea.tags;
         }
     }
-      
+
     var time = new Date(this.state.idea.createdAt).toLocaleString();
     console.log('this.state.idea', this.state.idea);
 
@@ -90,6 +90,7 @@ var IdeaView = React.createClass({
 
           <div className="text-primary"> tags:
             <span className="text-white"> {tags} </span>
+            <span className="pull-right">comments: {this.state.idea.commentCount}</span>
           </div>
 
           <div className="text-primary"> ID for Slack use:

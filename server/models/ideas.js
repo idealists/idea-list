@@ -29,7 +29,8 @@ var Idea = new Schema({
   voters       : [Vote],
   voteCount    : Number,
   comments     : [{type: Schema.Types.ObjectId, ref: 'Comment'}],
-  rating       : Number,
+  commentCount : Number,
+  rating       : Number
 });
 
 module.exports = mongoose.model('Idea', Idea);
