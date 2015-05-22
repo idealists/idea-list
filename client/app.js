@@ -61,6 +61,6 @@ Router.run(routes, function (Handler) {
       }
     });
   }else{
-      React.render(<Handler/>, document.getElementById('main'));    
-  }  
+      React.render(<Handler/>, document.getElementById('main'));
+  }
 });

@@ -3,7 +3,7 @@ var Idea = require('../models/ideas');
 var User = require('../models/users');
 var slackPost = require('./slackPost');
 var Status = require('./statusConstants');
-var ObjectId = require('mongoose').Types.ObjectId; 
+var ObjectId = require('mongoose').Types.ObjectId;
 var voteFunctions = require('./vote-functions.js');
 //var request = require('request');
 
@@ -11,7 +11,7 @@ function getIdeas (req, res) {
   req.headers.query = req.headers.query || "";
   var ideas;
 
-  var selectFields = 'createdAt updatedAt shortId userId slackId sUserName title body tags active voters upvotes downvotes rating img';
+  var selectFields = 'createdAt updatedAt shortId userId slackId sUserName title body tags active voters upvotes downvotes rating img commentCount voteCount';
 
   switch (req.headers.query) {
     case 'dateFirst':
@@ -31,6 +31,12 @@ function getIdeas (req, res) {
                 .select(selectFields)
                 .where({status: Status.OPEN})
                 .sort('-rating');
+      break;
+    case 'voteCount':
+      ideas = Idea.find()
+                .select(selectFields)
+                .where({status: Status.OPEN})
+                .sort('-voteCount');
       break;
     case 'tags':
     //add username to tags array for easy find of people also.
@@ -97,6 +103,7 @@ function createIdea (req, res) {
     tags         : req.body.tags || null,
     rating       : 0,
     voteCount    : 0,
+    commentCount : 0,
     status       : Status.OPEN
   });
 
@@ -205,6 +212,7 @@ function createComment (req, res) {
     var newComment = new Comment({
       createdAt  : now,
       updatedAt  : now,
+      ideaId     : req.body.ideaId,
       parentId   : req.body.parentId,
       parentType : req.body.parentType,
       commShortId: req.body.commShortId || null,
@@ -230,6 +238,7 @@ function createComment (req, res) {
         console.log('INSIDE CREATECOMMENT/ newComment: ', newComment, ' / req: ', req);
 
         idea.comments.push(newComment);
+        idea.commentCount += 1;
 
         idea.save(function(err){
           if (err) console.log('idea save error:', err);
@@ -241,7 +250,7 @@ function createComment (req, res) {
         saveNewComment();
 
       }); // end of findId
-    } else if (req.body.parentType === 'comment') { // if a comment is commenting on a comment ... 
+    } else if (req.body.parentType === 'comment') { // if a comment is commenting on a comment ...
       findIdComment(req.body.parentId, function (err, comment) {
         if (err) { console.log('adding comment to comment ERROR:', err); }
 
@@ -260,6 +269,16 @@ function createComment (req, res) {
 
         saveNewComment();
 
+      });
+
+      findId(req.body.ideaId, function (err, idea) {
+        if (err) console.log(err);
+
+        idea.commentCount += 1;
+
+        idea.save(function(err){
+          if (err) console.log('idea save error:', err);
+        });
       });
     }
 
