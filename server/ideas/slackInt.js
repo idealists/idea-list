@@ -135,8 +135,6 @@ For voting: /upvote OR /downvote [ Id ] \n\n\
                 res.end(reply);
               } else {
                 // creating a unique comment id based on the length of the comments array
-                var count = pId[0].comments.length+1;
-                req.body.commShortId = req.body.shortId + count;
                 req.body.parentId = pId[0]._id;
                 IFuncs.createComment(req, res);
               }
@@ -151,10 +149,6 @@ For voting: /upvote OR /downvote [ Id ] \n\n\
                 reply = 'Idea not found. To see a list of active ideas, use /allideas '; 
                 res.end(reply);
               } else {
-                // creating a unique comment id based on the ideaId and the length of the comments array
-                var count = pId[0].comments.length+1;
-                req.body.commShortId = String(parsed[0].split("_").slice(0,-1).join("_") + '_comm' + count).toLowerCase();
-                
                 //debugging
                 console.log('req.body.commShortId: ', req.body.commShortId);
 

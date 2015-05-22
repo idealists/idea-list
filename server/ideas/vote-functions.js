@@ -77,15 +77,15 @@ function addIdeaVote(req, res) {
         var title = voteInfo.parentTitle || idea.title;
         if (!unvoted){
           if ( voteInfo.slackCommand === '/upvote' ) {
-            reply = 'Upvote recorded for idea: ' + title + ' | Id: ' + voteInfo.shortId;
+            reply = 'Upvote recorded for idea: "' + title + '" | Id: ' + voteInfo.shortId;
           } else if ( voteInfo.slackCommand === '/downvote' ) {
-            reply = 'Downvote recorded for idea: ' + title + ' | Id: ' + voteInfo.shortId;
+            reply = 'Downvote recorded for idea: "' + title + '" | Id: ' + voteInfo.shortId;
           }
         } else {
           if ( voteInfo.slackCommand === '/upvote' ) {
-            reply = 'VOTE CHANGED to zero. \n You previously upvoted for idea: ' + title + ' | Id: ' + voteInfo.shortId;
+            reply = 'VOTE CHANGED to zero. \n You previously upvoted for idea: "' + title + '" | Id: ' + voteInfo.shortId;
           } else if ( voteInfo.slackCommand === '/downvote' ) {
-            reply = 'VOTE CHANGED to zero. \n You previously downvoted for idea: ' + title + ' | Id: ' + voteInfo.shortId;
+            reply = 'VOTE CHANGED to zero. \n You previously downvoted for idea: "' + title + '" | Id: ' + voteInfo.shortId;
           }
         }
         res.end(reply);
