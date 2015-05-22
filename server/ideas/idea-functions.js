@@ -148,7 +148,6 @@ function updateIdea (req, res) {
       }
     },
     function (err, idea) {
-      console.log('why late idea',idea)
       if (err) console.log(err);
       res.status(201).send(idea);
     }

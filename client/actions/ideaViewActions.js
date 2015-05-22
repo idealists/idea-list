@@ -35,10 +35,7 @@ var ideaViewActions = {
         dataType  : "json",
         data : data
       }).done(function(newidea){
-        Dispatcher.handleAction({
-          actionType : Constants.RELOAD_IDEAVIEW,
-          data       : newidea
-        });
+        ideaViewActions.getIdea('id', data.ideaId);
       });
     }
   }
