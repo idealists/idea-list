@@ -2,6 +2,7 @@ var Dispatcher = require('../dispatcher/dispatcher');
 var Constants  = require('../constants/constants');
 var cookie     = require('react-cookie');
 var $          = require('jquery');
+var ideaViewActions = require('./ideaViewActions');
 
 var commentActions = {
   getComments : function(query, data){
@@ -42,6 +43,7 @@ var commentActions = {
       data     : newComment
     }).done(function(commentList){
       commentActions.getComments(null, newComment.ideaId);
+      ideaViewActions.getIdea(null, newComment.ideaId);
     });
   }
 };

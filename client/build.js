@@ -3,6 +3,7 @@ var Dispatcher = require('../dispatcher/dispatcher');
 var Constants  = require('../constants/constants');
 var cookie     = require('react-cookie');
 var $          = require('jquery');
+var ideaViewActions = require('./ideaViewActions');
 
 var commentActions = {
   getComments : function(query, data){
@@ -43,13 +44,14 @@ var commentActions = {
       data     : newComment
     }).done(function(commentList){
       commentActions.getComments(null, newComment.ideaId);
+      ideaViewActions.getIdea(null, newComment.ideaId);
     });
   }
 };
 
 module.exports = commentActions;
 
-},{"../constants/constants":18,"../dispatcher/dispatcher":19,"jquery":29,"react-cookie":30}],2:[function(require,module,exports){
+},{"../constants/constants":18,"../dispatcher/dispatcher":19,"./ideaViewActions":3,"jquery":29,"react-cookie":30}],2:[function(require,module,exports){
 var Dispatcher = require('../dispatcher/dispatcher');
 var Constants  = require('../constants/constants');
 var cookie     = require('react-cookie');
@@ -173,6 +175,7 @@ var ideaViewActions = {
 };
 
 module.exports = ideaViewActions;
+
 },{"../constants/constants":18,"../dispatcher/dispatcher":19,"jquery":29,"react-cookie":30}],4:[function(require,module,exports){
 var $ = require('jquery');
 
@@ -841,13 +844,16 @@ var IdeaView = React.createClass({displayName: "IdeaView",
     ideaViewActions.getIdea('id',this.props.params.id);
     commentActions.getComments('votes', this.props.params.id);
     commentStore.addChangeListener(this._onChange);
+    ideaViewStore.addChangeListener(this._onChange);
   },
 
   componentWillUnmount : function(){
     commentStore.removeChangeListener(this._onChange);
+    ideaViewStore.removeChangeListener(this._onChange);
   },
 
   _onChange : function(){
+    console.log('IDEA VIEW STATE HAS CHANGED');
     this.setState({
       idea     : ideaViewStore.fetchIdeas(),
       edit     : ideaViewStore.ideaEditState(),
@@ -906,7 +912,8 @@ var IdeaView = React.createClass({displayName: "IdeaView",
           ), 
 
           React.createElement("div", {className: "text-primary"}, " tags:", 
-            React.createElement("span", {className: "text-white"}, " ", tags, " ")
+            React.createElement("span", {className: "text-white"}, " ", tags, " "), 
+            React.createElement("span", {className: "text-primary pull-right"}, "comments: ", this.state.idea.commentCount, " ")
           ), 
 
           React.createElement("div", {className: "text-primary"}, " ID for Slack use:", 
@@ -1284,6 +1291,7 @@ var editmode = false;
 var populateStore = function (idea) {
   _idea = idea;
   editmode = false;
+  console.log('populateStore', idea);
 };
 var ideaViewStore = ObjectAssign({}, EventEmitter.prototype, {
   fetchIdeas : function () {
@@ -1323,6 +1331,7 @@ ideaViewStore.dispatchToken = Dispatcher.register(function (action) {
 });
 
 module.exports = ideaViewStore;
+
 },{"../constants/constants":18,"../dispatcher/dispatcher":19,"events":25,"react/lib/Object.assign":96}],24:[function(require,module,exports){
 // shim for using process in browser
 
