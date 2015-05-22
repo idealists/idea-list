@@ -3,6 +3,7 @@ var NavBar      = require('./navBar.jsx');
 var CommentList = require('./commentList.jsx');
 var ideaViewActions = require('../actions/ideaViewActions');
 var ideaViewStore   = require('../stores/ideaViewStore');
+var cookie         = require('react-cookie');
 var commentStore   = require('../stores/commentStore');
 var commentActions = require('../actions/commentActions');
 
@@ -16,7 +17,7 @@ var IdeaView = React.createClass({
     return {
       idea     : ideaViewStore.fetchIdeas(),
       edit     : ideaViewStore.ideaEditState(),
-      comments : commentStore.fetchComments()
+      comments : commentStore.fetchComments(),
     }
   },
 
@@ -60,7 +61,46 @@ var IdeaView = React.createClass({
   editIdea: function (e) {
     ideaViewStore.ideaEditToggle();
   },
-
+  submitIdea:function(){
+  var ideabodyedit =  this.refs.editedIdea.getDOMNode().value;
+    var newIdea ={
+      body: ideabodyedit,
+      title: this.state.idea.title,
+      status: this.state.idea.status,
+      ideaId: this.state.idea._id
+    }
+    ideaViewActions.editIdea(newIdea)
+  },
+  editmode:function(){
+    var userinfo = cookie.load('userInfo');
+    if(userinfo._id===this.state.idea.userId){
+      if(this.state.edit){
+        return(          
+          <div className="container">
+            <textarea className="form-control" type="text" ref="editedIdea" defaultValue={this.state.idea.body} />
+            <div><br /><span className="text-red" onClick={this.submitIdea}>Submit</span></div>
+          </div>
+          )
+      }else{
+        return(
+          <div className="container">
+            <br />
+            <div className="huge text-white"> {this.state.idea.body} </div>
+            <div><br /><span className="text-red" onClick={this.editIdea}>Edit</span></div>
+            <br />
+          </div>
+          )
+      }
+    }else{
+      return(
+          <div className="container">
+            <br />
+            <div className="huge text-white"> {this.state.idea.body} </div>
+            <br />
+          </div>
+        )
+    }
+  },
   render: function(){
 
     if(this.state.idea.tags){
@@ -73,7 +113,6 @@ var IdeaView = React.createClass({
 
     var time = new Date(this.state.idea.createdAt).toLocaleString();
     console.log('this.state.idea', this.state.idea);
-
     return(
       <div>
         <NavBar />
@@ -105,18 +144,7 @@ var IdeaView = React.createClass({
           </div>
         </div>
 
-        {this.state.edit ?
-          <div className="container">
-            <textarea className="form-control" type="text" ref="editedIdea" defaultValue={this.state.idea.body} />
-          </div>
-          :
-          <div className="container">
-            <br />
-            <div className="huge text-white"> {this.state.idea.body} </div>
-            <div><br /><span className="text-red" onClick={this.editIdea}>Edit</span></div>
-            <br />
-          </div>
-        }
+        {this.editmode()}
 
         <br />
 
