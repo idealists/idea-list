@@ -37,7 +37,7 @@ var IdeaView = React.createClass({
     this.setState({
       idea     : ideaViewStore.fetchIdeas(),
       edit     : ideaViewStore.ideaEditState(),
-      comments : commentStore.fetchComments()
+      comments : commentStore.fetchComyayments()
     });
   },
 
