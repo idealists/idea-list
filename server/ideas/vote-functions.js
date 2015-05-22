@@ -81,6 +81,12 @@ function addIdeaVote(req, res) {
     
     idea.rating = total;
 
+    
+    idea.voteCount = idea.voters.filter(function(vote){ 
+      if (vote.value !== 0){ return vote; } }).length; 
+
+    console.log("!!!!idea.voteCount:", idea.voteCount);
+
     idea.save(function(err, ideaObj ){
       if (err) console.log('In idea save: ', err);
       var voteObj = { 
