@@ -54,4 +54,4 @@ function updateUsers () {
   });
 }
 
-module.exports = updateUsers();
+module.exports = updateUsers;

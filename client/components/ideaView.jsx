@@ -54,6 +54,15 @@ var IdeaView = React.createClass({
     this.refs.parentComment.getDOMNode().value = '';
   },
 
+  editIdea: function () {
+    ideaViewStore.addChangeListener(this._onChange);
+    ideaViewStore.ideaEditToggle();
+
+    // this.setState({
+    //   edit: !this.state.edit
+    // });
+  },
+
   render: function(){
 
     if(this.state.idea.tags){
@@ -97,11 +106,17 @@ var IdeaView = React.createClass({
           </div>
         </div>
 
-        <div className="container">
-          <br />
-          <div className="huge text-white"> {this.state.idea.body} </div>
-          <br />
-        </div>
+        {this.state.edit ?
+          <div className="container">
+            <textarea>{this.state.idea.body}</textarea>
+          </div>
+          : 
+          <div className="container">
+            <br />
+            <div className="huge text-white"> {this.state.idea.body} </div>
+            <div><br /><a href="" className="text-red" onClick={this.editIdea}>Edit</a></div>
+            <br />
+          </div>}
 
         <br />
 
