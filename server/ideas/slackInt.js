@@ -42,11 +42,12 @@ function slackInt (req, res){
   /* Error handling for incorrect format: */
   var error = false;
   var text = req.body.text;
+  var textSplit = req.body.text.split("|")[1];
 
   console.log('INSIDE SLACKINT, text: ', text, ' req.body: ', req.body);
 
   if (req.body.command === '/idea' || req.body.command === '/comment'){
-    if (text.indexOf('|') === -1 || text.trim() === ''){
+    if (text.indexOf('|') === -1){
       error = true;
       var reply = 'Please use the correct format for your request: \n\n \
 For ideas: /idea [ title | text | tags ] \n\n \
@@ -54,7 +55,11 @@ For comments: /comment [ Id | text ] \n\n \
 For voting: /upvote OR /downvote [ Id ] \n\n\
 *To see a list of all open ideas, use the command:  /allideas';
       res.end(reply);
-    } 
+    } else if (textSplit.trim() === ''){
+      error = true;
+      var reply = 'Please enter text for your idea or comment.';
+      res.end(reply);
+    }
   } else if (req.body.command === '/upvote' || req.body.command === '/downvote'){
     if (text === ''){
       error = true;
