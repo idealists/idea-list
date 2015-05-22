@@ -43,6 +43,8 @@ function slackInt (req, res){
   var error = false;
   var text = req.body.text;
 
+  console.log('INSIDE SLACKINT, text: ', text, ' req.body: ', req.body);
+  
   if (req.body.command === '/idea' || req.body.command === '/comment'){
     if (text.indexOf('|') === -1 || text === ''){
       error = true;
