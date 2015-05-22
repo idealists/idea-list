@@ -107,8 +107,6 @@ function createIdea (req, res) {
     status       : Status.OPEN
   });
 
-  console.log("INSIDE IDEA FUNCS: ", idea);
-  
   idea.save(function (err) {
     if (err) {
       return err;

@@ -90,7 +90,6 @@ function addIdeaVote(req, res) {
           }
         }
         slackPost.postSlack(reply);
-        //res.end();
       } else {
         res.end(JSON.stringify(voteObj));
       }
@@ -142,7 +141,7 @@ function addCommVote(req, res) {
     }
     
     comment.rating = total;
-    
+
     comment.save(function(err, commObj ){
       if (err) console.log('In comment save: ', err);
       var voteObj = { 
@@ -167,7 +166,6 @@ function addCommVote(req, res) {
           }
         }
         slackPost.postSlack(reply);
-        //res.end();
       } else {
         res.end(JSON.stringify(voteObj));
       }
