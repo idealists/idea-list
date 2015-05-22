@@ -5,7 +5,7 @@ var slackPost = require('./slackPost');
 var Status = require('./statusConstants');
 var ObjectId = require('mongoose').Types.ObjectId;
 var voteFunctions = require('./vote-functions.js');
-//var request = require('request');
+
 
 function getIdeas (req, res) {
   req.headers.query = req.headers.query || "";
