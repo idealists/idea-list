@@ -271,7 +271,7 @@ For voting: /upvote OR /downvote [ Id ] \n\n\
                 };
 
                 console.log('voteInfo:', voteInfo);
-                VoteFuncs.voteOptions(voteInfo);
+                VoteFuncs.voteOptions(voteInfo, res);
               });
             }
           });
@@ -300,7 +300,7 @@ For voting: /upvote OR /downvote [ Id ] \n\n\
                 };
 
                 console.log('voteInfo:', voteInfo);
-                VoteFuncs.voteOptions(voteInfo);
+                VoteFuncs.voteOptions(voteInfo, res);
               });
             }
           });

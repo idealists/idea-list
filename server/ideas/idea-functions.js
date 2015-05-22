@@ -247,25 +247,31 @@ function createComment (req, res) {
       findIdComment(req.body.parentId, function (err, comment) {
         if (err) { console.log('adding comment to comment ERROR:', err); }
 
-        // if () {
-        //   res.end('IdeaList does not accept comments past 2 levels, sorry.');
-        // } // also handle response message back to Slack so people cannot comment on
 
         if ( !newComment.commShortId ) {
           var count1 = comment.comments.length+1;
           newComment.commShortId = comment.commShortId + count1;
         }
 
-        comment.comments.push(newComment);
+        /* error handling for stopping commenting beyond 2 nested comments */
+        var level = newComment.commShortId.split('comm')[1];
+        var noMore = false;
+        if (level.length > 2) {
+          noMore = true;
+          res.end('IdeaList does not accept comments past 2 levels, sorry.');
+        } // also handle response message back to Slack so people cannot comment on
 
-        comment.save(function (err) {
-          if (err) { console.log('comment save ERROR:', err); }
-          var reply = { 'text': 'Comment added to comment: ' + comment.commShortId + '! \n New comment: ' + newComment.body + '\n *To comment on this comment, use commentId: `' + newComment.commShortId + '`'};
-          slackPost.postSlack(reply);
-        });
+        if(!noMore){  
+          comment.comments.push(newComment);
 
-        saveNewComment();
+          comment.save(function (err) {
+            if (err) { console.log('comment save ERROR:', err); }
+            var reply = { 'text': 'Comment added to comment: ' + comment.commShortId + '! \n New comment: ' + newComment.body + '\n *To comment on this comment, use commentId: `' + newComment.commShortId + '`'};
+            slackPost.postSlack(reply);
+          });
 
+          saveNewComment();
+        }
       });
     }
 
