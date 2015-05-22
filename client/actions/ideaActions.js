@@ -8,6 +8,8 @@ var ideaActions = {
     query = query || 'votes';
     data  = data  || null;
 
+    console.log('in ideaActions');
+
     $.ajax({
       url       : "/ideas",
       dataType  : "json",

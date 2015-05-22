@@ -55,12 +55,12 @@ var IdeaView = React.createClass({
   },
 
   editIdea: function () {
-    ideaViewStore.addChangeListener(this._onChange);
-    ideaViewStore.ideaEditToggle();
+    // ideaViewStore.addChangeListener(this._onChange);
+    // ideaViewStore.ideaEditToggle();
 
-    // this.setState({
-    //   edit: !this.state.edit
-    // });
+    this.setState({
+      edit: !this.state.edit
+    });
   },
 
   render: function(){
@@ -108,7 +108,7 @@ var IdeaView = React.createClass({
 
         {this.state.edit ?
           <div className="container">
-            <textarea>{this.state.idea.body}</textarea>
+            <textarea className="form-control" type="text" ref="editedIdea">{this.state.idea.body}</textarea>
           </div>
           : 
           <div className="container">
