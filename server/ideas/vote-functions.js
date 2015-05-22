@@ -77,9 +77,9 @@ function addIdeaVote(req, res) {
         var title = voteInfo.parentTitle || idea.title;
         if (!unvoted){
           if ( voteInfo.slackCommand === '/upvote' ) {
-            reply = { 'text': 'Upvote recorded for idea: ' + title + ' | Id: ' + voteInfo.shortId };
+            reply = 'Upvote recorded for idea: ' + title + ' | Id: ' + voteInfo.shortId;
           } else if ( voteInfo.slackCommand === '/downvote' ) {
-            reply = { 'text': 'Downvote recorded for idea: ' + title + ' | Id: ' + voteInfo.shortId };
+            reply = 'Downvote recorded for idea: ' + title + ' | Id: ' + voteInfo.shortId;
           }
         } else {
           if ( voteInfo.slackCommand === '/upvote' ) {
