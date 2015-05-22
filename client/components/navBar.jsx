@@ -4,6 +4,7 @@ var Link   = Router.Link;
 var $      = require('jquery');
 var cookie = require('react-cookie');
 var authenticated = require('../stores/authStore');
+var ideaActions    = require('../actions/ideaActions')
 
 var NavBar = React.createClass({
 
@@ -16,7 +17,9 @@ var NavBar = React.createClass({
       cookie.remove('userInfo');
     });
   },
-
+  changestore:function(){
+    ideaActions.getIdeas();
+  },
   render : function(){
     return(
       <nav className="navbar navbar-inverse transparent navbar-fixed-top">
@@ -28,13 +31,13 @@ var NavBar = React.createClass({
 
           <ul className="nav navbar-nav navbar-right">
             <li>
-              <Link to="app">
+              <Link to="app" onClick = {this.changestore}>
                 IDEA LIST &nbsp;
                 <span className="glyphicon glyphicon-home"></span>
               </Link>
             </li>
             <li>
-              <Link to="app">
+              <Link to="app" onClick = {this.changestore}>
                 ARCHIVES &nbsp;
                 <span className="glyphicon glyphicon-time"></span>
               </Link>
