@@ -48,20 +48,20 @@ function slackInt (req, res){
     if (text.indexOf('|') === -1){
       error = true;
       var reply = 'Please use the correct format for your request: \n\n \
-                   For ideas: /idea [ title | text | tags ] \n\n \
-                   For comments: /comment [ Id | text ] \n\n \
-                   For voting: /upvote OR /downvote [ Id ] \n\n\
-                   *To see a list of all open ideas, use the command /allideas';
+For ideas: /idea [ title | text | tags ] \n\n \
+For comments: /comment [ Id | text ] \n\n \
+For voting: /upvote OR /downvote [ Id ] \n\n\
+*To see a list of all open ideas, use the command:  /allideas';
       res.end(reply);
     }
   } else if (req.body.command === '/upvote' || req.body.command === '/downvote'){
     if (text === ''){
       error = true;
       var reply = 'Please use the correct format for your request: \n\n \
-                   For ideas: /idea [ title | text | tags ] \n\n \
-                   For comments: /comment [ Id | text ] \n\n \
-                   For voting: /upvote OR /downvote [ Id ] \n\n\
-                   *To see a list of all open ideas, use the command /allideas';
+For ideas: /idea [ title | text | tags ] \n\n \
+For comments: /comment [ Id | text ] \n\n \
+For voting: /upvote OR /downvote [ Id ] \n\n\
+*To see a list of all open ideas, use the command:  /allideas';
       res.end(reply);
     }
   }
@@ -177,10 +177,11 @@ function slackInt (req, res){
         // otherwise search in the Comment collection for the correct parentId, etc.
         if (req.body.voteType === "idea") {
           getIdeaId (req.body.shortId, function(err, pId) {
-            if (pId[0] === undefined) { 
-              console.log('ShortId is not found.');
-              reply = 'ID not found. See a list of active ideas with /allideas'; 
-              res.end(reply);
+            if (err || pId[0] === undefined) { 
+              reply = 'ID:' + req.body.shortId + ' not found. See a list of active ideas with /allideas'; 
+              console.log('ShortId is not found.' + reply);
+              res.send(reply);
+              res.end();
             } else {
               req.body.parentId = pId[0]._id;
               req.body.parentTitle = pId[0].title;
