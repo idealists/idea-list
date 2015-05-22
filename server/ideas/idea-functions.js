@@ -123,7 +123,8 @@ function createIdea (req, res) {
       user_name  : req.body.user_name,
       voteType   : 'idea',
       rate       : 1,
-      userImage  : req.body.img
+      userImage  : req.body.img,
+      slackReq   : true
     };
 
     voteFunctions.addIdeaVote(voteOptions, res);
