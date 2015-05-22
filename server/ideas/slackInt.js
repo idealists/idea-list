@@ -43,8 +43,10 @@ function slackInt (req, res){
   /* Error handling for incorrect format: */
   var error = false;
   var text = req.body.text;
+
+  console.log("req.body.text: ", req.body.text, ' req.body.text.indexOf('|'): ', req.body.text.indexOf('|')===-1);
+
   if (text.indexOf('|') === -1){
-    console.log('text : ', parsed, ' text.indexOf('|') === -1: ', text.indexOf('|') === -1);
     error = true;
     var reply = 'Please use the correct format for your request: \n\n For ideas: /idea [ title | text | tags ] \n\n For comments: /comment [ Id | text ] \n\n For voting: /upvote OR /downvote [ Id ]';
     res.end(reply);
