@@ -122,9 +122,9 @@ For voting: /upvote OR /downvote [ Id ] \n\n\
 
             // search in the db for the shortId, if it does not exist, send error msg back to user
             getCommId (req.body.shortId, function(err, pId) {
-              if (pId[0] === undefined) { 
+              if (err || pId[0] === undefined) { 
                 console.log('ShortId is not found.');
-                reply = 'Comment not found.'; 
+                reply = 'Comment: ' + req.body.shortId + ' not found.'; 
                 res.end(reply);
               } else {
                 // creating a unique comment id based on the length of the comments array
@@ -139,9 +139,9 @@ For voting: /upvote OR /downvote [ Id ] \n\n\
             
             // search in the db for the shortId, if it does not exist, send error msg back to user
             getIdeaId (req.body.shortId, function(err, pId) {
-              if (pId[0] === undefined) { 
+              if (err || pId[0] === undefined) { 
                 console.log('ShortId is not found.');
-                reply = 'Idea not found. See a list of active ideas with /allideas'; 
+                reply = 'Idea not found. To see a list of active ideas, use /allideas '; 
                 res.end(reply);
               } else {
                 // creating a unique comment id based on the ideaId and the length of the comments array
