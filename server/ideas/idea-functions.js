@@ -111,7 +111,8 @@ function createIdea (req, res) {
     if (err) {
       return err;
     }
-    var reply = { 'text': 'Idea Posted! Idea_id: `' + idea.shortId + '` | Idea: ' + idea.body + ' | tags: ' + idea.tags || '' };
+    var tags = idea.tags ? ' | tags: ' + idea.tags : '';
+    var reply = { 'text': 'Idea Posted! \n Id: `' + idea.shortId + '` | Idea: ' + idea.body + tags };
     slackPost.postSlack(reply);
     console.log('New idea:', idea.title, 'SAVED');
   })
@@ -290,7 +291,7 @@ function createComment (req, res) {
         console.log('SERVER CREATECOMMENT:', result);
         if(!req.body.slackReq){
           res.end(JSON.stringify(result));
-        } else { res.end(); }
+        } else { res.end('FINISHED!'); }
       });
     }
 
