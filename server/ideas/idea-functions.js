@@ -236,7 +236,7 @@ function createComment (req, res) {
         idea.save(function(err){
           if (err) console.log('idea save error:', err);
 
-          var reply = { 'text': 'Comment added! \n To idea: ' + idea.shortId + ' | new comment: ' + newComment.body + '\n\n To comment on this comment, use commentId: `' + newComment.commShortId + '`'};
+          var reply = { 'text': 'Comment added to idea: ' + idea.shortId + '! New comment: ' + newComment.body + '\n *To comment on this comment, use commentId: `' + newComment.commShortId + '`'};
           slackPost.postSlack(reply);
         });
 
@@ -260,7 +260,7 @@ function createComment (req, res) {
 
         comment.save(function (err) {
           if (err) { console.log('comment save ERROR:', err); }
-          var reply = { 'text': 'Comment added! \n To comment: ' + comment.commShortId + ' | new comment: ' + newComment.body + '\n\n To comment on this comment, use commentId: `' + newComment.commShortId + '`'};
+          var reply = { 'text': 'Comment added to comment: ' + comment.commShortId + '! \n New comment: ' + newComment.body + '\n *To comment on this comment, use commentId: `' + newComment.commShortId + '`'};
           slackPost.postSlack(reply);
         });
 
