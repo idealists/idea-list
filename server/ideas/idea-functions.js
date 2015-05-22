@@ -245,7 +245,7 @@ function createComment (req, res) {
         idea.save(function(err){
           if (err) console.log('idea save error:', err);
 
-          var reply = { 'text': 'Comment added to idea: ' + idea.shortId + ' / Text: ' + idea.body + ' / To comment on this comment, use commentId: `' + newComment.commShortId + '`'};
+          var reply = { 'text': 'Comment added! \n To idea: ' + idea.shortId + ' | new comment: ' + newComment.body + '\n\n To comment on this comment, use commentId: `' + newComment.commShortId + '`'};
           slackPost.postSlack(reply);
         });
 
@@ -256,6 +256,10 @@ function createComment (req, res) {
       findIdComment(req.body.parentId, function (err, comment) {
         if (err) { console.log('adding comment to comment ERROR:', err); }
 
+        // if () {
+        //   res.end('IdeaList does not accept comments past 2 levels, sorry.');
+        // } // also handle response message back to Slack so people cannot comment on
+
         if ( !newComment.commShortId ) {
           var count1 = comment.comments.length+1;
           newComment.commShortId = comment.commShortId + count1;
@@ -265,7 +269,7 @@ function createComment (req, res) {
 
         comment.save(function (err) {
           if (err) { console.log('comment save ERROR:', err); }
-          var reply = { 'text': 'Comment added to comment: ' + comment.commShortId + ' / Text: ' + comment.body + ' / To comment on this comment, use commentId: `' + newComment.commShortId + '`'};
+          var reply = { 'text': 'Comment added! \n To comment: ' + comment.commShortId + ' | new comment: ' + newComment.body + '\n\n To comment on this comment, use commentId: `' + newComment.commShortId + '`'};
           slackPost.postSlack(reply);
         });
 
@@ -291,7 +295,7 @@ function createComment (req, res) {
         console.log('SERVER CREATECOMMENT:', result);
         if(!req.body.slackReq){
           res.end(JSON.stringify(result));
-        } else { res.end('FINISHED!'); }
+        } else { res.end(); }
       });
     }
 
