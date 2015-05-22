@@ -19,8 +19,8 @@ var CreateIdeaView = React.createClass({
 
     // alert if no title or body
     var self = this;
-    ideaActions.createIdea(newIdea, self.goBack);
-
+    var redir = function(){self.transitionTo('Home')} ;
+    ideaActions.createIdea(newIdea,redir);
     this.refs.newIdeaTitle.getDOMNode().value = '';
     this.refs.newIdeaBody.getDOMNode().value = '';
     this.refs.newIdeaTags.getDOMNode().value = '';
