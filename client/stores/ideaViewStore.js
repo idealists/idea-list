@@ -9,6 +9,7 @@ var editmode = false;
 var populateStore = function (idea) {
   _idea = idea;
   editmode = false;
+  console.log('populateStore', idea);
 };
 var ideaViewStore = ObjectAssign({}, EventEmitter.prototype, {
   fetchIdeas : function () {

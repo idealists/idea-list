@@ -24,13 +24,16 @@ var IdeaView = React.createClass({
     ideaViewActions.getIdea('id',this.props.params.id);
     commentActions.getComments('votes', this.props.params.id);
     commentStore.addChangeListener(this._onChange);
+    ideaViewStore.addChangeListener(this._onChange);
   },
 
   componentWillUnmount : function(){
     commentStore.removeChangeListener(this._onChange);
+    ideaViewStore.removeChangeListener(this._onChange);
   },
 
   _onChange : function(){
+    console.log('IDEA VIEW STATE HAS CHANGED');
     this.setState({
       idea     : ideaViewStore.fetchIdeas(),
       edit     : ideaViewStore.ideaEditState(),
@@ -90,6 +93,7 @@ var IdeaView = React.createClass({
 
           <div className="text-primary"> tags:
             <span className="text-white"> {tags} </span>
+            <span className="text-primary pull-right">comments: {this.state.idea.commentCount} </span>
           </div>
 
           <div className="text-primary"> ID for Slack use:
