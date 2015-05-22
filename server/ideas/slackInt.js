@@ -205,7 +205,7 @@ For voting: /upvote OR /downvote [ Id ] \n\n\
           getCommId (req.body.shortId, function(err, pId) {
             if (err || pId[0] === undefined) { 
               console.log('ShortId is not found.');
-              reply = 'ID not found. See a list of active ideas with /allideas'; 
+              reply = 'ID:' + req.body.shortId + ' not found. See a list of active ideas with /allideas'; 
               res.end(reply);
             } else {
               req.body.parentId = pId[0]._id;
@@ -231,7 +231,6 @@ For voting: /upvote OR /downvote [ Id ] \n\n\
             }
           });
         }
-        res.end();
         break;
       case '/downvote':
 
