@@ -89,7 +89,6 @@ function addIdeaVote(req, res) {
             reply = 'VOTE CHANGED to zero. \n You previously downvoted for idea: ' + title + ' | Id: ' + voteInfo.shortId;
           }
         }
-        //slackPost.postSlack(reply);
         res.end(reply);
       } else {
         res.end(JSON.stringify(voteObj));
@@ -155,18 +154,17 @@ function addCommVote(req, res) {
         var reply; 
         if (!unvoted){
           if ( voteInfo.slackCommand === '/upvote' ) {
-            reply = { 'text': 'Upvote recorded! On comment Id: `' + voteInfo.shortId + '`'};
+            reply = 'Upvote recorded! On comment Id: ' + voteInfo.shortId;
           } else if ( voteInfo.slackCommand === '/downvote' ) {
-            reply = { 'text': 'Downvote recorded! On comment Id: `' + voteInfo.shortId + '`'};
+            reply = 'Downvote recorded! On comment Id: ' + voteInfo.shortId;
           }
         } else {
           if ( voteInfo.slackCommand === '/upvote' ) {
-            reply = { 'text': 'VOTE CHANGED to zero. \n You have reversed your upvote for comment Id: `' + voteInfo.shortId + '`'};
+            reply = 'VOTE CHANGED to zero. \n You have reversed your upvote for comment Id: ' + voteInfo.shortId;
           } else if ( voteInfo.slackCommand === '/downvote' ) {
-            reply = { 'text': 'VOTE CHANGED to zero. \n You have reversed your downvote for comment Id: `' + voteInfo.shortId + '`'};
+            reply = 'VOTE CHANGED to zero. \n You have reversed your downvote for comment Id: ' + voteInfo.shortId;
           }
         }
-        //slackPost.postSlack(reply);
         res.end(reply);
       } else {
         res.end(JSON.stringify(voteObj));
