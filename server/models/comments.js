@@ -16,7 +16,7 @@ Comment.add({
   parentId   : ObjectId,
   parentType : String,
   commShortId: String,
-  //ideaId   : ObjectId, <-- same as parentId?
+  ideaId     : ObjectId,
   userId     : ObjectId,
   slackId    : String,
   sUserName  : String,

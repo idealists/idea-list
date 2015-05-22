@@ -16,12 +16,13 @@ var IdeaList = React.createClass({
   },
 
   render: function(){
+
     var list = this.props.ideas.map(function(idea, index){
       if(!idea.email){
         if(idea.tags){var tags = idea.tags.join(', ');}else{var tags = "";}
         idea.type = 'idea';
         var time = new Date(idea.createdAt).toLocaleString();
-
+        console.log('commentCount SUCCESS:', idea);
         return (
           <div className="idea row" key={index}>
 
@@ -40,6 +41,7 @@ var IdeaList = React.createClass({
                 tags:
                 &nbsp;
                 {tags}
+                <span className="text-primary pull-right">comments: {idea.commentCount}</span>
               </div>
               <div className="text-primary">
                 created by:
@@ -59,7 +61,7 @@ var IdeaList = React.createClass({
       } else {
         return(
           <div key={index}>
-            <Link to="ideaView" params={{id: idea._id, index: index}}>
+            <Link to="ideaView" params={{id: idea._id}}>
               <img src={idea.image['24']}/>
               {idea.sUserName}
             </Link>

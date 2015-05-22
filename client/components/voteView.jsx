@@ -1,17 +1,17 @@
 var React = require('react');
 var VoteActions = require('../actions/voteActions');
 var cookie = require('react-cookie');
+var ideaActions    = require('../actions/ideaActions');
 
 var VoteView = React.createClass({
   getInitialState: function(){
     return {
       userInfo: cookie.load('userInfo'),
-      voteData: this.props.object
     }
   },
   componentDidMount: function(){
     console.log(this.props.object)
-    var voteStatus = this.state.voteData.rating;
+    var voteStatus = this.props.object.rating;
     if (voteStatus > 0) {
       //highlight the up arrow
       console.log('HI VOTE');
@@ -23,14 +23,14 @@ var VoteView = React.createClass({
     }
   },
   modifyProps: function(newData){
-    var newstate = this.state.voteData;
+    var newstate = this.props.object;
     newstate.rating = newData.rating;
 
     this.setState({ voteData: newstate });
 
   },
   sendVote: function(rating){
-    var votedata = this.state.voteData;
+    var votedata = this.props.object;
     var here = this;
     var voteInfo = {
         voterId    : this.state.userInfo._id,
@@ -56,7 +56,7 @@ var VoteView = React.createClass({
 
         <div className="text-primary" ref="rating">
           &nbsp;
-          {this.state.voteData.rating}
+          {this.props.object.rating}
         </div>
 
         <div className="text-primary">

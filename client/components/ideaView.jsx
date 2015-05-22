@@ -63,7 +63,7 @@ var IdeaView = React.createClass({
           var tags = this.state.idea.tags;
         }
     }
-      
+
     var time = new Date(this.state.idea.createdAt).toLocaleString();
     console.log('this.state.idea', this.state.idea);
 
