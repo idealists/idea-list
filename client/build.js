@@ -901,8 +901,7 @@ var IdeaView = React.createClass({displayName: "IdeaView",
           ), 
 
           React.createElement("div", {className: "text-primary"}, " tags:", 
-            React.createElement("span", {className: "text-white"}, " ", tags, " "), 
-            React.createElement("span", {className: "pull-right"}, "comments: ", this.state.idea.commentCount)
+            React.createElement("span", {className: "text-white"}, " ", tags, " ")
           ), 
 
           React.createElement("div", {className: "text-primary"}, " ID for Slack use:", 

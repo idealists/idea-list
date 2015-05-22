@@ -90,7 +90,6 @@ var IdeaView = React.createClass({
 
           <div className="text-primary"> tags:
             <span className="text-white"> {tags} </span>
-            <span className="pull-right">comments: {this.state.idea.commentCount}</span>
           </div>
 
           <div className="text-primary"> ID for Slack use:
