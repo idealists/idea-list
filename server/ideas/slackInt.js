@@ -60,6 +60,7 @@ function slackInt (req, res){
       if (parsed.length === 3) {
         req.body.tags = parsed[2].split(' ');
       }
+      req.body.slackReq = true;
       findUser(req.body.user_name, function(err, uId) {
         if (err) console.log(err);
         req.body.userId = uId._id;

@@ -36,12 +36,8 @@ function addIdeaVote(req, res) {
 
   voteInfo.rate = Number(voteInfo.rate);
 
-  console.log('INSIDE ADDIDEAVOTE, voteInfo: ', voteInfo);
-
   Idea.findById(voteInfo.parentId, function(err, idea){
     if (err) console.log('\nError in addIdeaVote:', err);
-
-    console.log("INSIDE IDEA FINDBYID, idea:", idea );
 
     var total = 0;
     var alreadyVoted = false;
@@ -50,7 +46,6 @@ function addIdeaVote(req, res) {
     // if the voter has voted before, then adjust their vote accordingly
     idea.voters.map(function(vote, index){
       if (String(vote.voter) === String(voteInfo.voterId)) {
-    console.log('INSIDE same voter: vote.voter === voteInfo.voterId:', String(vote.voter) === String(voteInfo.voterId) );
         alreadyVoted = true;
 
         if (vote.value !== voteInfo.rate) { 
@@ -76,7 +71,6 @@ function addIdeaVote(req, res) {
 
       idea.voters.push(newVote);
       total += voteInfo.rate;
-      console.log('\n total: ', total); 
     }
     
     idea.rating = total;
@@ -106,7 +100,6 @@ function addIdeaVote(req, res) {
           }
         }
         slackPost.postSlack(reply);
-        //res.end();
       } else {
         res.end(JSON.stringify(voteObj));
       }
@@ -159,7 +152,6 @@ function addCommVote(req, res) {
     
     comment.rating = total;
 
-    
     comment.save(function(err, commObj ){
       if (err) console.log('In comment save: ', err);
       var voteObj = { 
@@ -184,7 +176,6 @@ function addCommVote(req, res) {
           }
         }
         slackPost.postSlack(reply);
-        //res.end();
       } else {
         res.end(JSON.stringify(voteObj));
       }
