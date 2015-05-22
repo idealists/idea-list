@@ -36,7 +36,7 @@ function getIdeas (req, res) {
       ideas = Idea.find()
                 .select(selectFields)
                 .where({status: Status.OPEN})
-                .sort('voteCount');
+                .sort('-voteCount');
       break;
     case 'tags':
     //add username to tags array for easy find of people also.
