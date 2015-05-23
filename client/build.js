@@ -3,7 +3,6 @@ var Dispatcher = require('../dispatcher/dispatcher');
 var Constants  = require('../constants/constants');
 var cookie     = require('react-cookie');
 var $          = require('jquery');
-var ideaViewActions = require('./ideaViewActions');
 
 var commentActions = {
   getComments : function(query, data){
@@ -44,14 +43,13 @@ var commentActions = {
       data     : newComment
     }).done(function(commentList){
       commentActions.getComments(null, newComment.ideaId);
-      ideaViewActions.getIdea(null, newComment.ideaId);
     });
   }
 };
 
 module.exports = commentActions;
 
-},{"../constants/constants":18,"../dispatcher/dispatcher":19,"./ideaViewActions":3,"jquery":29,"react-cookie":30}],2:[function(require,module,exports){
+},{"../constants/constants":18,"../dispatcher/dispatcher":19,"jquery":29,"react-cookie":30}],2:[function(require,module,exports){
 var Dispatcher = require('../dispatcher/dispatcher');
 var Constants  = require('../constants/constants');
 var cookie     = require('react-cookie');
@@ -59,8 +57,10 @@ var $          = require('jquery');
 
 var ideaActions = {
   getIdeas: function(query, data, cb){
-    query = query || 'voteCount';
+    query = query || 'votes';
     data  = data  || null;
+
+    console.log('in ideaActions');
 
     $.ajax({
       url       : "/ideas",
@@ -113,7 +113,7 @@ var ideaActions = {
       data     : newIdea
     })
     .done(function (ideaList) {
-      ideaActions.getIdeas(null, null, cb);
+      ideaActions.getIdeas('votes', null, cb);
       //cb();
     });
   },
@@ -157,25 +157,22 @@ var ideaViewActions = {
     });
   },
 
-  editIdea:function(query,data){
-    query = query || 'id';
-    data  = data  || null;
-     $.ajax({
+  editIdea:function(data){
+    if(!data){console.log('Error: No data');}
+    else{
+      $.ajax({
         url : '/ideas',
         method : 'PUT',
         dataType  : "json",
         data : data
-     }).done(function(newidea){
-      Dispatcher.handleAction({
-        actionType : Constants.RELOAD_IDEAVIEW,
-        data       : idea
+      }).done(function(newidea){
+        ideaViewActions.getIdea('id', data.ideaId);
       });
-    });
+    }
   }
 };
 
 module.exports = ideaViewActions;
-
 },{"../constants/constants":18,"../dispatcher/dispatcher":19,"jquery":29,"react-cookie":30}],4:[function(require,module,exports){
 var $ = require('jquery');
 
@@ -259,8 +256,8 @@ Router.run(routes, function (Handler) {
       }
     });
   }else{
-      React.render(React.createElement(Handler, null), document.getElementById('main'));
-  }
+      React.render(React.createElement(Handler, null), document.getElementById('main'));    
+  }  
 });
 
 },{"./components/createIdeaView.jsx":9,"./components/homeView.jsx":10,"./components/ideaView.jsx":14,"./components/login.jsx":15,"./stores/authStore":20,"jquery":29,"react":225,"react-cookie":30,"react-router":56}],6:[function(require,module,exports){
@@ -377,7 +374,6 @@ var Comment = React.createClass({displayName: "Comment",
       ideaId     : ideaId
     };
 
-    console.log('SUBMIT COMMENT IDEA ID', newComment);
     commentActions.createComment(newComment);
 
     this.refs.nestedComment.getDOMNode().value = '';
@@ -411,7 +407,6 @@ var Comment = React.createClass({displayName: "Comment",
         )
       )
     } else {
-
       return (
         React.createElement("div", {className: "comment"}, 
           React.createElement("div", {className: "xx-large text-primary"}, " ", this.props.element.body, " "), 
@@ -430,10 +425,6 @@ var Comment = React.createClass({displayName: "Comment",
             React.createElement("span", {className: "text-white"}, " ", this.state.time, " "), 
             " ", 
             React.createElement("span", {className: "text-red", onClick: this.showTextarea}, " REPLY ")
-          ), 
-
-          React.createElement("div", {className: "text-primary"}, " ID for Slack use:", 
-            React.createElement("span", {className: "text-white"}, " ", this.props.element.commShortId, " ")
           ), 
 
           React.createElement("br", null), 
@@ -490,8 +481,8 @@ var CreateIdeaView = React.createClass({displayName: "CreateIdeaView",
 
     // alert if no title or body
     var self = this;
-    var redir = function(){self.transitionTo('Home')} ;
-    ideaActions.createIdea(newIdea,redir);
+    ideaActions.createIdea(newIdea, self.goBack);
+
     this.refs.newIdeaTitle.getDOMNode().value = '';
     this.refs.newIdeaBody.getDOMNode().value = '';
     this.refs.newIdeaTags.getDOMNode().value = '';
@@ -694,13 +685,12 @@ var IdeaList = React.createClass({displayName: "IdeaList",
   },
 
   render: function(){
-
     var list = this.props.ideas.map(function(idea, index){
       if(!idea.email){
         if(idea.tags){var tags = idea.tags.join(', ');}else{var tags = "";}
         idea.type = 'idea';
         var time = new Date(idea.createdAt).toLocaleString();
-        console.log('commentCount SUCCESS:', idea);
+
         return (
           React.createElement("div", {className: "idea row", key: index}, 
 
@@ -718,8 +708,7 @@ var IdeaList = React.createClass({displayName: "IdeaList",
               React.createElement("div", {className: "text-primary"}, 
                 "tags:" + ' ' +
                 " ", 
-                tags, 
-                React.createElement("span", {className: "text-primary pull-right"}, "comments: ", idea.commentCount)
+                tags
               ), 
               React.createElement("div", {className: "text-primary"}, 
                 "created by:" + ' ' +
@@ -739,7 +728,7 @@ var IdeaList = React.createClass({displayName: "IdeaList",
       } else {
         return(
           React.createElement("div", {key: index}, 
-            React.createElement(Link, {to: "ideaView", params: {id: idea._id}}, 
+            React.createElement(Link, {to: "ideaView", params: {id: idea._id, index: index}}, 
               React.createElement("img", {src: idea.image['24']}), 
               idea.sUserName
             )
@@ -823,6 +812,7 @@ var NavBar      = require('./navBar.jsx');
 var CommentList = require('./commentList.jsx');
 var ideaViewActions = require('../actions/ideaViewActions');
 var ideaViewStore   = require('../stores/ideaViewStore');
+var cookie         = require('react-cookie');
 var commentStore   = require('../stores/commentStore');
 var commentActions = require('../actions/commentActions');
 
@@ -836,7 +826,7 @@ var IdeaView = React.createClass({displayName: "IdeaView",
     return {
       idea     : ideaViewStore.fetchIdeas(),
       edit     : ideaViewStore.ideaEditState(),
-      comments : commentStore.fetchComments()
+      comments : commentStore.fetchComments(),
     }
   },
 
@@ -853,7 +843,6 @@ var IdeaView = React.createClass({displayName: "IdeaView",
   },
 
   _onChange : function(){
-    console.log('IDEA VIEW STATE HAS CHANGED');
     this.setState({
       idea     : ideaViewStore.fetchIdeas(),
       edit     : ideaViewStore.ideaEditState(),
@@ -877,6 +866,49 @@ var IdeaView = React.createClass({displayName: "IdeaView",
     this.refs.parentComment.getDOMNode().value = '';
   },
 
+  editIdea: function (e) {
+    ideaViewStore.ideaEditToggle();
+  },
+  submitIdea:function(){
+  var ideabodyedit =  this.refs.editedIdea.getDOMNode().value;
+    var newIdea ={
+      body: ideabodyedit,
+      title: this.state.idea.title,
+      status: this.state.idea.status,
+      ideaId: this.state.idea._id
+    }
+    ideaViewActions.editIdea(newIdea)
+  },
+  editmode:function(){
+    var userinfo = cookie.load('userInfo');
+    if(userinfo._id===this.state.idea.userId){
+      if(this.state.edit){
+        return(          
+          React.createElement("div", {className: "container"}, 
+            React.createElement("textarea", {className: "form-control", type: "text", ref: "editedIdea", defaultValue: this.state.idea.body}), 
+            React.createElement("div", null, React.createElement("br", null), React.createElement("span", {className: "text-red", onClick: this.submitIdea}, "Submit"))
+          )
+          )
+      }else{
+        return(
+          React.createElement("div", {className: "container"}, 
+            React.createElement("br", null), 
+            React.createElement("div", {className: "huge text-white"}, " ", this.state.idea.body, " "), 
+            React.createElement("div", null, React.createElement("br", null), React.createElement("span", {className: "text-red", onClick: this.editIdea}, "Edit")), 
+            React.createElement("br", null)
+          )
+          )
+      }
+    }else{
+      return(
+          React.createElement("div", {className: "container"}, 
+            React.createElement("br", null), 
+            React.createElement("div", {className: "huge text-white"}, " ", this.state.idea.body, " "), 
+            React.createElement("br", null)
+          )
+        )
+    }
+  },
   render: function(){
 
     if(this.state.idea.tags){
@@ -886,10 +918,9 @@ var IdeaView = React.createClass({displayName: "IdeaView",
           var tags = this.state.idea.tags;
         }
     }
-
+      
     var time = new Date(this.state.idea.createdAt).toLocaleString();
     console.log('this.state.idea', this.state.idea);
-
     return(
       React.createElement("div", null, 
         React.createElement(NavBar, null), 
@@ -912,8 +943,7 @@ var IdeaView = React.createClass({displayName: "IdeaView",
           ), 
 
           React.createElement("div", {className: "text-primary"}, " tags:", 
-            React.createElement("span", {className: "text-white"}, " ", tags, " "), 
-            React.createElement("span", {className: "text-primary pull-right"}, "comments: ", this.state.idea.commentCount, " ")
+            React.createElement("span", {className: "text-white"}, " ", tags, " ")
           ), 
 
           React.createElement("div", {className: "text-primary"}, " ID for Slack use:", 
@@ -921,11 +951,7 @@ var IdeaView = React.createClass({displayName: "IdeaView",
           )
         ), 
 
-        React.createElement("div", {className: "container"}, 
-          React.createElement("br", null), 
-          React.createElement("div", {className: "huge text-white"}, " ", this.state.idea.body, " "), 
-          React.createElement("br", null)
-        ), 
+        this.editmode(), 
 
         React.createElement("br", null), 
 
@@ -959,7 +985,7 @@ var IdeaView = React.createClass({displayName: "IdeaView",
 
 module.exports = IdeaView;
 
-},{"../actions/commentActions":1,"../actions/ideaViewActions":3,"../stores/commentStore":21,"../stores/ideaViewStore":23,"./commentList.jsx":8,"./navBar.jsx":16,"react":225}],15:[function(require,module,exports){
+},{"../actions/commentActions":1,"../actions/ideaViewActions":3,"../stores/commentStore":21,"../stores/ideaViewStore":23,"./commentList.jsx":8,"./navBar.jsx":16,"react":225,"react-cookie":30}],15:[function(require,module,exports){
 var React = require('react');
 var cookie = require('react-cookie');
 var authenticated = require('../stores/authStore');
@@ -1003,7 +1029,6 @@ var Link   = Router.Link;
 var $      = require('jquery');
 var cookie = require('react-cookie');
 var authenticated = require('../stores/authStore');
-var ideaActions    = require('../actions/ideaActions')
 
 var NavBar = React.createClass({displayName: "NavBar",
 
@@ -1016,9 +1041,7 @@ var NavBar = React.createClass({displayName: "NavBar",
       cookie.remove('userInfo');
     });
   },
-  changestore:function(){
-    ideaActions.getIdeas();
-  },
+
   render : function(){
     return(
       React.createElement("nav", {className: "navbar navbar-inverse transparent navbar-fixed-top"}, 
@@ -1030,13 +1053,13 @@ var NavBar = React.createClass({displayName: "NavBar",
 
           React.createElement("ul", {className: "nav navbar-nav navbar-right"}, 
             React.createElement("li", null, 
-              React.createElement(Link, {to: "app", onClick: this.changestore}, 
+              React.createElement(Link, {to: "app"}, 
                 "IDEA LIST  ", 
                 React.createElement("span", {className: "glyphicon glyphicon-home"})
               )
             ), 
             React.createElement("li", null, 
-              React.createElement(Link, {to: "app", onClick: this.changestore}, 
+              React.createElement(Link, {to: "app"}, 
                 "ARCHIVES  ", 
                 React.createElement("span", {className: "glyphicon glyphicon-time"})
               )
@@ -1062,7 +1085,7 @@ var NavBar = React.createClass({displayName: "NavBar",
 
 module.exports = NavBar;
 
-},{"../actions/ideaActions":2,"../stores/authStore":20,"jquery":29,"react":225,"react-cookie":30,"react-router":56}],17:[function(require,module,exports){
+},{"../stores/authStore":20,"jquery":29,"react":225,"react-cookie":30,"react-router":56}],17:[function(require,module,exports){
 var React = require('react');
 var VoteActions = require('../actions/voteActions');
 var cookie = require('react-cookie');
@@ -1291,7 +1314,6 @@ var editmode = false;
 var populateStore = function (idea) {
   _idea = idea;
   editmode = false;
-  console.log('populateStore', idea);
 };
 var ideaViewStore = ObjectAssign({}, EventEmitter.prototype, {
   fetchIdeas : function () {
@@ -1302,7 +1324,7 @@ var ideaViewStore = ObjectAssign({}, EventEmitter.prototype, {
 },
  ideaEditToggle : function(){
   editmode = !editmode;
-  ideaViewStore.emit(CHANGE_EVENT);
+  this.emit(CHANGE_EVENT);
 },
 addChangeListener : function (cb) {
     this.on(CHANGE_EVENT, cb);
@@ -1383,7 +1405,7 @@ process.nextTick = function (fun) {
         }
     }
     queue.push(new Item(fun, args));
-    if (queue.length === 1 && !draining) {
+    if (!draining) {
         setTimeout(drainQueue, 0);
     }
 };
@@ -11308,122 +11330,81 @@ if (typeof window !== 'undefined') {
 }
 
 },{"cookie":31}],31:[function(require,module,exports){
-/*!
- * cookie
- * Copyright(c) 2012-2014 Roman Shtylman
- * MIT Licensed
- */
 
-/**
- * Module exports.
- * @public
- */
+/// Serialize the a name value pair into a cookie string suitable for
+/// http headers. An optional options object specified cookie parameters
+///
+/// serialize('foo', 'bar', { httpOnly: true })
+///   => "foo=bar; httpOnly"
+///
+/// @param {String} name
+/// @param {String} val
+/// @param {Object} options
+/// @return {String}
+var serialize = function(name, val, opt){
+    opt = opt || {};
+    var enc = opt.encode || encode;
+    var pairs = [name + '=' + enc(val)];
 
-exports.parse = parse;
-exports.serialize = serialize;
+    if (null != opt.maxAge) {
+        var maxAge = opt.maxAge - 0;
+        if (isNaN(maxAge)) throw new Error('maxAge should be a Number');
+        pairs.push('Max-Age=' + maxAge);
+    }
 
-/**
- * Module variables.
- * @private
- */
+    if (opt.domain) pairs.push('Domain=' + opt.domain);
+    if (opt.path) pairs.push('Path=' + opt.path);
+    if (opt.expires) pairs.push('Expires=' + opt.expires.toUTCString());
+    if (opt.httpOnly) pairs.push('HttpOnly');
+    if (opt.secure) pairs.push('Secure');
 
-var decode = decodeURIComponent;
+    return pairs.join('; ');
+};
+
+/// Parse the given cookie header string into an object
+/// The object has the various cookies as keys(names) => values
+/// @param {String} str
+/// @return {Object}
+var parse = function(str, opt) {
+    opt = opt || {};
+    var obj = {}
+    var pairs = str.split(/; */);
+    var dec = opt.decode || decode;
+
+    pairs.forEach(function(pair) {
+        var eq_idx = pair.indexOf('=')
+
+        // skip things that don't look like key=value
+        if (eq_idx < 0) {
+            return;
+        }
+
+        var key = pair.substr(0, eq_idx).trim()
+        var val = pair.substr(++eq_idx, pair.length).trim();
+
+        // quoted values
+        if ('"' == val[0]) {
+            val = val.slice(1, -1);
+        }
+
+        // only assign once
+        if (undefined == obj[key]) {
+            try {
+                obj[key] = dec(val);
+            } catch (e) {
+                obj[key] = val;
+            }
+        }
+    });
+
+    return obj;
+};
+
 var encode = encodeURIComponent;
+var decode = decodeURIComponent;
 
-/**
- * Parse a cookie header.
- *
- * Parse the given cookie header string into an object
- * The object has the various cookies as keys(names) => values
- *
- * @param {string} str
- * @param {object} [options]
- * @return {string}
- * @public
- */
-
-function parse(str, options) {
-  var obj = {}
-  var opt = options || {};
-  var pairs = str.split(/; */);
-  var dec = opt.decode || decode;
-
-  pairs.forEach(function(pair) {
-    var eq_idx = pair.indexOf('=')
-
-    // skip things that don't look like key=value
-    if (eq_idx < 0) {
-      return;
-    }
-
-    var key = pair.substr(0, eq_idx).trim()
-    var val = pair.substr(++eq_idx, pair.length).trim();
-
-    // quoted values
-    if ('"' == val[0]) {
-      val = val.slice(1, -1);
-    }
-
-    // only assign once
-    if (undefined == obj[key]) {
-      obj[key] = tryDecode(val, dec);
-    }
-  });
-
-  return obj;
-}
-
-/**
- * Serialize data into a cookie header.
- *
- * Serialize the a name value pair into a cookie string suitable for
- * http headers. An optional options object specified cookie parameters.
- *
- * serialize('foo', 'bar', { httpOnly: true })
- *   => "foo=bar; httpOnly"
- *
- * @param {string} name
- * @param {string} val
- * @param {object} [options]
- * @return {string}
- * @public
- */
-
-function serialize(name, val, options) {
-  var opt = options || {};
-  var enc = opt.encode || encode;
-  var pairs = [name + '=' + enc(val)];
-
-  if (null != opt.maxAge) {
-    var maxAge = opt.maxAge - 0;
-    if (isNaN(maxAge)) throw new Error('maxAge should be a Number');
-    pairs.push('Max-Age=' + maxAge);
-  }
-
-  if (opt.domain) pairs.push('Domain=' + opt.domain);
-  if (opt.path) pairs.push('Path=' + opt.path);
-  if (opt.expires) pairs.push('Expires=' + opt.expires.toUTCString());
-  if (opt.httpOnly) pairs.push('HttpOnly');
-  if (opt.secure) pairs.push('Secure');
-
-  return pairs.join('; ');
-}
-
-/**
- * Try decoding a string using a decoding function.
- *
- * @param {string} str
- * @param {function} decode
- * @private
- */
-
-function tryDecode(str, decode) {
-  try {
-    return decode(str);
-  } catch (e) {
-    return str;
-  }
-}
+module.exports.serialize = serialize;
+module.exports.parse = parse;
 
 },{}],32:[function(require,module,exports){
 /**

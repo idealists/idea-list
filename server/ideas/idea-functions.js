@@ -135,8 +135,8 @@ function createIdea (req, res) {
 
 function updateIdea (req, res) {
   var now = Date.now();
-  var ideaId = JSON.parse(req.headers);
-  var incoming = JSON.parse(req.body);
+  var ideaId = req.body.ideaId;
+  var incoming = req.body;
 
   Idea.findByIdAndUpdate(ideaId,
     {

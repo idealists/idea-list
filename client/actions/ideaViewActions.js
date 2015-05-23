@@ -26,20 +26,18 @@ var ideaViewActions = {
     });
   },
 
-  editIdea:function(query,data){
-    query = query || 'id';
-    data  = data  || null;
-     $.ajax({
+  editIdea:function(data){
+    if(!data){console.log('Error: No data');}
+    else{
+      $.ajax({
         url : '/ideas',
         method : 'PUT',
         dataType  : "json",
         data : data
-     }).done(function(newidea){
-      Dispatcher.handleAction({
-        actionType : Constants.RELOAD_IDEAVIEW,
-        data       : idea
+      }).done(function(newidea){
+        ideaViewActions.getIdea('id', data.ideaId);
       });
-    });
+    }
   }
 };
 
