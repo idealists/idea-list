@@ -71,6 +71,7 @@ function addIdeaVote(req, res) {
           voteArray : ideaObj.voters, 
           rating    : ideaObj.rating
       };
+
       // if req is from the app client, res.end();
       // if req is from Slack, send response to Slack channel
       if(voteInfo.slackReq){

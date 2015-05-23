@@ -8,7 +8,6 @@ var ideaActions = {
     query = query || 'voteCount';
     data  = data  || null;
 
-    console.log('in ideaActions');
 
     $.ajax({
       url       : "/ideas",
@@ -24,7 +23,6 @@ var ideaActions = {
         actionType : Constants.RELOAD_IDEALIST,
         data       : ideaList
       });
-      console.log("CB: ", cb);
       if(cb){ cb(); }
     });
   },
@@ -47,6 +45,7 @@ var ideaActions = {
   },
 
   createIdea: function(newIdea, cb){
+    console.log('creating idea',cb);
     var ideaActions   = this;
     var userinfo      = cookie.load('userInfo');
     newIdea.user_name = userinfo.sUserName;
