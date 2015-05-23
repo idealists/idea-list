@@ -34,37 +34,46 @@ var CreateIdeaView = React.createClass({
         <NavBar />
 
         <div className="page-header container">
-          <div className="xx-huge text-center text-primary"> Create An Idea </div>
+            <div className="text-center">
+              <span className="x-huge text-center text-primary"> Create a </span>
+              <span className="x-huge text-center text-white"> New Idea </span>
+            </div>
         </div>
+
+        <br />
 
         <div className="input-group container">
+
           <div className="row">
             <div className="col-lg-2"></div>
-
-            <div className="col-lg-4">
-              <input className="form-control" type='text' ref='newIdeaTitle' placeholder='title'></input>
-            </div>
-
-            <div className="col-lg-4">
-              <input className="form-control" type='text' ref='newIdeaTags' placeholder='tags (split by space)'></input>
-            </div>
-
-            <div className="col-lg-2"></div>
-
-            <br />
-            <br />
-            <br />
-
-            <div className="col-lg-2"></div>
-
             <div className="col-lg-8">
-              <textarea className="form-control" type='text' ref='newIdeaBody' placeholder='body' rows="8"></textarea>
+              <input className="form-control input-lg" type='text' ref='newIdeaTitle' placeholder='Name your idea.'></input>
             </div>
-
             <div className="col-lg-2"></div>
-
           </div>
+
+          <br />
+
+          <div className="row">
+            <div className="col-lg-2"></div>
+            <div className="col-lg-8">
+              <input className="form-control input-lg" type='text' ref='newIdeaTags' placeholder='Add some descriptive tags. (split by space)'></input>
+            </div>
+            <div className="col-lg-2"></div>
+          </div>
+
+          <br />
+
+          <div className="row">
+            <div className="col-lg-2"></div>
+            <div className="col-lg-8">
+              <textarea className="form-control input-lg" type='text' ref='newIdeaBody' placeholder='Tell us more about it.' rows="8"></textarea>
+            </div>
+            <div className="col-lg-2"></div>
+          </div>
+
         </div>
+
           <br />
           <div className="text-center">
             <button className="btn btn-red btn-wide center" onClick={this.handleSubmit}>

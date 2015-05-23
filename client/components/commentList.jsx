@@ -129,7 +129,7 @@ var Comment = React.createClass({
             &nbsp;
             <span className="text-white"> {this.state.time} </span>
             &nbsp;
-            <span className="text-red" onClick={this.showTextarea}> REPLY </span>
+            <span className="btn btn-yellow btn-xxs" onClick={this.showTextarea}> REPLY </span>
           </div>
 
           <div className="text-primary"> ID for Slack use:
