@@ -207,6 +207,8 @@ function createComment (req, res) {
     function addCommentToIdea(idea) {
       comment.commShortId = generateCommentShortId(idea);
 
+      idea.commentCount++;
+
       idea.comments.push(comment);
 
       comment.save();
@@ -220,6 +222,11 @@ function createComment (req, res) {
     function addCommentToComment(parent) {
       comment.parentId = parent.parentId;
 
+      findIdea(comment.ideaId).then(function(idea){
+        idea.commentCount++;
+        idea.save();
+      })
+      
       parent.comments.push(comment);
 
       parent.save(function (err) {
