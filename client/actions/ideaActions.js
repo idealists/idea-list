@@ -24,6 +24,7 @@ var ideaActions = {
         actionType : Constants.RELOAD_IDEALIST,
         data       : ideaList
       });
+      console.log("CB: ", cb);
       if(cb){ cb(); }
     });
   },
