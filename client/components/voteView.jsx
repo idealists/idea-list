@@ -7,26 +7,14 @@ var VoteView = React.createClass({
   getInitialState: function(){
     return {
       userInfo: cookie.load('userInfo'),
-    }
-  },
-  componentDidMount: function(){
-    console.log(this.props.object)
-    var voteStatus = this.props.object.rating;
-    if (voteStatus > 0) {
-      //highlight the up arrow
-      console.log('HI VOTE');
-    } else if (voteStatus < 0) {
-      //highlight the down arrow
-       console.log('low vote');
-    } else {
-      //no highlighting
+      object  : this.props.object
     }
   },
   modifyProps: function(newData){
-    var newstate = this.props.object;
+    var newstate = this.state.object;
     newstate.rating = newData.rating;
-
-    this.setState({ voteData: newstate });
+    newstate.voters = newData.voteArray;
+    this.setState({ object: newstate });
 
   },
   sendVote: function(rating){
@@ -39,29 +27,54 @@ var VoteView = React.createClass({
         voteType   : votedata.type,
         rate       : rating,
         userImage  : this.state.userInfo.image['24']
-    }
+    };
 
     VoteActions.sendVote(voteInfo, here.modifyProps);
+  },
+  voteup:function(props){
+    var value = (<div className={"text-primary"}>
+          <span className="glyphicon glyphicon-chevron-up" ref="upVote" onClick={(this.voteTypes.up).bind(this)}></span>
+        </div>);
+    props.forEach(function(singlevote){
+      
+      if(this.state.userInfo._id===singlevote.voter&&singlevote.value>0){
+        value = (<div className="text-red">
+          <span className="glyphicon glyphicon-chevron-up" ref="upVote" onClick={(this.voteTypes.up).bind(this)}></span>
+        </div>);
+      }
+    }.bind(this));
+    return value;
+  },
+  votedown:function(props){
+    var value = ( <div className="text-primary">
+          <span className="glyphicon glyphicon-chevron-down" ref="downVote" onClick={(this.voteTypes.down).bind(this)}></span>
+        </div>);
+    props.forEach(function(singlevote){
+      
+      if(this.state.userInfo._id===singlevote.voter&&singlevote.value<0){
+        value = ( <div className="text-red">
+          <span className="glyphicon glyphicon-chevron-down" ref="downVote" onClick={(this.voteTypes.down).bind(this)}></span>
+        </div>);
+      }
+    }.bind(this));
+    return value;
   },
   voteTypes: {
     up: function(){this.sendVote(1);} ,
     down: function(){this.sendVote(-1);}
   },
   render: function(){
+    var here = this
     return(
       <div className="votePosition">
-        <div className="text-primary">
-          <span className="glyphicon glyphicon-chevron-up" ref="upVote" onClick={(this.voteTypes.up).bind(this)}></span>
-        </div>
+        {here.voteup(here.state.object.voters)}
 
         <div className="text-primary" ref="rating">
           &nbsp;
-          {this.props.object.rating}
+          {here.state.object.rating}
         </div>
-
-        <div className="text-primary">
-          <span className="glyphicon glyphicon-chevron-down" ref="downVote" onClick={(this.voteTypes.down).bind(this)}></span>
-        </div>
+        {here.votedown(here.state.object.voters)}
+       
       </div>
     )
   }

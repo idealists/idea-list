@@ -22,7 +22,6 @@ var IdeaList = React.createClass({
         if(idea.tags){var tags = idea.tags.join(', ');}else{var tags = "";}
         idea.type = 'idea';
         var time = new Date(idea.createdAt).toLocaleString();
-        console.log('commentCount SUCCESS:', idea);
         return (
           <div className="idea row" key={index}>
 
