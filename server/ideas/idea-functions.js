@@ -227,11 +227,11 @@ function createComment (req, res) {
         slackPost.postSlack(reply);
       });
     }
-
+  /* jshint ignore:start */
     req.body.parentType == 'idea'
       ? findIdea(comment.parentId).then(addCommentToIdea)
       : findComment(comment.parentId).then(addCommentToComment);
-
+  /* jshint ignore:end */
     comment.save().then(sendResponse);
   });
 

@@ -48,7 +48,13 @@ function slackInt (req, res){
   if (req.body.command === '/idea' || req.body.command === '/comment'){
     if (text.indexOf('|') === -1){
       error = true;
-      reply = 'Please use the correct format for your request: \n\n For ideas: /idea [ title | text | tags ] \n\n For comments: /comment [ Id | text ] \n\n For voting: /upvote OR /downvote [ Id ] \n\n *To see a list of all open ideas, use the command:  /allideas';
+/* jshint ignore:start */
+      reply = 'Please use the correct format for your request: \n\n \
+For ideas: /idea [ title | text | tags ] \n\n \
+For comments: /comment [ Id | text ] \n\n \
+For voting: /upvote OR /downvote [ Id ] \n\n \
+*To see a list of all open ideas, use the command:  /allideas';
+/* jshint ignore:end */
       res.end(reply);
     } else if (textSplit.trim() === ''){
       error = true;
@@ -58,8 +64,14 @@ function slackInt (req, res){
   } else if (req.body.command === '/upvote' || req.body.command === '/downvote'){
     if (text === ''){
       error = true;
-      reply = 'Please use the correct format for your request: \n\n For ideas: /idea [ title | text | tags ] \n\n For comments: /comment [ Id | text ] \n\n For voting: /upvote OR /downvote [ Id ] \n\n *To see a list of all open ideas, use the command:  /allideas';
-      res.end(reply);
+/* jshint ignore:start */
+      reply = 'Please use the correct format for your request: \n\n \
+For ideas: /idea [ title | text | tags ] \n\n \
+For comments: /comment [ Id | text ] \n\n \
+For voting: /upvote OR /downvote [ Id ] \n\n \
+*To see a list of all open ideas, use the command:  /allideas';
+/* jshint ignore:end */
+    res.end(reply);
     }
   }
 
