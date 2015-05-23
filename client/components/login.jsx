@@ -22,9 +22,16 @@ var Login = React.createClass({
         </div>
         <br />
         <br />
+        <a href="https://slack-idealist.herokuapp.com/">
+          <button className="btn btn-red btn-large center" id="signup-btn">
+            Join IdeaList
+          </button>
+        </a>
+        <br />
+        <br />
         <a href="/auth/slack">
           <button className="btn btn-red btn-large center" id="login-btn">
-            Login with Slack
+            Login
           </button>
         </a>
       </div>

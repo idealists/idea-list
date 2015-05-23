@@ -1,6 +1,7 @@
 var passport = require('passport');
 var SlackStrategy = require('passport-slack').Strategy;
 var User = require('./models/users.js');
+var updateUsers = require('./update-users');
 
 passport.use(new SlackStrategy({
     clientID: process.env.SLACK_OAUTH_ID,
@@ -46,6 +47,7 @@ module.exports = function (app) {
   app.use(passport.session());
 
   app.get('/auth/slack',
+    updateUsers,
     passport.authenticate('slack')
   );
   app.get('/auth/slack/callback',
