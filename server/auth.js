@@ -20,7 +20,7 @@ passport.use(new SlackStrategy({
         // User list populates before login, so user should be in DB
         return done(null, false);
       }
-    })
+    });
   }
 ));
 
