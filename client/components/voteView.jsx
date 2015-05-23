@@ -11,7 +11,7 @@ var VoteView = React.createClass({
     }
   },
   modifyProps: function(newData){
-    var newstate = this.state.object;
+    var newstate = this.props.object;
     newstate.rating = newData.rating;
     newstate.voters = newData.voteArray;
     this.setState({ object: newstate });
@@ -67,13 +67,13 @@ var VoteView = React.createClass({
     var here = this
     return(
       <div className="votePosition">
-        {here.voteup(here.state.object.voters)}
+        {here.voteup(here.props.object.voters)}
 
         <div className="text-primary" ref="rating">
           &nbsp;
-          {here.state.object.rating}
+          {here.props.object.rating}
         </div>
-        {here.votedown(here.state.object.voters)}
+        {here.votedown(here.props.object.voters)}
        
       </div>
     )
