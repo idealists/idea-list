@@ -1109,7 +1109,7 @@ var VoteView = React.createClass({displayName: "VoteView",
     }
   },
   modifyProps: function(newData){
-    var newstate = this.state.object;
+    var newstate = this.props.object;
     newstate.rating = newData.rating;
     newstate.voters = newData.voteArray;
     this.setState({ object: newstate });
@@ -1165,13 +1165,13 @@ var VoteView = React.createClass({displayName: "VoteView",
     var here = this
     return(
       React.createElement("div", {className: "votePosition"}, 
-        here.voteup(here.state.object.voters), 
+        here.voteup(here.props.object.voters), 
 
         React.createElement("div", {className: "text-primary", ref: "rating"}, 
           " ", 
-          here.state.object.rating
+          here.props.object.rating
         ), 
-        here.votedown(here.state.object.voters)
+        here.votedown(here.props.object.voters)
        
       )
     )
