@@ -18,8 +18,6 @@ app.use(session({
 
 require('./auth')(app);
 require('./middleware')(app, express);
-var updateUsers = require('./update-users');
-updateUsers();
 
 var server = app.listen(process.env.PORT || 5000, function () {
   var host = server.address().address;
