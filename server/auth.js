@@ -14,14 +14,11 @@ passport.use(new SlackStrategy({
     User.findOne({ slackId: profile.id }, function (err, user) {
       if (err) return done(err);
 
-      if (!user) {
-        // User list populates on server start, so don't allow user to authenticate if not in DB
-        return done(err);
+      if (user) {
+        return done(null, user);
       } else {
-        // Otherwise update user
-        user.accessToken = accessToken;
-        user.slack = JSON.stringify(profile._json);
-        return done(err, user);
+        // User list populates before login, so user should be in DB
+        return done(null, false);
       }
     });
   }

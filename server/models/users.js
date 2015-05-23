@@ -3,10 +3,8 @@ var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
 
 var User = new Schema({
-  accessToken : String,
   createdAt   : Date,
   updatedAt   : Date,
-  slack       : String,
   slackId     : String,
   sUserName   : String,
   realName    : String,
