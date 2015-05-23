@@ -11,7 +11,7 @@ app.use('/', express.static('client'));
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(session({
-  secret: 'idealist',
+  secret: process.env.SESSION_SECRET || 'idealist',
   resave: true,
   saveUninitialized: true
 }));
