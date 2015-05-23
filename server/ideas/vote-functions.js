@@ -71,6 +71,7 @@ function addIdeaVote(req, res) {
           voteArray : ideaObj.voters, 
           rating    : ideaObj.rating
       };
+
       // if req is from the app client, res.end();
       // if req is from Slack, send response to Slack channel
       if(voteInfo.slackReq){
@@ -78,19 +79,18 @@ function addIdeaVote(req, res) {
         var title = voteInfo.parentTitle || idea.title;
         if (!unvoted){
           if ( voteInfo.slackCommand === '/upvote' ) {
-            reply = { 'text': 'Upvote recorded for idea: ' + title + ' | Id: ' + voteInfo.shortId };
+            reply = 'Upvote recorded for idea: "' + title + '" | Id: ' + voteInfo.shortId;
           } else if ( voteInfo.slackCommand === '/downvote' ) {
-            reply = { 'text': 'Downvote recorded for idea: ' + title + ' | Id: ' + voteInfo.shortId };
+            reply = 'Downvote recorded for idea: "' + title + '" | Id: ' + voteInfo.shortId;
           }
         } else {
           if ( voteInfo.slackCommand === '/upvote' ) {
-            reply = { 'text': 'VOTE CHANGED to zero. \n You previously upvoted for idea: ' + title + ' | Id: ' + voteInfo.shortId };
+            reply = 'VOTE CHANGED to zero. \n You previously upvoted for idea: "' + title + '" | Id: ' + voteInfo.shortId;
           } else if ( voteInfo.slackCommand === '/downvote' ) {
-            reply = { 'text': 'VOTE CHANGED to zero. \n You previously downvoted for idea: ' + title + ' | Id: ' + voteInfo.shortId };
+            reply = 'VOTE CHANGED to zero. \n You previously downvoted for idea: "' + title + '" | Id: ' + voteInfo.shortId;
           }
         }
-        slackPost.postSlack(reply);
-        //res.end();
+        res.end(reply);
       } else {
         res.end(JSON.stringify(voteObj));
       }
@@ -142,7 +142,7 @@ function addCommVote(req, res) {
     }
     
     comment.rating = total;
-    
+
     comment.save(function(err, commObj ){
       if (err) console.log('In comment save: ', err);
       var voteObj = { 
@@ -155,19 +155,18 @@ function addCommVote(req, res) {
         var reply; 
         if (!unvoted){
           if ( voteInfo.slackCommand === '/upvote' ) {
-            reply = { 'text': 'Upvote recorded for comment Id: ' + voteInfo.shortId };
+            reply = 'Upvote recorded! On comment Id: ' + voteInfo.shortId;
           } else if ( voteInfo.slackCommand === '/downvote' ) {
-            reply = { 'text': 'Downvote recorded for comment Id: ' + voteInfo.shortId };
+            reply = 'Downvote recorded! On comment Id: ' + voteInfo.shortId;
           }
         } else {
           if ( voteInfo.slackCommand === '/upvote' ) {
-            reply = { 'text': 'VOTE CHANGED to zero. \n You previously upvoted for comment Id: ' + voteInfo.shortId };
+            reply = 'VOTE CHANGED to zero. \n You have reversed your upvote for comment Id: ' + voteInfo.shortId;
           } else if ( voteInfo.slackCommand === '/downvote' ) {
-            reply = { 'text': 'VOTE CHANGED to zero. \n You previously downvoted for comment Id: ' + voteInfo.shortId };
+            reply = 'VOTE CHANGED to zero. \n You have reversed your downvote for comment Id: ' + voteInfo.shortId;
           }
         }
-        slackPost.postSlack(reply);
-        //res.end();
+        res.end(reply);
       } else {
         res.end(JSON.stringify(voteObj));
       }

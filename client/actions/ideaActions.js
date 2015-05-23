@@ -8,7 +8,6 @@ var ideaActions = {
     query = query || 'voteCount';
     data  = data  || null;
 
-    console.log('in ideaActions');
 
     $.ajax({
       url       : "/ideas",
@@ -46,6 +45,7 @@ var ideaActions = {
   },
 
   createIdea: function(newIdea, cb){
+    console.log('creating idea',cb);
     var ideaActions   = this;
     var userinfo      = cookie.load('userInfo');
     newIdea.user_name = userinfo.sUserName;
