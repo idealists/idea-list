@@ -1,15 +1,14 @@
 var passport = require('passport');
 var SlackStrategy = require('passport-slack').Strategy;
 var User = require('./models/users.js');
-var TEAM_ID = 'T04M0RM4V';
+var updateUsers = require('./update-users');
 
 passport.use(new SlackStrategy({
     clientID: process.env.SLACK_OAUTH_ID,
     clientSecret: process.env.SLACK_OAUTH_SECRET,
     callbackURL: '/auth/slack/callback',
-    scope: 'read,post',
-    state: 'xyz',
-    team: TEAM_ID
+    scope: 'read',
+    state: 'xyz'
   },
   function(accessToken, refreshToken, profile, done) {
     User.findOne({ slackId: profile.id }, function (err, user) {
@@ -47,14 +46,14 @@ module.exports = function (app) {
   app.use(passport.initialize());
   app.use(passport.session());
 
-
   app.get('/auth/slack',
+    updateUsers,
     passport.authenticate('slack')
   );
   app.get('/auth/slack/callback',
-    passport.authenticate('slack', { failureRedirect: '/login' }),
+    passport.authenticate('slack', { failureRedirect: '/#/login' }),
     function (request, response) {
-      response.redirect('/#/home'); // temporary - for development only
+      response.redirect('/#/home');
     }
   );
 
