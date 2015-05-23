@@ -43,23 +43,44 @@ var VoteView = React.createClass({
 
     VoteActions.sendVote(voteInfo, here.modifyProps);
   },
+  voteup:function(value){
+    return "text-primary"
+  }
   voteTypes: {
-    up: function(){this.sendVote(1);} ,
-    down: function(){this.sendVote(-1);}
+    up: function(){this.sendVote(1); this.voteup ='text-red';} ,
+    down: function(){this.sendVote(-1); this.votedown = 'text-red';}
   },
   render: function(){
-    return(
-      <div className="votePosition">
-        <div className="text-primary">
+    var user = this.state.userInfo._id
+    var voteup =(
+             <div className={voteup()}>
           <span className="glyphicon glyphicon-chevron-up" ref="upVote" onClick={(this.voteTypes.up).bind(this)}></span>
         </div>
+      );
+    var votedown = 
+    this.props.object.voters.forEach(function(vote){
+      if(vote.voter===user){
+        if(vote.value>0){
+          this.voteup = (<div className={"text-primary"}>
+                    <span className="glyphicon glyphicon-chevron-up" ref="upVote" onClick={(this.voteTypes.up).bind(this)}></span>
+                  </div>)
+        }
+        if(vote.value<0){
+          votedown = 'text-red'
+        }
+      }
+    }.bind(this))
+    console.log('chnge')
+    return(
+      <div className="votePosition">
+        {voteup}
 
         <div className="text-primary" ref="rating">
           &nbsp;
           {this.props.object.rating}
         </div>
 
-        <div className="text-primary">
+        <div className={votedown}>
           <span className="glyphicon glyphicon-chevron-down" ref="downVote" onClick={(this.voteTypes.down).bind(this)}></span>
         </div>
       </div>
