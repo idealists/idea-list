@@ -1,7 +1,7 @@
 var React  = require('react');
 var Router = require('react-router');
 var Home   = require('./components/homeView.jsx');
-var ideaView= require('./components/ideaView.jsx')
+var ideaView = require('./components/ideaView.jsx')
 var Login = require('./components/login.jsx');
 var CreateIdeaView = require('./components/createIdeaView.jsx');
 var cookie = require('react-cookie');
@@ -42,12 +42,11 @@ Router.run(routes, function (Handler) {
   if(!(authenticated.loginStatus())){
 
     $.ajax({
-      url:"/api/user",
-      dataType:'json',
-      method:"GET"
+      url      : "/api/user",
+      dataType : 'json',
+      method   : "GET"
     })
     .done(function (value) {
-      console.log('got auth')
       if (!value.loggedIn) {
         cookie.remove('userInfo');
         React.render(<Login/>, document.getElementById('main'));
@@ -60,7 +59,7 @@ Router.run(routes, function (Handler) {
         React.render(<Handler/>, document.getElementById('main'));
       }
     });
-  }else{
+  } else {
       React.render(<Handler/>, document.getElementById('main'));
   }
 });

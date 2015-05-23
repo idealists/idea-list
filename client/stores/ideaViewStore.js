@@ -9,28 +9,31 @@ var editmode = false;
 var populateStore = function (idea) {
   _idea = idea;
   editmode = false;
-  console.log('populateStore', idea);
 };
+
 var ideaViewStore = ObjectAssign({}, EventEmitter.prototype, {
-  fetchIdeas : function () {
+  fetchIdeas: function () {
     return _idea;
   },
- ideaEditState : function(){
-  return editmode;
-},
- ideaEditToggle : function(){
-  editmode = !editmode;
-  this.emit(CHANGE_EVENT);
-},
-addChangeListener : function (cb) {
+
+  ideaEditState: function () {
+    return editmode;
+  },
+
+  ideaEditToggle: function () {
+    editmode = !editmode;
+    this.emit(CHANGE_EVENT);
+  },
+
+  addChangeListener: function (cb) {
     this.on(CHANGE_EVENT, cb);
     this.setMaxListeners(100);
   },
-  removeChangeListener : function (cb) {
+
+  removeChangeListener: function (cb) {
     this.removeListener(CHANGE_EVENT, cb);
   }
 });
-
 
 ideaViewStore.dispatchToken = Dispatcher.register(function (action) {
   switch (action.action.actionType) {
@@ -39,7 +42,7 @@ ideaViewStore.dispatchToken = Dispatcher.register(function (action) {
       ideaViewStore.emit(CHANGE_EVENT);
       break;
 
-      case Constants.FETCH_IDEAVIEW:
+    case Constants.FETCH_IDEAVIEW:
       fetchIdeas();
       break;
 

@@ -6,41 +6,41 @@ var VoteView = require('./voteView.jsx');
 
 var DefaultRoute = Router.DefaultRoute;
 var RouteHandler = Router.RouteHandler;
-var commentStore   = require('../stores/commentStore');
+var commentStore = require('../stores/commentStore');
 var Route = Router.Route;
 var Link  = Router.Link;
 
 var CommentList = React.createClass({
-  render: function(){
-    console.log('the commetst to reder',this.props.comments)
-    var here = this
-    var childcomments = function(com,parentId,level) {
-      if(com.length>0){
-        var result= com.map(function(comdata,index){
-          comdata.type = 'comment'
-          var ptype = 'comment'
-          if(level===0){ ptype === 'idea'}
-            // console.oog
+  render: function () {
+    var here = this;
+    var childComments = function (comments, parentId, level) {
+      if (comments.length > 0) {
+        var result = comments.map(function (commentData, index) {
+          commentData.type = 'comment';
+          var parentType = 'comment';
+          if (level === 0) {
+            parentType === 'idea';
+          }
           return (
             <div className="container">
               <div className="row">
                 <div className="col-md-1">
-                  <VoteView object={comdata}/>
+                  <VoteView object={commentData}/>
                 </div>
 
                 <div className="col-md-11">
-                  <Comment element={comdata} root={parentId} level={level} ptype={ptype} />
-                  {childcomments(comdata.comments, parentId, level+1)}
+                  <Comment element={commentData} root={parentId} level={level} ptype={parentType} />
+                  {childComments(commentData.comments, parentId, level+1)}
                 </div>
               </div>
               <br />
             </div>
           )
         });
-        return result
+        return result;
       }
     };
-    var list = childcomments(this.props.comments,this.props.idea,0)
+    var list = childComments(this.props.comments, this.props.idea, 0);
     return (
       <div>
         {list}
@@ -54,7 +54,7 @@ var CommentList = React.createClass({
 
 
 var Comment = React.createClass({
-  getInitialState: function(){
+  getInitialState: function () {
     var uniq = this.props.element._id;
 
     return {
@@ -63,13 +63,13 @@ var Comment = React.createClass({
     }
   },
 
-  handleSubmit: function(e) {
+  handleSubmit: function (e) {
     e.preventDefault();
 
     var commentBody = this.refs.nestedComment.getDOMNode().value;
     var commentId   = this.props.element._id;
     var ideaId      = this.props.root._id;
-    var ptype       = this.props.ptype
+    var ptype       = this.props.ptype;
     var newComment = {
       body       : commentBody,
       parentId   : commentId,
@@ -83,13 +83,13 @@ var Comment = React.createClass({
     this.refs.nestedComment.getDOMNode().value = '';
   },
 
-  showTextarea: function(){
+  showTextarea: function () {
     this.setState({
       uniq: !this.state.uniq
-    })
+    });
   },
 
-  render: function(){
+  render: function () {
     if (this.props.level > 0) {
       return (
         <div className="comment">
@@ -109,7 +109,8 @@ var Comment = React.createClass({
             <span className="text-white"> {this.state.time} </span>
           </div>
         </div>
-      )
+      );
+      
     } else {
 
       return (
@@ -164,6 +165,5 @@ var Comment = React.createClass({
   }
 });
 
-//
 module.exports = CommentList;
 

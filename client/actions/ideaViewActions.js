@@ -18,7 +18,6 @@ var ideaViewActions = {
       }
     })
     .done(function (idea) {
-      console.log('got this idea',idea);
       Dispatcher.handleAction({
         actionType : Constants.RELOAD_IDEAVIEW,
         data       : idea[0]
@@ -26,15 +25,16 @@ var ideaViewActions = {
     });
   },
 
-  editIdea:function(data){
+  editIdea: function (data) {
     if(!data){console.log('Error: No data');}
     else{
       $.ajax({
-        url : '/ideas',
-        method : 'PUT',
+        url       : '/ideas',
+        method    : 'PUT',
         dataType  : "json",
-        data : data
-      }).done(function(newidea){
+        data      : data
+      })
+      .done(function(newidea){
         ideaViewActions.getIdea('id', data.ideaId);
       });
     }

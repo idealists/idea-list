@@ -23,19 +23,21 @@ var ideaActions = {
         actionType : Constants.RELOAD_IDEALIST,
         data       : ideaList
       });
-      if(cb){ cb(); }
+      if (cb) cb();
     });
   },
 
-  searchBy:function(data){
+  searchBy: function (data) {
     $.ajax({
       url       : "/ideas",
       dataType  : "json",
       method    : "GET",
-      headers   : { 'query' : 'searchbar',
-                    'lookup'  : data.lookup
-                  }
-    }).done(function (result) {
+      headers   : {
+        'query' : 'searchbar',
+        'lookup'  : data.lookup
+      }
+    })
+    .done(function (result) {
       var uslist = result.users.concat(result.ideas);
       Dispatcher.handleAction({
         actionType : Constants.RELOAD_IDEALIST,
@@ -44,8 +46,7 @@ var ideaActions = {
     });
   },
 
-  createIdea: function(newIdea, cb){
-    console.log('creating idea',cb);
+  createIdea: function (newIdea, cb) {
     var ideaActions   = this;
     var userinfo      = cookie.load('userInfo');
     newIdea.user_name = userinfo.sUserName;
@@ -62,7 +63,6 @@ var ideaActions = {
     })
     .done(function (ideaList) {
       ideaActions.getIdeas(null, null, cb);
-      //cb();
     });
   },
 
@@ -74,4 +74,4 @@ var ideaActions = {
   }
 };
 
-module.exports= ideaActions;
+module.exports = ideaActions;

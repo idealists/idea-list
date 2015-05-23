@@ -9,32 +9,30 @@ var commentActions = require('../actions/commentActions');
 
 var IdeaView = React.createClass({
 
-
   getInitialState: function () {
-    ideaViewActions.getIdea('id',this.props.params.id);
+    ideaViewActions.getIdea('id', this.props.params.id);
     commentActions.getComments('votes', this.props.params.id);
 
     return {
       idea     : ideaViewStore.fetchIdeas(),
       edit     : ideaViewStore.ideaEditState(),
       comments : commentStore.fetchComments()
-    }
+    };
   },
 
-  componentDidMount : function(){
-    ideaViewActions.getIdea('id',this.props.params.id);
+  componentDidMount: function () {
+    ideaViewActions.getIdea('id', this.props.params.id);
     commentActions.getComments('votes', this.props.params.id);
     commentStore.addChangeListener(this._onChange);
     ideaViewStore.addChangeListener(this._onChange);
   },
 
-  componentWillUnmount : function(){
+  componentWillUnmount: function () {
     commentStore.removeChangeListener(this._onChange);
     ideaViewStore.removeChangeListener(this._onChange);
   },
 
-  _onChange : function(){
-    console.log('IDEA VIEW STATE HAS CHANGED');
+  _onChange: function () {
     this.setState({
       idea     : ideaViewStore.fetchIdeas(),
       edit     : ideaViewStore.ideaEditState(),
@@ -42,7 +40,7 @@ var IdeaView = React.createClass({
     });
   },
 
-  handleSubmit : function(){
+  handleSubmit: function () {
     var commentBody = this.refs.parentComment.getDOMNode().value;
     var ideaId      = this.state.idea._id
 
@@ -61,59 +59,60 @@ var IdeaView = React.createClass({
   editIdea: function (e) {
     ideaViewStore.ideaEditToggle();
   },
-  submitIdea:function(){
-  var ideabodyedit =  this.refs.editedIdea.getDOMNode().value;
-    var newIdea ={
+
+  submitIdea: function () {
+    var ideabodyedit = this.refs.editedIdea.getDOMNode().value;
+    var newIdea = {
       body: ideabodyedit,
       title: this.state.idea.title,
       status: this.state.idea.status,
       ideaId: this.state.idea._id
     }
-    ideaViewActions.editIdea(newIdea)
+    ideaViewActions.editIdea(newIdea);
   },
-  editmode:function(){
+
+  editmode: function () {
     var userinfo = cookie.load('userInfo');
-    if(userinfo._id===this.state.idea.userId){
-      if(this.state.edit){
-        return(          
+    if (userinfo._id === this.state.idea.userId) {
+      if (this.state.edit) {
+        return (          
           <div className="container">
             <textarea className="form-control" type="text" ref="editedIdea" defaultValue={this.state.idea.body} />
             <div><br /><span className="text-red" onClick={this.submitIdea}>Submit</span></div>
           </div>
-          )
-      }else{
-        return(
+        );
+      } else {
+        return (
           <div className="container">
             <br />
             <div className="huge text-white"> {this.state.idea.body} </div>
             <div><br /><span className="text-red" onClick={this.editIdea}>Edit</span></div>
             <br />
           </div>
-          )
+        );
       }
-    }else{
-      return(
-          <div className="container">
-            <br />
-            <div className="huge text-white"> {this.state.idea.body} </div>
-            <br />
-          </div>
-        )
+    } else {
+      return (
+        <div className="container">
+          <br />
+          <div className="huge text-white"> {this.state.idea.body} </div>
+          <br />
+        </div>
+      );
     }
   },
-  render: function(){
 
-    if(this.state.idea.tags){
-      if(this.state.idea.tags.length>1){
-          var tags = this.state.idea.tags.join(", ");
-        }else{
-          var tags = this.state.idea.tags;
-        }
+  render: function () {
+    if (this.state.idea.tags) {
+      if (this.state.idea.tags.length>1) {
+        var tags = this.state.idea.tags.join(", ");
+      } else {
+        var tags = this.state.idea.tags;
+      }
     }
 
     var time = new Date(this.state.idea.createdAt).toLocaleString();
-    console.log('this.state.idea', this.state.idea);
-    return(
+    return (
       <div>
         <NavBar />
 
@@ -125,7 +124,7 @@ var IdeaView = React.createClass({
           <div className="text-primary">
             created by:
             &nbsp;
-            <img src={this.state.idea.img}/>
+            <img src={this.state.idea.img} />
             &nbsp;
             <span className="text-white">{this.state.idea.sUserName}</span>
             &nbsp;

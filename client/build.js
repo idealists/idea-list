@@ -77,19 +77,21 @@ var ideaActions = {
         actionType : Constants.RELOAD_IDEALIST,
         data       : ideaList
       });
-      if(cb){ cb(); }
+      if (cb) cb();
     });
   },
 
-  searchBy:function(data){
+  searchBy: function (data) {
     $.ajax({
       url       : "/ideas",
       dataType  : "json",
       method    : "GET",
-      headers   : { 'query' : 'searchbar',
-                    'lookup'  : data.lookup
-                  }
-    }).done(function (result) {
+      headers   : {
+        'query' : 'searchbar',
+        'lookup'  : data.lookup
+      }
+    })
+    .done(function (result) {
       var uslist = result.users.concat(result.ideas);
       Dispatcher.handleAction({
         actionType : Constants.RELOAD_IDEALIST,
@@ -98,8 +100,7 @@ var ideaActions = {
     });
   },
 
-  createIdea: function(newIdea, cb){
-    console.log('creating idea',cb);
+  createIdea: function (newIdea, cb) {
     var ideaActions   = this;
     var userinfo      = cookie.load('userInfo');
     newIdea.user_name = userinfo.sUserName;
@@ -116,7 +117,6 @@ var ideaActions = {
     })
     .done(function (ideaList) {
       ideaActions.getIdeas(null, null, cb);
-      //cb();
     });
   },
 
@@ -128,7 +128,7 @@ var ideaActions = {
   }
 };
 
-module.exports= ideaActions;
+module.exports = ideaActions;
 
 },{"../constants/constants":17,"../dispatcher/dispatcher":18,"jquery":28,"react-cookie":29}],3:[function(require,module,exports){
 var Dispatcher = require('../dispatcher/dispatcher');
@@ -151,7 +151,6 @@ var ideaViewActions = {
       }
     })
     .done(function (idea) {
-      console.log('got this idea',idea);
       Dispatcher.handleAction({
         actionType : Constants.RELOAD_IDEAVIEW,
         data       : idea[0]
@@ -159,15 +158,16 @@ var ideaViewActions = {
     });
   },
 
-  editIdea:function(data){
+  editIdea: function (data) {
     if(!data){console.log('Error: No data');}
     else{
       $.ajax({
-        url : '/ideas',
-        method : 'PUT',
+        url       : '/ideas',
+        method    : 'PUT',
         dataType  : "json",
-        data : data
-      }).done(function(newidea){
+        data      : data
+      })
+      .done(function(newidea){
         ideaViewActions.getIdea('id', data.ideaId);
       });
     }
@@ -199,7 +199,7 @@ module.exports = VoteActions;
 var React  = require('react');
 var Router = require('react-router');
 var Home   = require('./components/homeView.jsx');
-var ideaView= require('./components/ideaView.jsx')
+var ideaView = require('./components/ideaView.jsx')
 var Login = require('./components/login.jsx');
 var CreateIdeaView = require('./components/createIdeaView.jsx');
 var cookie = require('react-cookie');
@@ -240,12 +240,11 @@ Router.run(routes, function (Handler) {
   if(!(authenticated.loginStatus())){
 
     $.ajax({
-      url:"/api/user",
-      dataType:'json',
-      method:"GET"
+      url      : "/api/user",
+      dataType : 'json',
+      method   : "GET"
     })
     .done(function (value) {
-      console.log('got auth')
       if (!value.loggedIn) {
         cookie.remove('userInfo');
         React.render(React.createElement(Login, null), document.getElementById('main'));
@@ -258,7 +257,7 @@ Router.run(routes, function (Handler) {
         React.render(React.createElement(Handler, null), document.getElementById('main'));
       }
     });
-  }else{
+  } else {
       React.render(React.createElement(Handler, null), document.getElementById('main'));
   }
 });
@@ -294,41 +293,41 @@ var VoteView = require('./voteView.jsx');
 
 var DefaultRoute = Router.DefaultRoute;
 var RouteHandler = Router.RouteHandler;
-var commentStore   = require('../stores/commentStore');
+var commentStore = require('../stores/commentStore');
 var Route = Router.Route;
 var Link  = Router.Link;
 
 var CommentList = React.createClass({displayName: "CommentList",
-  render: function(){
-    console.log('the commetst to reder',this.props.comments)
-    var here = this
-    var childcomments = function(com,parentId,level) {
-      if(com.length>0){
-        var result= com.map(function(comdata,index){
-          comdata.type = 'comment'
-          var ptype = 'comment'
-          if(level===0){ ptype === 'idea'}
-            // console.oog
+  render: function () {
+    var here = this;
+    var childComments = function (comments, parentId, level) {
+      if (comments.length > 0) {
+        var result = comments.map(function (commentData, index) {
+          commentData.type = 'comment';
+          var parentType = 'comment';
+          if (level === 0) {
+            parentType === 'idea';
+          }
           return (
             React.createElement("div", {className: "container"}, 
               React.createElement("div", {className: "row"}, 
                 React.createElement("div", {className: "col-md-1"}, 
-                  React.createElement(VoteView, {object: comdata})
+                  React.createElement(VoteView, {object: commentData})
                 ), 
 
                 React.createElement("div", {className: "col-md-11"}, 
-                  React.createElement(Comment, {element: comdata, root: parentId, level: level, ptype: ptype}), 
-                  childcomments(comdata.comments, parentId, level+1)
+                  React.createElement(Comment, {element: commentData, root: parentId, level: level, ptype: parentType}), 
+                  childComments(commentData.comments, parentId, level+1)
                 )
               ), 
               React.createElement("br", null)
             )
           )
         });
-        return result
+        return result;
       }
     };
-    var list = childcomments(this.props.comments,this.props.idea,0)
+    var list = childComments(this.props.comments, this.props.idea, 0);
     return (
       React.createElement("div", null, 
         list
@@ -342,7 +341,7 @@ var CommentList = React.createClass({displayName: "CommentList",
 
 
 var Comment = React.createClass({displayName: "Comment",
-  getInitialState: function(){
+  getInitialState: function () {
     var uniq = this.props.element._id;
 
     return {
@@ -351,13 +350,13 @@ var Comment = React.createClass({displayName: "Comment",
     }
   },
 
-  handleSubmit: function(e) {
+  handleSubmit: function (e) {
     e.preventDefault();
 
     var commentBody = this.refs.nestedComment.getDOMNode().value;
     var commentId   = this.props.element._id;
     var ideaId      = this.props.root._id;
-    var ptype       = this.props.ptype
+    var ptype       = this.props.ptype;
     var newComment = {
       body       : commentBody,
       parentId   : commentId,
@@ -371,13 +370,13 @@ var Comment = React.createClass({displayName: "Comment",
     this.refs.nestedComment.getDOMNode().value = '';
   },
 
-  showTextarea: function(){
+  showTextarea: function () {
     this.setState({
       uniq: !this.state.uniq
-    })
+    });
   },
 
-  render: function(){
+  render: function () {
     if (this.props.level > 0) {
       return (
         React.createElement("div", {className: "comment"}, 
@@ -397,7 +396,8 @@ var Comment = React.createClass({displayName: "Comment",
             React.createElement("span", {className: "text-white"}, " ", this.state.time, " ")
           )
         )
-      )
+      );
+      
     } else {
 
       return (
@@ -452,7 +452,6 @@ var Comment = React.createClass({displayName: "Comment",
   }
 });
 
-//
 module.exports = CommentList;
 
 
@@ -826,32 +825,30 @@ var commentActions = require('../actions/commentActions');
 
 var IdeaView = React.createClass({displayName: "IdeaView",
 
-
   getInitialState: function () {
-    ideaViewActions.getIdea('id',this.props.params.id);
+    ideaViewActions.getIdea('id', this.props.params.id);
     commentActions.getComments('votes', this.props.params.id);
 
     return {
       idea     : ideaViewStore.fetchIdeas(),
       edit     : ideaViewStore.ideaEditState(),
       comments : commentStore.fetchComments()
-    }
+    };
   },
 
-  componentDidMount : function(){
-    ideaViewActions.getIdea('id',this.props.params.id);
+  componentDidMount: function () {
+    ideaViewActions.getIdea('id', this.props.params.id);
     commentActions.getComments('votes', this.props.params.id);
     commentStore.addChangeListener(this._onChange);
     ideaViewStore.addChangeListener(this._onChange);
   },
 
-  componentWillUnmount : function(){
+  componentWillUnmount: function () {
     commentStore.removeChangeListener(this._onChange);
     ideaViewStore.removeChangeListener(this._onChange);
   },
 
-  _onChange : function(){
-    console.log('IDEA VIEW STATE HAS CHANGED');
+  _onChange: function () {
     this.setState({
       idea     : ideaViewStore.fetchIdeas(),
       edit     : ideaViewStore.ideaEditState(),
@@ -859,7 +856,7 @@ var IdeaView = React.createClass({displayName: "IdeaView",
     });
   },
 
-  handleSubmit : function(){
+  handleSubmit: function () {
     var commentBody = this.refs.parentComment.getDOMNode().value;
     var ideaId      = this.state.idea._id
 
@@ -878,59 +875,60 @@ var IdeaView = React.createClass({displayName: "IdeaView",
   editIdea: function (e) {
     ideaViewStore.ideaEditToggle();
   },
-  submitIdea:function(){
-  var ideabodyedit =  this.refs.editedIdea.getDOMNode().value;
-    var newIdea ={
+
+  submitIdea: function () {
+    var ideabodyedit = this.refs.editedIdea.getDOMNode().value;
+    var newIdea = {
       body: ideabodyedit,
       title: this.state.idea.title,
       status: this.state.idea.status,
       ideaId: this.state.idea._id
     }
-    ideaViewActions.editIdea(newIdea)
+    ideaViewActions.editIdea(newIdea);
   },
-  editmode:function(){
+
+  editmode: function () {
     var userinfo = cookie.load('userInfo');
-    if(userinfo._id===this.state.idea.userId){
-      if(this.state.edit){
-        return(          
+    if (userinfo._id === this.state.idea.userId) {
+      if (this.state.edit) {
+        return (          
           React.createElement("div", {className: "container"}, 
             React.createElement("textarea", {className: "form-control", type: "text", ref: "editedIdea", defaultValue: this.state.idea.body}), 
             React.createElement("div", null, React.createElement("br", null), React.createElement("span", {className: "text-red", onClick: this.submitIdea}, "Submit"))
           )
-          )
-      }else{
-        return(
+        );
+      } else {
+        return (
           React.createElement("div", {className: "container"}, 
             React.createElement("br", null), 
             React.createElement("div", {className: "huge text-white"}, " ", this.state.idea.body, " "), 
             React.createElement("div", null, React.createElement("br", null), React.createElement("span", {className: "text-red", onClick: this.editIdea}, "Edit")), 
             React.createElement("br", null)
           )
-          )
+        );
       }
-    }else{
-      return(
-          React.createElement("div", {className: "container"}, 
-            React.createElement("br", null), 
-            React.createElement("div", {className: "huge text-white"}, " ", this.state.idea.body, " "), 
-            React.createElement("br", null)
-          )
+    } else {
+      return (
+        React.createElement("div", {className: "container"}, 
+          React.createElement("br", null), 
+          React.createElement("div", {className: "huge text-white"}, " ", this.state.idea.body, " "), 
+          React.createElement("br", null)
         )
+      );
     }
   },
-  render: function(){
 
-    if(this.state.idea.tags){
-      if(this.state.idea.tags.length>1){
-          var tags = this.state.idea.tags.join(", ");
-        }else{
-          var tags = this.state.idea.tags;
-        }
+  render: function () {
+    if (this.state.idea.tags) {
+      if (this.state.idea.tags.length>1) {
+        var tags = this.state.idea.tags.join(", ");
+      } else {
+        var tags = this.state.idea.tags;
+      }
     }
 
     var time = new Date(this.state.idea.createdAt).toLocaleString();
-    console.log('this.state.idea', this.state.idea);
-    return(
+    return (
       React.createElement("div", null, 
         React.createElement(NavBar, null), 
 
@@ -1340,28 +1338,31 @@ var editmode = false;
 var populateStore = function (idea) {
   _idea = idea;
   editmode = false;
-  console.log('populateStore', idea);
 };
+
 var ideaViewStore = ObjectAssign({}, EventEmitter.prototype, {
-  fetchIdeas : function () {
+  fetchIdeas: function () {
     return _idea;
   },
- ideaEditState : function(){
-  return editmode;
-},
- ideaEditToggle : function(){
-  editmode = !editmode;
-  this.emit(CHANGE_EVENT);
-},
-addChangeListener : function (cb) {
+
+  ideaEditState: function () {
+    return editmode;
+  },
+
+  ideaEditToggle: function () {
+    editmode = !editmode;
+    this.emit(CHANGE_EVENT);
+  },
+
+  addChangeListener: function (cb) {
     this.on(CHANGE_EVENT, cb);
     this.setMaxListeners(100);
   },
-  removeChangeListener : function (cb) {
+
+  removeChangeListener: function (cb) {
     this.removeListener(CHANGE_EVENT, cb);
   }
 });
-
 
 ideaViewStore.dispatchToken = Dispatcher.register(function (action) {
   switch (action.action.actionType) {
@@ -1370,7 +1371,7 @@ ideaViewStore.dispatchToken = Dispatcher.register(function (action) {
       ideaViewStore.emit(CHANGE_EVENT);
       break;
 
-      case Constants.FETCH_IDEAVIEW:
+    case Constants.FETCH_IDEAVIEW:
       fetchIdeas();
       break;
 
