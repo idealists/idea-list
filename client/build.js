@@ -1079,12 +1079,6 @@ var NavBar = React.createClass({displayName: "NavBar",
               )
             ), 
             React.createElement("li", null, 
-              React.createElement(Link, {to: "app", onClick: this.changestore}, 
-                "ARCHIVES  ", 
-                React.createElement("span", {className: "glyphicon glyphicon-time"})
-              )
-            ), 
-            React.createElement("li", null, 
               React.createElement(Link, {to: "ideas"}, 
                 "CREATE  ", 
                 React.createElement("span", {className: "glyphicon glyphicon-pencil"})
