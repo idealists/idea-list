@@ -26,11 +26,17 @@ function getIdeas (req, res) {
                 .where({status: Status.OPEN})
                 .sort('updatedAt');
       break;
-    case 'votes':
+    case 'votesDesc':
       ideas = Idea.find()
                 .select(selectFields)
                 .where({status: Status.OPEN})
                 .sort('-rating');
+      break;
+    case 'votesAsc':
+      ideas = Idea.find()
+                .select(selectFields)
+                .where({status: Status.OPEN})
+                .sort('rating');
       break;
     case 'voteCount':
       ideas = Idea.find()
