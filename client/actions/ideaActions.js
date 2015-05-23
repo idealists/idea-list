@@ -5,7 +5,7 @@ var $          = require('jquery');
 
 var ideaActions = {
   getIdeas: function(query, data, cb){
-    query = query || 'voteCount';
+    query = query || 'votesDesc';
     data  = data  || null;
 
 

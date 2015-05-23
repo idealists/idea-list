@@ -17,9 +17,19 @@ var IdeaFilter = React.createClass({
     }
   },
 
-  byvote: function (e) {
-    e.preventDefault();
-    ideaActions.getIdeas('votes');
+  byvote: {
+    first: false,
+    filter: function (e) {
+      e.preventDefault();
+
+      if (this.byvote.first) {
+        this.byvote.first = false;
+        ideaActions.getIdeas();
+      } else {
+        this.byvote.first = true;
+        ideaActions.getIdeas('votesAsc');
+      }
+    }
   },
 
   render : function(){
@@ -28,7 +38,7 @@ var IdeaFilter = React.createClass({
 
           <div>
             <ul className="nav nav-tabs nav-justified">
-              <li role="presentation" onClick={this.byvote}>
+              <li role="presentation" onClick={(this.byvote.filter).bind(this)}>
                 <a href="#" className="filter">
                   Votes
                   &nbsp;
