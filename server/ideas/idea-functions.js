@@ -151,7 +151,7 @@ function updateIdea (req, res) {
 
 // helper functions for mongodb search with async callbacks
 function getUserId (username){
-  return User.findOne({ sUserName: username })
+  return User.findOne({ sUserName: username });
 }
 
 function findIdea (ideaId){
@@ -205,7 +205,7 @@ function createComment (req, res) {
       comment.save();
 
       idea.save(function(err){
-        var reply = { 'text': 'Comment added to idea: ' + idea.shortId + '! \n New comment: "' + comment.body + '"\n *To comment on this comment, use commentId: `' + comment.commShortId + '`'};
+        var reply = { 'text': 'Comment added to idea: `' + idea.shortId + '` ! \n New comment: "' + comment.body + '"\n *To comment on this comment, use commentId: `' + comment.commShortId + '`'};
         slackPost.postSlack(reply);
       });
     }
@@ -226,7 +226,7 @@ function createComment (req, res) {
       : findComment(comment.parentId).then(addCommentToComment);
 
     comment.save().then(sendResponse);
-  })
+  });
 
 } // end of createComment
 
