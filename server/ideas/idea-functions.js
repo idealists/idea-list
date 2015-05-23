@@ -202,21 +202,21 @@ function createComment (req, res) {
 
       idea.comments.push(comment);
 
+      comment.save();
+
       idea.save(function(err){
-        var reply = { 'text': 'Comment added to idea: ' + idea.shortId + '! New comment: "' + comment.body + '"\n *To comment on this comment, use commentId: `' + comment.commShortId + '`'};
+        var reply = { 'text': 'Comment added to idea: ' + idea.shortId + '! \n New comment: "' + comment.body + '"\n *To comment on this comment, use commentId: `' + comment.commShortId + '`'};
         slackPost.postSlack(reply);
       });
     }
 
     function addCommentToComment(parent) {
-      if (parent.parentType === 'comment') {
-        comment.parentId = parent.parentId;
-      }
+      comment.parentId = parent.parentId;
 
       parent.comments.push(comment);
 
       parent.save(function (err) {
-        var reply = { 'text': 'Comment added to comment: ' + parent.commShortId + '! \n New comment: "' + comment.body};
+        var reply = { 'text': 'Comment added to comment: `' + parent.commShortId + '` ! \n New comment: "' + comment.body+'"'};
         slackPost.postSlack(reply);
       });
     }
