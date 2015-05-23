@@ -48,7 +48,8 @@ Router.run(routes, function (Handler) {
     })
     .done(function (value) {
       console.log('got auth')
-     if (!value.loggedIn) {
+      if (!value.loggedIn) {
+        console.log('not logged in');
         cookie.remove('userInfo');
         React.render(<Login/>, document.getElementById('main'));
       } else {
