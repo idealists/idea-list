@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var StatusConstants = require('../ideas/StatusConstants');
+var StatusConstants = require('../ideas/statusConstants');
 var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
 
@@ -50,6 +50,6 @@ Comment.fromRequest = function (req) {
     comments   : [],
     status     : StatusConstants.OPEN
   });
-}
+};
 
 module.exports = Comment;
