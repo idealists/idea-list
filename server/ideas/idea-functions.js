@@ -221,12 +221,13 @@ function createComment (req, res) {
 
     function addCommentToComment(parent) {
       comment.parentId = parent.parentId;
-
+      console.log('INSIDE COMMENTING ON COMMENT, comment:', comment);
       findIdea(comment.ideaId).then(function(idea){
+        console.log('idea:', idea);
         idea.commentCount++;
         idea.save();
       })
-      
+
       parent.comments.push(comment);
 
       parent.save(function (err) {

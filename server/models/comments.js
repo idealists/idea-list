@@ -40,6 +40,7 @@ Comment.fromRequest = function (req) {
     parentId   : req.body.parentId,
     parentType : req.body.parentType,
     commShortId: req.body.commShortId || null,
+    ideaId     : req.body.ideaId,
     userId     : req.body.userId,
     slackId    : req.body.slackId,
     sUserName  : req.body.sUserName,
