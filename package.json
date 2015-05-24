@@ -11,6 +11,7 @@
     "express-session": "^1.11.1",
     "flux": "*",
     "grunt-browserify": "*",
+    "grunt-cli": "*",
     "grunt-contrib-watch": "*",
     "grunt-react": "*",
     "hashids": "^1.0.1",
@@ -45,6 +46,7 @@
     "karma-story-reporter": "*"
   },
   "scripts": {
-    "test": "grunt --verbose"
+    "test": "grunt --verbose",
+    "postinstall": "echo postinstall time; ./node_modules/grunt-cli/bin/grunt browserify"
   }
 }
