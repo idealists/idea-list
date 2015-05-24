@@ -75,10 +75,11 @@ var IdeaView = React.createClass({
     var userinfo = cookie.load('userInfo');
     if(userinfo._id===this.state.idea.userId){
       if(this.state.edit){
-        return(          
+        return(
           <div className="container">
             <textarea className="form-control" type="text" ref="editedIdea" defaultValue={this.state.idea.body} />
-            <div><br /><span className="text-red" onClick={this.submitIdea}>Submit</span></div>
+            <br />
+            <div><span className="btn btn-yellow btn-xxs pull-right" onClick={this.submitIdea}>SUBMIT</span></div>
           </div>
           )
       }else{
@@ -86,7 +87,8 @@ var IdeaView = React.createClass({
           <div className="container">
             <br />
             <div className="huge text-white"> {this.state.idea.body} </div>
-            <div><br /><span className="text-red" onClick={this.editIdea}>Edit</span></div>
+            <br />
+            <div><span className="btn btn-yellow btn-xxs pull-right" onClick={this.editIdea}>EDIT</span></div>
             <br />
           </div>
           )

@@ -56,3 +56,10 @@ var NavBar = React.createClass({
 });
 
 module.exports = NavBar;
+
+// <li>
+//   <Link to="app" onClick = {this.changestore}>
+//     ARCHIVES &nbsp;
+//     <span className="glyphicon glyphicon-time"></span>
+//   </Link>
+// </li>

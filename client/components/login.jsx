@@ -30,7 +30,7 @@ var Login = React.createClass({
         <br />
         <br />
         <a href="/auth/slack">
-          <button className="btn btn-red btn-large center" id="login-btn">
+          <button className="btn btn-red btn-xlarge center" id="login-btn">
             Login
           </button>
         </a>
