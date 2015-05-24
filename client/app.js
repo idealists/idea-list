@@ -3,6 +3,7 @@ var Router = require('react-router');
 var Home   = require('./components/homeView.jsx');
 var ideaView= require('./components/ideaView.jsx')
 var Login = require('./components/login.jsx');
+var Errorpage = require('./components/404page.jsx');
 var CreateIdeaView = require('./components/createIdeaView.jsx');
 var cookie = require('react-cookie');
 var authenticated = require('./stores/authStore');
@@ -34,6 +35,7 @@ var routes = (
     <Route name="Home" path='/home' handler={Home} />
     <Route name="login" path='/login' handler={Login} />
     <Route name="logout" path='/logout' handler={Login} />
+    <Route path="*" handler={Errorpage}/>
     <DefaultRoute handler={Home} />
   </Route>
 );
