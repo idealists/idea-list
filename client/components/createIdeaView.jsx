@@ -34,10 +34,29 @@ var CreateIdeaView = React.createClass({
         <NavBar />
 
         <div className="page-header container">
-            <div className="text-center">
-              <span className="x-huge text-center text-primary"> Create a </span>
-              <span className="x-huge text-center text-white"> New Idea </span>
+          <div className="row">
+
+            <div className="col-md-5">
+              <div className="kinda-huge text-right text-muted">
+                FROM A VISION
+              </div>
+              <div className="kinda-huge text-right text-muted">
+                TO A REALITY
+              </div>
             </div>
+
+            <div className="col-md-6">
+              <blockquote className="x1-huge text-white">
+                &nbsp;
+                <b className="text-primary">IDEA</b>
+                &nbsp;
+                <b>CREATION.</b>
+              </blockquote>
+            </div>
+
+            <div className="col-md-1"></div>
+
+          </div>
         </div>
 
         <br />
