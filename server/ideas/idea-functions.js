@@ -18,13 +18,13 @@ function getIdeas (req, res) {
       ideas = Idea.find()
                 .select(selectFields)
                 .where({status: Status.OPEN})
-                .sort('-updatedAt');
+                .sort('-createdAt');
       break;
     case 'dateLast':
       ideas = Idea.find()
                 .select(selectFields)
                 .where({status: Status.OPEN})
-                .sort('updatedAt');
+                .sort('createdAt');
       break;
     case 'votesDesc':
       ideas = Idea.find()
