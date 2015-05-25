@@ -229,7 +229,6 @@ function createComment (req, res) {
       comment.parentId = parent.parentId;
 
       findIdea(comment.ideaId).then(function(idea){
-        console.log('idea:', idea);
         idea.commentCount++;
         idea.save();
       });
