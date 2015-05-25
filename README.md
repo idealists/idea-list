@@ -1,6 +1,6 @@
 # IdeaList
 
-> IdeaList is a forum integrated with Slack designed to centralize a team's feature requests and ideas.
+> IdeaList is a forum integrated with Slack designed to promote discussion around a team's feature requests and ideas.
 
 ## Team
 
@@ -20,7 +20,7 @@
 ## Usage
 
 > Login with Slack to authorize IdeaList to post to your Slack team's `#general` channel. In the Web app, post an idea and comment and vote on existing ideas. Switch over to Slack to see the idea you just created and observe the same functionality in custom slash commands:
->> 
+>> `/idea`, `/comment`, `/upvote`, `/downvote`, `/allideas`
 
 ## Requirements
 
@@ -36,7 +36,7 @@ As is, IdeaList is tied to the demo [IdeaList Slack team](https://idealist-slack
 
 From within the root directory:
 
-```sh
+```
 npm install
 ```
 
