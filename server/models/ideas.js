@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+var Schema   = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
 
 var Vote = new Schema({

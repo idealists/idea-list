@@ -1,13 +1,14 @@
-var React = require('react');
-var cookie = require('react-cookie');
+var React         = require('react');
+var cookie        = require('react-cookie');
 var authenticated = require('../stores/authStore');
 
 var Login = React.createClass({
-  componentDidMount: function(){
+  componentDidMount : function(){
     cookie.remove('userInfo');
   },
+
   render : function() {
-    return(
+    return (
       <div className="text-center vertical-center" id="login">
         <img src="umbel-ui/assets/logo.png"></img>
         <br />

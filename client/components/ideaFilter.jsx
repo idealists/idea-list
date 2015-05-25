@@ -1,13 +1,13 @@
-var React = require('react');
-var ideaActions    = require('../actions/ideaActions');
+var React       = require('react');
+var ideaActions = require('../actions/ideaActions');
 
 var IdeaFilter = React.createClass({
-  bydate: {
-    first: false,
-    filter: function (e) {
+  bydate : {
+    first  : false,
+    filter : function (e) {
       e.preventDefault();
 
-      if(this.bydate.first) {
+      if (this.bydate.first) {
         this.bydate.first = false;
         ideaActions.getIdeas('dateFirst');
       } else {
@@ -17,9 +17,9 @@ var IdeaFilter = React.createClass({
     }
   },
 
-  byvote: {
-    first: false,
-    filter: function (e) {
+  byvote : {
+    first  : false,
+    filter : function (e) {
       e.preventDefault();
 
       if (this.byvote.first) {
@@ -36,24 +36,24 @@ var IdeaFilter = React.createClass({
     return(
       <div>
 
-          <div>
-            <ul className="nav nav-tabs nav-justified">
-              <li role="presentation" onClick={(this.byvote.filter).bind(this)}>
-                <a href="#" className="filter">
-                  Votes
-                  &nbsp;
-                  <span className="glyphicon glyphicon-sort"></span>
-                </a>
-              </li>
-              <li role="presentation" onClick={(this.bydate.filter).bind(this)}>
-                <a href="#" className="filter">
-                  Date
-                  &nbsp;
-                  <span className="glyphicon glyphicon-sort"></span>
-                </a>
-              </li>
-            </ul>
-          </div>
+        <div>
+          <ul className="nav nav-tabs nav-justified">
+            <li role="presentation" onClick={(this.byvote.filter).bind(this)}>
+              <a href="#" className="filter">
+                Votes
+                &nbsp;
+                <span className="glyphicon glyphicon-sort"></span>
+              </a>
+            </li>
+            <li role="presentation" onClick={(this.bydate.filter).bind(this)}>
+              <a href="#" className="filter">
+                Date
+                &nbsp;
+                <span className="glyphicon glyphicon-sort"></span>
+              </a>
+            </li>
+          </ul>
+        </div>
 
       </div>
     );

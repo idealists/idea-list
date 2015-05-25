@@ -1,9 +1,9 @@
 var ideaFunctions = require('./idea-functions');
-var isAuth = require('../auth').isAuthenticated;
-var Slack = require('./slackInt');
-var Vote = require('./vote-functions').voteOptions;
+var isAuth        = require('../auth').isAuthenticated;
+var Slack         = require('./slackInt');
+var Vote          = require('./vote-functions').voteOptions;
 
-module.exports = function(ideas){
+module.exports = function (ideas) {
   ideas.get('/', isAuth, ideaFunctions.getIdeas);
   ideas.post('/', isAuth, ideaFunctions.createIdea);
   ideas.put('/', isAuth, ideaFunctions.updateIdea);
@@ -13,6 +13,6 @@ module.exports = function(ideas){
   ideas.put('/comments', isAuth, ideaFunctions.updateComment);
 
   ideas.post('/votes', isAuth, Vote);
-  
+
   ideas.post('/api/idea', Slack.slackInt);
 };

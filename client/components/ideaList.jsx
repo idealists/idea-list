@@ -1,27 +1,30 @@
 var React    = require('react');
 var Router   = require('react-router');
-var ideaView = require('./ideaView.jsx');
 var VoteView = require('./voteView.jsx');
+var ideaView = require('./ideaView.jsx');
 
 var DefaultRoute = Router.DefaultRoute;
 var RouteHandler = Router.RouteHandler;
-var Route = Router.Route;
-var Link  = Router.Link;
+var Route        = Router.Route;
+var Link         = Router.Link;
 
 var IdeaList = React.createClass({
-  getInitialState: function (){
+  getInitialState : function (){
     return {
       format: 'MMMM Do YYYY, h:mm:ss a'
     }
   },
 
-  render: function(){
+  render : function(){
 
-    var list = this.props.ideas.map(function(idea, index){
-      if(!idea.email){
-        if(idea.tags){var tags = idea.tags.join(', ');}else{var tags = "";}
+    var list = this.props.ideas.map(function (idea, index) {
+      if (!idea.email) {
+        if (idea.tags) { var tags = idea.tags.join(', '); }
+        else { var tags = ''; }
+
+        var time  = new Date(idea.createdAt).toLocaleString();
         idea.type = 'idea';
-        var time = new Date(idea.createdAt).toLocaleString();
+
         return (
           <div className="idea row" key={index}>
 
@@ -32,7 +35,7 @@ var IdeaList = React.createClass({
             <div className="col-md-11">
 
               <Link to="ideaView" params={{id: idea._id}}>
-              <div className="xx-large text-white ideaTitle">
+                <div className="xx-large text-white ideaTitle">
                   {idea.title}
                 </div>
               </Link>
@@ -67,8 +70,8 @@ var IdeaList = React.createClass({
           </div>
         )
       }
-
     })
+
     return (
       <div className="container">
         <div className="row">
@@ -86,7 +89,5 @@ var IdeaList = React.createClass({
     );
   }
 });
-
-
 
 module.exports = IdeaList;

@@ -1,14 +1,13 @@
 var $ = require('jquery');
 
-// send vote data to the server
 var VoteActions = {
-  sendVote : function(vote, cb){
+  sendVote : function (vote, cb) {
     $.ajax({
-      url      : "ideas/votes",
-      dataType : "json",
-      method   : "POST",
+      url      : 'ideas/votes',
+      dataType : 'json',
+      method   : 'POST',
       data     : vote
-    }).success(function(data){
+    }).success(function (data) {
       cb(data);
     });
   }

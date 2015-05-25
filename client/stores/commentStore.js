@@ -2,13 +2,10 @@ var Dispatcher   = require('../dispatcher/dispatcher');
 var Constants    = require('../constants/constants');
 var EventEmitter = require('events').EventEmitter;
 var ObjectAssign = require('react/lib/Object.assign');
-// var events        = require('events');
 var CHANGE_EVENT = 'change';
 var _commentList = [];
 
-
-
-var populateStore = function(commentList){
+var populateStore = function (commentList) {
   _commentList = commentList;
 };
 
@@ -17,17 +14,17 @@ var commentStore = ObjectAssign({}, EventEmitter.prototype, {
     return _commentList;
   },
 
-  addChangeListener : function(cb){
+  addChangeListener : function (cb) {
     this.on(CHANGE_EVENT, cb);
     this.setMaxListeners(100);
   },
 
-  removeChangeListener : function(cb){
+  removeChangeListener : function (cb) {
     this.removeListener(CHANGE_EVENT, cb);
   }
 });
 
-commentStore.dispatchToken = Dispatcher.register(function(action){
+commentStore.dispatchToken = Dispatcher.register(function (action) {
   switch(action.action.actionType){
     case Constants.RELOAD_COMMENTLIST:
       populateStore(action.action.data);

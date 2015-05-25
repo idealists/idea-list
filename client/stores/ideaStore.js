@@ -11,7 +11,7 @@ var populateStore = function (ideaList) {
 };
 
 var ideaStore = ObjectAssign({}, EventEmitter.prototype, {
-  fetchIdeas : function () {
+  fetchIdeas : function(){
     return _ideaList;
   },
 
@@ -42,4 +42,3 @@ ideaStore.dispatchToken = Dispatcher.register(function (action) {
 });
 
 module.exports = ideaStore;
-

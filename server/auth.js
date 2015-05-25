@@ -1,23 +1,23 @@
-var passport = require('passport');
+var passport      = require('passport');
 var SlackStrategy = require('passport-slack').Strategy;
-var User = require('./models/users.js');
-var updateUsers = require('./update-users');
+var User          = require('./models/users.js');
+var updateUsers   = require('./update-users');
 
 passport.use(new SlackStrategy({
-    clientID: process.env.SLACK_OAUTH_ID,
-    clientSecret: process.env.SLACK_OAUTH_SECRET,
-    callbackURL: '/auth/slack/callback',
-    scope: 'read',
-    state: 'xyz'
+    clientID     : process.env.SLACK_OAUTH_ID,
+    clientSecret : process.env.SLACK_OAUTH_SECRET,
+    callbackURL  : '/auth/slack/callback',
+    scope        : 'read',
+    state        : 'xyz'
   },
-  function(accessToken, refreshToken, profile, done) {
+
+  function (accessToken, refreshToken, profile, done) {
     User.findOne({ slackId: profile.id }, function (err, user) {
       if (err) return done(err);
 
       if (user) {
         return done(null, user);
       } else {
-        // User list populates before login, so user should be in DB
         return done(null, false);
       }
     });

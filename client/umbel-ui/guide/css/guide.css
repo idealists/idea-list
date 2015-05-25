@@ -17,10 +17,6 @@ body {
 
   margin-top: 65px;
 }
-.littleButton {
-  border: 1px;
-  border-color: red;
-}
 #login {
   margin-top: 5%;
 }
@@ -49,11 +45,14 @@ body {
   color: #fff;
   background-color: transparent;
 }
+.littleButton {
+  border: 1px;
+  border-color: red;
+}
 .btn.btn-xxs,
 .btn:visited.btn-xxs {
   padding: 2px 10px;
   font-size: 14px;
-  /*border-radius: 5px;*/
 }
 .btn.btn-xwide,
 .btn:visited.btn-xwide {

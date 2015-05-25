@@ -1,18 +1,18 @@
-var Dispatcher = require('../dispatcher/dispatcher');
-var Constants  = require('../constants/constants');
-var cookie     = require('react-cookie');
-var $          = require('jquery');
 var ideaViewActions = require('./ideaViewActions');
+var Dispatcher      = require('../dispatcher/dispatcher');
+var Constants       = require('../constants/constants');
+var cookie          = require('react-cookie');
+var $               = require('jquery');
 
 var commentActions = {
-  getComments : function(query, data){
+  getComments : function (query, data) {
     query = query || null;
     data  = data  || null;
 
     $.ajax({
-      url       : "/ideas/comments",
-      dataType  : "json",
-      method    : "GET",
+      url       : '/ideas/comments',
+      dataType  : 'json',
+      method    : 'GET',
       headers   : {
         'query' : query,
         'data'  : JSON.stringify(data)
@@ -26,7 +26,7 @@ var commentActions = {
     });
   },
 
-  createComment : function(newComment){
+  createComment : function (newComment) {
     var commentActions = this;
     var userinfo       = cookie.load('userInfo');
 
@@ -35,13 +35,12 @@ var commentActions = {
     newComment.sUserName = userinfo.sUserName;
     newComment.img       = userinfo.image['24'];
 
-
     $.ajax({
-      url      : "/ideas/comments",
-      dataType : "json",
-      method   : "POST",
+      url      : '/ideas/comments',
+      dataType : 'json',
+      method   : 'POST',
       data     : newComment
-    }).done(function(commentList){
+    }).done(function (commentList) {
       commentActions.getComments(null, newComment.ideaId);
       ideaViewActions.getIdea(null, newComment.ideaId);
     });

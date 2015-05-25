@@ -1,7 +1,7 @@
-var mongoose = require('mongoose');
+var mongoose        = require('mongoose');
+var Schema          = mongoose.Schema;
+var ObjectId        = Schema.ObjectId;
 var StatusConstants = require('../ideas/statusConstants');
-var Schema = mongoose.Schema;
-var ObjectId = Schema.ObjectId;
 
 var Vote = new Schema({
   createdAt : Date,

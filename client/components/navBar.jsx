@@ -1,29 +1,30 @@
-var React  = require('react');
-var Router = require('react-router');
-var Link   = Router.Link;
-var $      = require('jquery');
-var cookie = require('react-cookie');
+var React         = require('react');
+var Router        = require('react-router');
+var Link          = Router.Link;
+var $             = require('jquery');
+var cookie        = require('react-cookie');
 var authenticated = require('../stores/authStore');
-var ideaActions    = require('../actions/ideaActions')
+var ideaActions   = require('../actions/ideaActions')
 
 var NavBar = React.createClass({
-
-  handleLogout: function() {
+  handleLogout : function(){
     $.ajax({
-      url       : "/logout",
-      method    : "GET"
+      url       : '/logout',
+      method    : 'GET'
     }).done(function(){
       authenticated.switchStatus();
       cookie.remove('userInfo');
     });
   },
-  changestore:function(){
+
+  changestore : function(){
     ideaActions.getIdeas();
   },
+
   render : function(){
-    return(
+    return (
       <nav className="navbar navbar-inverse transparent navbar-fixed-top">
-        <div className="container-fluid">
+        <div className="container">
 
           <a href="#">
             <img alt="Brand" src="umbel-ui/assets/nav.png"/>

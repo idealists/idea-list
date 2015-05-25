@@ -4,33 +4,37 @@ var EventEmitter = require('events').EventEmitter;
 var ObjectAssign = require('react/lib/Object.assign');
 
 var CHANGE_EVENT = 'viewChange';
-var _idea    = {};
-var editmode = false;
+var editmode     = false;
+var _idea        = {};
+
 var populateStore = function (idea) {
   _idea = idea;
   editmode = false;
-  console.log('populateStore', idea);
 };
+
 var ideaViewStore = ObjectAssign({}, EventEmitter.prototype, {
-  fetchIdeas : function () {
+  fetchIdeas : function(){
     return _idea;
   },
+
  ideaEditState : function(){
   return editmode;
 },
+
  ideaEditToggle : function(){
   editmode = !editmode;
   this.emit(CHANGE_EVENT);
 },
+
 addChangeListener : function (cb) {
     this.on(CHANGE_EVENT, cb);
     this.setMaxListeners(100);
   },
+
   removeChangeListener : function (cb) {
     this.removeListener(CHANGE_EVENT, cb);
   }
 });
-
 
 ideaViewStore.dispatchToken = Dispatcher.register(function (action) {
   switch (action.action.actionType) {
