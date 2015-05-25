@@ -27,6 +27,16 @@ function getIdeaId (pi, callback) {
   });
 }
 
+function searchIdeaId (pi, callback) {
+  Idea.find({ _id: pi }, function(err, idea){
+    if (err) {
+      callback(err, null);
+    } else {
+      callback(null, idea);
+    }
+  });
+}
+
 function getCommId (pi, callback) {
   Comment.find({ commShortId: pi }, function (err, comment) {
     if (err) {
@@ -140,8 +150,11 @@ For voting: /upvote OR /downvote [ Id ] \n\n \
               } else {
                 // creating a unique comment id based on the length of the comments array
                 req.body.parentId = pId[0]._id;
-                req.body.ideaId = pId[0]._id;
-                IFuncs.createComment(req, res);
+                searchIdeaId(req.body.parentId, function(idea){
+                  req.body.ideaId = idea._id;
+                  console.log('req.body.ideaId: ', req.body.ideaId);
+                  IFuncs.createComment(req, res);
+                })
               }
             });
           } else {
