@@ -8,6 +8,7 @@ var Home           = require('./components/homeView.jsx');
 var ideaView       = require('./components/ideaView.jsx')
 var Errorpage = require('./components/404page.jsx');
 var CreateIdeaView = require('./components/createIdeaView.jsx');
+var NotFoundRoute = Router.NotFoundRoute;
 
 var Link         = Router.Link;
 var Route        = Router.Route;
@@ -29,14 +30,15 @@ var App = React.createClass({
 });
 
 var routes = (
+
   <Route name="app"        path="/"             handler={App}>
     <Route name="ideas"    path="/newidea"      handler={CreateIdeaView} />
     <Route name="ideaView" path="/ideaView/:id" handler={ideaView}/>
     <Route name="Home"     path="/home"         handler={Home} />
     <Route name="login"    path="/login"        handler={Login} />
     <Route name="logout"   path="/logout"       handler={Login} />
-    <Route path="*" handler={Errorpage}/>
     <DefaultRoute handler={Home} />
+     <NotFoundRoute handler={Errorpage} />
   </Route>
 );
 
