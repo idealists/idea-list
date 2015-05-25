@@ -140,6 +140,7 @@ For voting: /upvote OR /downvote [ Id ] \n\n \
               } else {
                 // creating a unique comment id based on the length of the comments array
                 req.body.parentId = pId[0]._id;
+                req.body.ideaId = req.body.parentId;
                 IFuncs.createComment(req, res);
               }
             });
