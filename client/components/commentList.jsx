@@ -23,7 +23,7 @@ var CommentList = React.createClass({
           if (level === 0) { ptype === 'idea' }
 
           return (
-            <div className="container">
+            <div className="container-fluid">
 
               <div className="row">
                 <div className="col-md-1">
@@ -144,7 +144,7 @@ var Comment = React.createClass({
           <br />
 
           {this.state.uniq ?
-            <div className="container">
+            <div className="container-fluid">
               <div className="row">
 
                 <div className="col-md-3">
