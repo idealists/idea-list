@@ -151,7 +151,6 @@ For voting: /upvote OR /downvote [ Id ] \n\n \
                 // creating a unique comment id based on the length of the comments array
                 req.body.parentId = pId[0]._id;
                 req.body.ideaId = pId[0].parentId;
-                console.log('idea: ', idea);
                 IFuncs.createComment(req, res);
               }
             });
