@@ -1,9 +1,9 @@
-var Comment = require('../models/comments');
-var Idea = require('../models/ideas');
-var User = require('../models/users');
-var slackPost = require('./slackPost');
-var Status = require('./statusConstants');
-var ObjectId = require('mongoose').Types.ObjectId;
+var Comment       = require('../models/comments');
+var Idea          = require('../models/ideas');
+var User          = require('../models/users');
+var slackPost     = require('./slackPost');
+var Status        = require('./statusConstants');
+var ObjectId      = require('mongoose').Types.ObjectId;
 var voteFunctions = require('./vote-functions.js');
 
 
@@ -227,7 +227,7 @@ function createComment (req, res) {
 
     function addCommentToComment(parent) {
       comment.parentId = parent.parentId;
-      
+
       findIdea(comment.ideaId).then(function(idea){
         console.log('idea:', idea);
         idea.commentCount++;

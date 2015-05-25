@@ -4,15 +4,14 @@ var cookie     = require('react-cookie');
 var $          = require('jquery');
 
 var ideaActions = {
-  getIdeas: function(query, data, cb){
+  getIdeas : function (query, data, cb) {
     query = query || 'votesDesc';
     data  = data  || null;
 
-
     $.ajax({
-      url       : "/ideas",
-      dataType  : "json",
-      method    : "GET",
+      url       : '/ideas',
+      dataType  : 'json',
+      method    : 'GET',
       headers   : {
         'query' : query,
         'data'  : data
@@ -27,11 +26,11 @@ var ideaActions = {
     });
   },
 
-  searchBy:function(data){
+  searchBy : function (data) {
     $.ajax({
-      url       : "/ideas",
-      dataType  : "json",
-      method    : "GET",
+      url       : '/ideas',
+      dataType  : 'json',
+      method    : 'GET',
       headers   : { 'query' : 'searchbar',
                     'lookup'  : data.lookup
                   }
@@ -44,29 +43,27 @@ var ideaActions = {
     });
   },
 
-  createIdea: function(newIdea, cb){
-    console.log('creating idea',cb);
+  createIdea : function (newIdea, cb) {
     var ideaActions   = this;
     var userinfo      = cookie.load('userInfo');
     newIdea.user_name = userinfo.sUserName;
-    newIdea.shortId   = String(newIdea.title.split(" ").slice(0,3).join("_")+ "_" + newIdea.user_name).toLowerCase();
+    newIdea.shortId   = String(newIdea.title.split(' ').slice(0,3).join(' ')+ '_' + newIdea.user_name).toLowerCase();
     newIdea.slackId   = userinfo.slackId;
     newIdea.userId    = userinfo._id;
     newIdea.img       = userinfo.image['24'];
 
     $.ajax({
-      url      : "/ideas",
-      dataType : "json",
-      method   : "POST",
+      url      : '/ideas',
+      dataType : 'json',
+      method   : 'POST',
       data     : newIdea
     })
     .done(function (ideaList) {
       ideaActions.getIdeas(null, null, cb);
-      //cb();
     });
   },
 
-  changeVote: function (voteObj, userId) {
+  changeVote : function (voteObj, userId) {
     data = {
       source   : voteObj,
       userInfo : userId

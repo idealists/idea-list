@@ -9,4 +9,3 @@ mainDispatcher.handleAction = function (action) {
 };
 
 module.exports = mainDispatcher;
- 

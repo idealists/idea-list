@@ -1,16 +1,17 @@
-var React = require('react');
-var ideaActions    = require('../actions/ideaActions');
+var React       = require('react');
+var ideaActions = require('../actions/ideaActions');
+
 var IdeaSearch = React.createClass({
-  handleSubmit : function () {
+  handleSubmit : function(){
     var data = {
-      lookup: this.refs.search.getDOMNode().value
+      lookup : this.refs.search.getDOMNode().value
     };
+
     ideaActions.searchBy(data);
     this.refs.search.getDOMNode().value = '';
-    // fill in the action
   },
 
-  render : function () {
+  render : function(){
     return(
       <div className="container">
         <br />
@@ -22,7 +23,7 @@ var IdeaSearch = React.createClass({
           <div className="col-md-5">
             <div className="input-group">
               <span className="input-group-addon" id="search"><span className="glyphicon glyphicon-search"></span></span>
-              <input type='text' ref='search' className="form-control input-lg" id="searchBar" placeholder='looking for specific users or tags?'></input>
+              <input type="text" ref="search" className="form-control input-lg" id="searchBar" placeholder="looking for specific users or tags?"></input>
             </div>
           </div>
 
@@ -31,7 +32,6 @@ var IdeaSearch = React.createClass({
               Search
             </div>
           </div>
-
         </div>
 
         <br />
@@ -41,5 +41,3 @@ var IdeaSearch = React.createClass({
 });
 
 module.exports = IdeaSearch;
-
-

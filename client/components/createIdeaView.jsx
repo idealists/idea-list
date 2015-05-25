@@ -1,8 +1,8 @@
-var React = require('react');
-var ideaActions    = require('../actions/ideaActions');
-var Router = require('react-router');
-var NavBar = require('./navBar.jsx');
-var Navigation = Router.Navigation;
+var React       = require('react');
+var Router      = require('react-router');
+var Navigation  = Router.Navigation;
+var NavBar      = require('./navBar.jsx');
+var ideaActions = require('../actions/ideaActions');
 
 var CreateIdeaView = React.createClass({
   mixins: [Navigation],
@@ -17,15 +17,12 @@ var CreateIdeaView = React.createClass({
       tags    : tagsArray
     };
 
-    // alert if no title or body
-    var self = this;
+    var self  = this;
     var redir = function(){self.transitionTo('Home');} ;
     ideaActions.createIdea(newIdea,redir);
     this.refs.newIdeaTitle.getDOMNode().value = '';
     this.refs.newIdeaBody.getDOMNode().value = '';
     this.refs.newIdeaTags.getDOMNode().value = '';
-    // this.goBack()
-
   },
 
   render : function(){
@@ -62,12 +59,13 @@ var CreateIdeaView = React.createClass({
         <br />
 
         <div className="input-group container">
-
           <div className="row">
             <div className="col-lg-2"></div>
+
             <div className="col-lg-8">
-              <input className="form-control input-lg" type='text' ref='newIdeaTitle' placeholder='Name your idea.'></input>
+              <input className="form-control input-lg" type="text" ref="newIdeaTitle" placeholder="Name your idea."></input>
             </div>
+
             <div className="col-lg-2"></div>
           </div>
 
@@ -75,9 +73,11 @@ var CreateIdeaView = React.createClass({
 
           <div className="row">
             <div className="col-lg-2"></div>
+
             <div className="col-lg-8">
-              <input className="form-control input-lg" type='text' ref='newIdeaTags' placeholder='Add some descriptive tags. (split by space)'></input>
+              <input className="form-control input-lg" type="text" ref="newIdeaTags" placeholder="Add some descriptive tags. (split by space)"></input>
             </div>
+
             <div className="col-lg-2"></div>
           </div>
 
@@ -85,9 +85,11 @@ var CreateIdeaView = React.createClass({
 
           <div className="row">
             <div className="col-lg-2"></div>
+
             <div className="col-lg-8">
-              <textarea className="form-control input-lg" type='text' ref='newIdeaBody' placeholder='Tell us more about it.' rows="8"></textarea>
+              <textarea className="form-control input-lg" type='text' ref="newIdeaBody" placeholder="Tell us more about it." rows="8"></textarea>
             </div>
+
             <div className="col-lg-2"></div>
           </div>
 

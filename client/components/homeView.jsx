@@ -1,11 +1,10 @@
-var React          = require('react');
-var IdeaList       = require('./ideaList.jsx');
-var IdeaFilter     = require('./ideaFilter.jsx');
-var IdeaSearch     = require('./ideaSearch.jsx');
-var ideaActions    = require('../actions/ideaActions');
-var ideaStore      = require('../stores/ideaStore');
-var NavBar         = require('./navBar.jsx')
-
+var React       = require('react');
+var IdeaList    = require('./ideaList.jsx');
+var IdeaFilter  = require('./ideaFilter.jsx');
+var IdeaSearch  = require('./ideaSearch.jsx');
+var ideaActions = require('../actions/ideaActions');
+var ideaStore   = require('../stores/ideaStore');
+var NavBar      = require('./navBar.jsx')
 
 var Home = React.createClass({
   getInitialState : function(){
@@ -35,7 +34,9 @@ var Home = React.createClass({
     return(
       <div>
         <NavBar />
-        <div className="container-fluid">
+
+        <div className="container">
+
           <div className="page-header">
             <div className="row">
 
@@ -56,9 +57,13 @@ var Home = React.createClass({
 
             </div>
           </div>
+
           <IdeaSearch />
+
           <br />
+
           <IdeaFilter />
+
           <IdeaList ideas={this.state.list}/>
         </div>
       </div>

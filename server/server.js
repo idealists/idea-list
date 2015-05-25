@@ -1,9 +1,9 @@
-var bodyParser = require('body-parser');
+var bodyParser   = require('body-parser');
 var cookieParser = require('cookie-parser');
-var express = require('express');
-var mongoose = require('mongoose');
-var session = require('express-session');
-var app = express();
+var express      = require('express');
+var session      = require('express-session');
+var mongoose     = require('mongoose');
+var app          = express();
 
 mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost:27017/idealist');
 
