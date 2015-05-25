@@ -227,9 +227,8 @@ function createComment (req, res) {
 
     function addCommentToComment(parent) {
       comment.parentId = parent.parentId;
-      console.log('parent: ', parent);
+
       findIdea(comment.ideaId).then(function(idea){
-        console.log('idea:', idea);
         idea.commentCount++;
         idea.save();
       });

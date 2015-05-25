@@ -27,16 +27,6 @@ function getIdeaId (pi, callback) {
   });
 }
 
-function searchIdeaId (pi, callback) {
-  Idea.find({ _id: pi }, function(err, idea){
-    if (err) {
-      callback(err, null);
-    } else {
-      callback(null, idea);
-    }
-  });
-}
-
 function getCommId (pi, callback) {
   Comment.find({ commShortId: pi }, function (err, comment) {
     if (err) {
