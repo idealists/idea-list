@@ -22,12 +22,6 @@
 > Login with Slack to authorize IdeaList to post to your Slack team's `#general` channel. In the Web app, post an idea and comment and vote on existing ideas. Switch over to Slack to see the idea you just created and observe the same functionality in custom slash commands:
 >> `/idea`, `/comment`, `/upvote`, `/downvote`, `/allideas`
 
-## Requirements
-
-- Node 0.10.x
-- Redis 2.6.x
-- Postgresql 9.1.x
-
 ## Development
 
 As is, IdeaList is tied to the demo [IdeaList Slack team](https://idealist-slack.herokuapp.com), but can be easily forked and integrated with any Slack team.
@@ -46,7 +40,3 @@ Should automatically bundle scripts with `browserify`.
 
 View the project roadmap [here](https://github.com/idealists/idea-list/issues)
 
-
-## Contributing
-
-See [CONTRIBUTING.md](https://github.com/unexpected-lion/ourglass/blob/master/contributing.md) for contribution guidelines.
