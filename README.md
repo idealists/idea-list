@@ -2,6 +2,11 @@
 
 > IdeaList is a forum integrated with Slack designed to promote discussion around a team's feature requests and ideas.
 
+## Screenshots
+![login] (http://i.imgur.com/neZ1GFp.jpg)
+![home] (http://i.imgur.com/CvqfUrv.jpg)
+![slack] (http://i.imgur.com/7dlyuCf.jpg)
+
 ## Team
 
   - __Product Owner__: [sharkySharks](https://github.com/sharkySharks)
